@@ -12,7 +12,7 @@ jobs:
         id: cache
         uses: actions/cache@v3
         with:
-          path: ./backend/node_modules
+          path: ./node_modules
           key: modules-${{ hashFiles('backend/package-lock.json') }}
 
       - name: Set up node
@@ -22,14 +22,12 @@ jobs:
 
       - name: Launch docker containers
         run: |
-          cd backend
           docker-compose up --detach
           npm install
 
       - name: Npm install
         if: steps.cache.outputs.cache-hit != 'true'
         run: |
-          cd backend
           npm install
 
       - name: Set up Run backend tests
