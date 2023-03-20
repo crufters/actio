@@ -1,0 +1,43 @@
+name: Deploy frontend
+on:
+  push:
+    branches:
+      - "main"
+
+jobs:
+  Explore-GitHub-Actions:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Gcloud auth
+        uses: 'google-github-actions/auth@v1'
+        with:
+          credentials_json: '${{ secrets.GCP_SA_KEY }}'
+      
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@main
+
+      - name: Check out this code
+        uses: actions/checkout@v3
+        with:
+          path: workdir
+
+      - name: Cache node modules
+        uses: actions/cache@v3
+        env:
+          cache-name: cache-node-modules
+        with:
+          # npm cache files are stored in `~/.npm` on Linux/macOS
+          path: ~/.npm
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+
+      - name: Deploy frontend
+        working-directory: workdir
+        run: |
+          npm install --legacy-peer-deps
+          npm run build:ssr &&
+          gcloud builds submit --tag gcr.io/wrdf-5f427/frontend &&
+          gcloud run deploy frontend --image gcr.io/wrdf-5f427/frontend --allow-unauthenticated --platform managed --region=europe-central2

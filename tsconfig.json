@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "noImplicitReturns": false,
+    "noUnusedLocals": true,
+    "outDir": "lib",
+    "sourceMap": true,
+    //"strictNullChecks": true,
+    //"strict": true,
+    "target": "esnext",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "typeRoots": ["./node_modules/@types"]
+    //"esModuleInterop": true,
+  },
+  "compileOnSave": true,
+  "target": "esnext",
+  "include": ["src"],
+  "allowSyntheticDefaultImports": true
+}

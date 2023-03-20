@@ -1,0 +1,48 @@
+name: Backend tests
+on: [push]
+
+jobs:
+  backend-tests-run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Cache node modules
+        id: cache
+        uses: actions/cache@v3
+        with:
+          path: ./backend/node_modules
+          key: modules-${{ hashFiles('backend/package-lock.json') }}
+
+      - name: Set up node
+        uses: actions/setup-node@v3
+        with:
+          node-version: "16"
+
+      - name: Launch docker containers
+        run: |
+          cd backend
+          docker-compose up --detach
+          npm install
+
+      - name: Npm install
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: |
+          cd backend
+          npm install
+
+      - name: Set up Run backend tests
+        run: |
+          cd backend
+          printf "CONNECTION_NAME=$CONNECTION_NAME\n" > .env
+          printf "SQL_USER=$SQL_USER\n" >> .env
+          printf "SQL_PASSWORD=$SQL_PASSWORD\n" >> .env
+          printf "SQL_NAME=$SQL_NAME\n" >> .env
+          cat .env
+          npm test
+        env:
+          CONNECTION_NAME: ${{ secrets.CONNECTION_NAME }}
+          SQL_USER: ${{ secrets.SQL_USER }}
+          SQL_PASSWORD: ${{ secrets.SQL_PASSWORD }}
+          SQL_NAME: ${{ secrets.SQL_NAME }}
