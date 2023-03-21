@@ -1,5 +1,6 @@
 {
   "name": "typescript-functions",
+  "type": "module",
   "description": "TypeScript sample Cloud Functions for Firebase",
   "dependencies": {
     "@google-cloud/storage": "^6.7.0",
