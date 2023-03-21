@@ -1,6 +1,6 @@
-# Accio
+# Actio
 
-Accio is a lightweight framework written by a microservices veteran that is simple enough to modify it to your needs. Don't get overwhelmed by heavy tooling, services based architecture can be simpler than you think!
+Actio is a lightweight framework written by a microservices veteran that is simple enough to modify it to your needs. Don't get overwhelmed by heavy tooling, services based architecture can be simpler than you think!
 
 Goals:
 
@@ -16,7 +16,7 @@ Nongoals:
 
 - Supporting writing services in multiple languages is not a near term goal.
 
-Accio also aims to be batteries included: it contains a bunch of services that help you bootstrap your system (but does not force you to use these) faster:
+Actio also aims to be batteries included: it contains a bunch of services that help you bootstrap your system (but does not force you to use these) faster:
 
 - [x] Authentication service for login, register, oauth (facebook etc.) login
 - [x] File service for file upload. Upload to a local disk or to Google Storage ec.
