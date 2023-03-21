@@ -32,7 +32,6 @@ jobs:
 
       - name: Set up Run backend tests
         run: |
-          cd backend
           printf "CONNECTION_NAME=$CONNECTION_NAME\n" > .env
           printf "SQL_USER=$SQL_USER\n" >> .env
           printf "SQL_PASSWORD=$SQL_PASSWORD\n" >> .env
