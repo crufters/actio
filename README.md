@@ -2,6 +2,33 @@
 
 Actio is a lightweight framework written by a microservices veteran that is simple enough to modify it to your needs. Don't get overwhelmed by heavy tooling, services based architecture can be simpler than you think!
 
+
+```
+Without configuration, service calls are just normal function calls:
+--------------------------------
+|  Login Service    <-|  <-|   |
+| Payment Service ----|    |   |
+|  Order Service  ---------|   |
+-------------------------------|
+ instance address
+     0.0.0.0
+  no Actio config
+
+
+With some lightweight configuration a true services based
+architecture can be achieved, without code changes:
+
+-------------------                     -----------------
+| Payment Service |-------------------> | Login Service |
+|  Order Service  |-------------------> |               |
+-------------------                     -----------------
+ instance address                        instance address
+     0.0.0.0                                 0.0.0.1
+envar LOGIN_SERVICE_ADDRESS=0.0.0.1
+
+Calls to the login service become network calls automatically.
+```
+
 Goals:
 
 - [ ] Transition from monolith to services should be effortless
