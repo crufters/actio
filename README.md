@@ -2,6 +2,8 @@
 
 Actio is a lightweight framework written by a microservices veteran that is simple enough to modify it to your needs. Don't get overwhelmed by heavy tooling, services based architecture can be simpler than you think!
 
+Inspired by Micro[https://github.com/micro/micro] and the author's previous work Asim Aslam.
+Authors: [János Dobronszki](https://github.com/crufter), Asim Aslam[https://github.com/asim], Dávid Dobronszki[https://github.com/Dobika], Viktor Veress[].
 
 ```
 Without configuration, service calls are just normal function calls:
