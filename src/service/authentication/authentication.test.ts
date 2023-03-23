@@ -1,5 +1,5 @@
 import { test, expect, describe } from "@jest/globals";
-import { Injector } from "../../sys/injector";
+import { Injector } from "../../injector";
 import { nanoid } from "nanoid";
 import { AuthenticationService } from "./index";
 import { ConfigService } from "../config/index";

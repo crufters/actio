@@ -13,7 +13,7 @@ import {
   SecretCode,
 } from "../models";
 import * as sendgrid from "@sendgrid/mail";
-import { Error, error } from "../../../sys";
+import { Error, error } from "../../..";
 import { nanoid } from "nanoid";
 import { default as configRead } from "../../config/configRead";
 

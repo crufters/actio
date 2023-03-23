@@ -15,7 +15,7 @@ import {
   Config,
 } from "../models";
 import * as sendgrid from "@sendgrid/mail";
-import { Error, error } from "../../../sys";
+import { Error, error } from "../../..";
 import { nanoid } from "nanoid";
 import { ConfigService } from "../../config";
 

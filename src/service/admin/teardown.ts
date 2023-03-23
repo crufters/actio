@@ -8,8 +8,8 @@
 import { DataSource } from "typeorm";
 import { TeardownRequest, TeardownResponse } from "./models";
 import { Token, roleAdmin } from "../authentication/models";
-import { error } from "../../sys";
-import { default as env } from "../../sys/env";
+import { error } from "../..";
+import { default as env } from "../../env";
 
 export default async (
   connection: DataSource,

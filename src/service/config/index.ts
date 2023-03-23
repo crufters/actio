@@ -1,4 +1,4 @@
-import { Service, Unexposed } from "../../sys";
+import { Service, Unexposed } from "../..";
 import { DataSource } from "typeorm";
 
 import configRead from "./configRead";
@@ -13,7 +13,7 @@ import {
   SecretReadRequest,
   SecretSaveRequest,
 } from "./models";
-import { Servicelike } from "../../sys";
+import { Servicelike } from "../..";
 import { AuthenticationService } from "../authentication";
 import secretRead from "./secretRead";
 import secretSave from "./secretSave";

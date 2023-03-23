@@ -7,7 +7,7 @@
 
 import * as bcrypt from "bcrypt";
 import { DataSource } from "typeorm";
-import { error } from "../../../sys";
+import { error } from "../../..";
 import {
   Contact,
   Password,

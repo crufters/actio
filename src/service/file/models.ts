@@ -5,7 +5,6 @@
  * Written by Dobronszki János <dobronszki@gmail.com>, 2021
  */
 import { Column, Entity, PrimaryColumn } from "typeorm";
-import { Model, Field } from "../../framework/form/field";
 import { nanoid } from "nanoid";
 
 export function copy(from, to) {
@@ -17,7 +16,6 @@ export function copy(from, to) {
   }
 }
 @Entity()
-@Model({ class: "File" })
 export class File {
   constructor(json?: any) {
     copy(json, this);
@@ -29,15 +27,12 @@ export class File {
   id?: string;
 
   @Column()
-  @Field({ class: "File" })
   url?: string;
 
   @Column()
-  @Field({ class: "File" })
   originalName?: string;
 
   @Column()
-  @Field({ class: "File" })
   size?: number;
 
   //@CreateDateColumn({ type: "timestamptz", default: () => "CURRENT_TIMESTAMP" })

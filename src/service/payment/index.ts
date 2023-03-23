@@ -1,5 +1,5 @@
-import { Service } from "../../sys";
-import { Servicelike } from "../../sys";
+import { Service } from "../..";
+import { Servicelike } from "../..";
 import { DataSource } from "typeorm";
 
 import {

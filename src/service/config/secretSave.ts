@@ -6,8 +6,8 @@
  */
 
 import { DataSource } from "typeorm";
-import { error } from "../../sys";
-import { copy } from "../../sys";
+import { error } from "../..";
+import { copy } from "../..";
 import { roleAdmin } from "../authentication/models";
 import { AuthenticationService } from "../authentication";
 import { Secret, SecretSaveRequest, SecretSaveResponse } from "./models";

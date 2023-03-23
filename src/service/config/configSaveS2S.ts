@@ -7,7 +7,7 @@
 
 //import { nanoid } from "nanoid";
 import { DataSource } from "typeorm";
-import { copy } from "../../sys";
+import { copy } from "../..";
 import { Config, ConfigSaveRequest, ConfigSaveResponse } from "./models";
 
 export default async (

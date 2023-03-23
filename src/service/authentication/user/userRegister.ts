@@ -19,7 +19,7 @@ import {
 import { nanoid } from "nanoid";
 import * as slug from "slug";
 import * as bcrypt from "bcrypt";
-import { error } from "../../../sys";
+import { error } from "../../..";
 // import verificationCodeSend from "./verificationCodeSend";
 import userLogin from "./userLogin";
 import { ConfigService } from "../../config";

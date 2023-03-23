@@ -1,5 +1,5 @@
-import { Service, Unexposed } from "../../sys";
-import { Servicelike } from "../../sys";
+import { Service, Unexposed } from "../..";
+import { Servicelike } from "../..";
 import { DataSource } from "typeorm";
 
 import departmentList from "./department/departmentList";

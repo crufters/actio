@@ -6,7 +6,7 @@
  */
 
 import { DataSource } from "typeorm";
-import { error } from "../../sys";
+import { error } from "../..";
 import {
   TopupRequest,
   TopupResponse,

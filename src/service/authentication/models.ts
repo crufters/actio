@@ -21,7 +21,6 @@ import {
 import { File } from "../file/models";
 import { Geometry } from "geojson";
 import { nanoid } from "nanoid";
-import { Field, Model, Context, Operation } from "../../framework/form/field";
 
 export function copy(from, to) {
   if (!from || !to) {
@@ -65,23 +64,8 @@ export interface Config {
   facebookAppRedirectURL?: string;
 }
 
-let isRole = (role: Role): ((_, context: Context) => boolean) => {
-  return (_, context) => {
-    let cu: User = context.user as User;
-    if (cu?.roles?.find((r) => r.id == role.id)) {
-      return true;
-    }
-    return false;
-  };
-};
-
-let whenListing = (_, context: Context): boolean => {
-  return context.operation == Operation["Read"];
-};
-
 // User roles
 @Entity()
-@Model({ class: "Role" })
 export class Role {
   constructor(json?: Partial<Role>) {
     if (!json) {
@@ -98,16 +82,13 @@ export class Role {
 
   // eg. "user", "business", "admin"
   @PrimaryColumn()
-  @Field({ class: "Role" })
   id?: string;
 
   @Column({ nullable: true })
   @Index({ unique: true })
-  @Field({ class: "Role" })
   slug?: string;
 
   @Column({ nullable: true })
-  @Field({ class: "Role" })
   name?: string;
 
   @ManyToMany(() => User, (user) => user.roles)
@@ -132,7 +113,6 @@ roleAdmin.name = "Admin";
 export const roles = [roleUser, roleBusiness, roleAdmin];
 
 @Entity()
-@Model({ class: "User" })
 export class User {
   constructor(json?: Partial<User>) {
     if (!json) {
@@ -158,16 +138,13 @@ export class User {
   }
 
   @PrimaryColumn()
-  @Field({ class: "User", visible: whenListing })
   id?: string;
 
   @Column()
   @Index({ unique: true })
-  @Field({ class: "User", unique: true })
   slug?: string;
 
   @Column({ nullable: true })
-  @Field({ class: "User" })
   fullName?: string;
 
   @Column({ nullable: true })
@@ -177,11 +154,6 @@ export class User {
   // "male", "female", "other"
   gender?: string;
 
-  @Field({
-    class: "User",
-    file: {},
-    type: "File",
-  })
   thumbnail?: File;
 
   @Column({ nullable: true })
@@ -195,15 +167,6 @@ export class User {
     nullable: true,
   })
   @Index({ spatial: true })
-  @Field({
-    class: "User",
-    location: {
-      addressField: "address",
-    },
-    stringer: (u: User): string => {
-      return u.address?.formatted_address;
-    },
-  })
   // Is one location enough?
   location?: Geometry;
 
@@ -239,21 +202,10 @@ export class User {
     cascade: ["insert", "update"],
   })
   @JoinTable()
-  @Field({
-    class: "User",
-    fixList: true,
-    arrayOf: "Role",
-    visible: isRole(roleBusiness),
-  })
   roles?: Role[];
 
   @OneToMany(() => Contact, (contact) => contact.user, {
     cascade: ["insert", "update"],
-  })
-  @Field({
-    class: "User",
-    arrayOf: "Contact",
-    // visible: isRole(roleAdmin),
   })
   contacts?: Contact[];
 
@@ -267,11 +219,6 @@ export class User {
     cascade: ["insert", "update"],
   })
   // departments a user belongs to
-  @Field({
-    class: "User",
-    arrayOf: "Department",
-    visible: isRole(roleBusiness),
-  })
   departments?: Department[];
 
   @OneToMany(() => Token, (token) => token.user)
@@ -282,7 +229,6 @@ export class User {
 }
 
 @Entity()
-@Model({ class: "Token" })
 // token/token
 // Our system is relatively "special" in that way
 // even API keys are passwords, ie. go through a hashing mechanism.
@@ -325,7 +271,6 @@ export class Token {
 
 /** Used for things like email verification, password reset or OTPs */
 @Entity()
-@Model({ class: "SecretCode" })
 export class SecretCode {
   @PrimaryColumn()
   id?: string;
@@ -354,7 +299,6 @@ export class SecretCode {
 }
 
 @Entity()
-@Model({ class: "Organization" })
 export class Organization {
   constructor(json?: Partial<Organization>) {
     if (!json) {
@@ -373,23 +317,15 @@ export class Organization {
 
   @Column()
   @Index({ unique: true })
-  @Field({ class: "Organization" })
   slug?: string;
 
   @Column()
-  @Field({ class: "Organization" })
   name?: string;
 
   /** Main website URL of the organization */
   @Column({ nullable: true })
-  @Field({ class: "Organization" })
   website?: string;
 
-  @Field({
-    class: "Organization",
-    file: {},
-    type: "File",
-  })
   thumbnail?: File;
 
   @Column({ nullable: true })
@@ -408,7 +344,6 @@ export class Organization {
 }
 
 @Entity()
-@Model({ class: "Department" })
 @Unique("organization_department_slug", ["slug", "organizationId"])
 export class Department {
   constructor(json?: Department) {
@@ -429,7 +364,6 @@ export class Department {
   slug?: string;
 
   @Column()
-  @Field({ class: "Department" })
   name?: string;
 
   @Column()
@@ -438,7 +372,6 @@ export class Department {
   @ManyToOne(() => Organization, (organization) => organization.departments, {
     cascade: ["insert", "update"],
   })
-  @Field({ class: "Department", type: "Organization" })
   organization?: Organization;
 
   @Column()
@@ -460,7 +393,6 @@ export class Department {
 // A contact
 @Entity()
 @Unique("user_contact", ["url", "userId"])
-@Model({ class: "Contact" })
 export class Contact {
   constructor(json?: Partial<Contact>) {
     if (!json) {
@@ -485,23 +417,16 @@ export class Contact {
    * +44270111222
    */
   @Column()
-  @Field({ class: "Contact" })
   url?: string;
 
   /** Youtube channel or Facebook account name */
   @Column({ nullable: true })
-  @Field({ class: "Contact" })
   name?: string;
 
   @Column({ nullable: true })
   verified?: boolean;
 
   @ManyToOne(() => Platform, (platform) => platform.contacts)
-  @Field({
-    class: "Contact",
-    fixList: true,
-    type: "Platform",
-  })
   platform?: Relation<Platform>;
 
   @Column()
@@ -524,7 +449,6 @@ export class Contact {
  * Phone, email, Facebook etc. It is also used for proving
  */
 @Entity()
-@Model({ class: "Platform" })
 export class Platform {
   constructor(json?: Partial<Platform>) {
     if (!json) {
@@ -542,7 +466,6 @@ export class Platform {
 
   @Column({ nullable: true })
   @Index({ unique: true })
-  @Field({ class: "Platform" })
   slug?: string;
 
   // Represents either an abstract platform ("email", "phone")
@@ -550,13 +473,11 @@ export class Platform {
   // eg. "facebook.com", "Reddit.com", "email", "phone"
   @Column({ nullable: true })
   @Index({ unique: true })
-  @Field({ class: "Platform" })
   name?: string;
 
   // Is platform still selectable for new missions? (see Mission class)
   // Can users still log in with the platform contact? (see Contact class)
   @Column("boolean", { default: true })
-  @Field({ class: "Platform" })
   active?: boolean;
 
   @OneToMany(() => Contact, (contact) => contact.platform)
@@ -598,7 +519,6 @@ export const platforms = [
 
 // Passwords can be used to acquire tokens.
 @Entity()
-@Model({ class: "Password" })
 export class Password {
   constructor(json?: Partial<Password>) {
     if (!json) {
@@ -780,7 +700,6 @@ export interface TokenAdminGetResponse {
 }
 
 @Entity()
-@Model({ class: "Language" })
 // Language/Dialect supported
 export class Language {
   @PrimaryColumn()

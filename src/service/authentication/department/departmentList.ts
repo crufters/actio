@@ -15,7 +15,7 @@ import {
   roleAdmin,
   roleBusiness,
 } from "../models";
-import { error } from "../../../sys";
+import { error } from "../../..";
 
 export default async (
   connection: DataSource,

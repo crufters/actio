@@ -10,7 +10,7 @@ import { SystemBalanceRequest, SystemBalanceResponse } from "./models";
 
 import { AuthenticationService } from "../authentication";
 import { roleAdmin } from "../authentication/models";
-import { error } from "../../sys";
+import { error } from "../..";
 
 export default async (
   connection: DataSource,

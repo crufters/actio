@@ -3,8 +3,8 @@ import teardown from "./teardown";
 import { TeardownRequest } from "./models";
 
 import { DataSource } from "typeorm";
-import { Service } from "../../sys";
-import { Servicelike } from "../../sys";
+import { Service } from "../..";
+import { Servicelike } from "../..";
 
 @Service()
 export class AdminService implements Servicelike {

@@ -3,8 +3,8 @@ import fileUpload from "./fileUpload";
 import fileServe from "./httpFileServe";
 
 import { File } from "./models";
-import { Service, Raw } from "../../sys";
-import { Servicelike } from "../../sys";
+import { Service, Raw } from "../..";
+import { Servicelike } from "../..";
 import { ConfigService } from "../config";
 import * as fs from "fs";
 import * as express from "express";
