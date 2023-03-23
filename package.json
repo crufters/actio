@@ -15,6 +15,7 @@
     "@types/slug": "^5.0.3",
     "@types/stripe-v3": "^3.1.27",
     "axios": "^1.2.3",
+    "bcrypt": "^5.1.0",
     "busboy": "^1.6.0",
     "chalk": "^4.1.2",
     "crypto-js": "^4.1.1",
