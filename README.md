@@ -6,10 +6,23 @@ Actio is a lightweight framework that enables you to start your codebase as a mo
 
 - [A basic Actio service](#a-basic-service-exposed-over-http)
 - [Goals and nongoals](#goals)
-- [Configuring as microservices](#configuring-as-microservices)
+- [Running as microservices](#running-as-microservices)
+- [Multitenancy and testing][#multitenancy-and-testing]
 - [Credit](#credit)
 
 ## A basic service exposed over http
+
+Let's create a new project:
+
+```sh
+mkdir myproject; cd myproject;
+npm i -s @crufters/actio
+npm i typescript --save-dev
+npx tsc --init
+touch index.ts
+```
+
+Put this into your `index.ts`:
 
 ```typescript
 import { Service, Servicelike, Registrator } "@crufters/actio";
@@ -27,7 +40,8 @@ class MyService implements Servicelike {
         this.auth = auth
     }
 
-    // this endpoint will be exposed
+    // this endpoint will be exposed as a http endpoint, ie.
+    // curl 127.0.0.1/my-service/my-endpoint
     async myEndpoint(req: MyEndpointRequest) {
         let t = await this.auth.tokenRead({
             token: req.token,
@@ -54,6 +68,11 @@ app.listen(port, () => {
 });
 ```
 
+Compile and run your project:
+```sh
+
+```
+
 ## Goals
 
 - [ ] Transition from monolith to services should be effortless
@@ -78,7 +97,7 @@ Actio also aims to be batteries included: it contains a bunch of services that h
 
 Let's list a few concepts that can give you a taste (without the intent of being complete or 100% easy to follow)
 
-## Configuring as microservices
+## Running as microservices
 
 Turning your monolithic codebase into a microservices architecture can be done with minimal configuration.
 Simply set the addresses of services through environment variables and function calls get monkey patched into network calls.
@@ -111,13 +130,48 @@ envar LOGIN_SERVICE_ADDRESS=0.0.0.1
 Calls to the login service become network calls automatically.
 ```
 
-## Multiple instances for resiliency
+### Multiple instances for resiliency
 
 Use a comma separated list of addresses to randomly call any of the instances:
 
 ```
 envar LOGIN_SERVICE_ADDRESS=0.0.0.1:6061,0.0.0.2:6061
 ```
+
+## Multitenancy and testing
+
+Actio support multitenancy by either passing the `namespace` as either a header or a cookie.
+Namespaces are useful for two reasons:
+- they enable you to serve multiple frontends/applications from the same backend server
+- they enable you to do integration or end to end tests effortlessly without overwriting your existing data
+
+To see an example of this look at any of the jest tests in Actio, for example the config service test starts like this:
+
+```ts
+describe("Config tests", () => {
+  var config: ConfigService;
+  test("setup", async () => {
+    let namespace = "t_" + nanoid().slice(0, 7);
+    let i = new Injector([ConfigService]);
+    config = await i.getInstance("ConfigService", namespace);
+  });
+
+  test("config read basics", async () => {
+    expect(config).toBeTruthy();
+    let rsp = await config.configRead({});
+    expect(rsp.config?.data).toBeTruthy();
+  });
+
+  // to see more check the `config.test.ts` file
+})
+```
+
+It is best practice to write services in a way that requires the least amount of configuration so tests
+are easy to run.
+
+## Configuration
+
+TBD
 
 ## Credits
 
