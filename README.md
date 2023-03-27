@@ -15,11 +15,19 @@ Actio is a lightweight framework that enables you to start your codebase as a mo
 Let's create a new project:
 
 ```sh
-mkdir myproject; cd myproject;
+mkdir myproject; cd myproject
+npm init --yes
 npm i -s @crufters/actio
+npm i -s express; npm i -s @types/express
 npm i typescript --save-dev
 npx tsc --init
 touch index.ts
+```
+
+Make sure your `tsconfig.ts` has the `experimentalDecorator` flag set to true:
+```js
+  "compilerOptions": {
+    "experimentalDecorators": true,
 ```
 
 Put this into your `index.ts`:
@@ -49,7 +57,7 @@ class MyService implements Servicelike {
         console.log(`The calling user's name is ${t.token.user.fullName}`);
     }
 
-    _onInit() {
+    async _onInit() {
         console.log("This callback runs when the server boots up.");
         console.log("Perfect place to run do things like seeding the database.");
     }
@@ -150,6 +158,7 @@ To see an example of this look at any of the jest tests in Actio, for example th
 ```ts
 describe("Config tests", () => {
   var config: ConfigService;
+
   test("setup", async () => {
     let namespace = "t_" + nanoid().slice(0, 7);
     let i = new Injector([ConfigService]);

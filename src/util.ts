@@ -55,7 +55,7 @@ export interface Servicelike {
    * This can range from registration name to dependency config -
    * like entities for the `TypeORMHandler`.
    */
-  meta: ServiceMeta;
+  meta?: ServiceMeta;
 
   /**
    * Called when a service is initialized.

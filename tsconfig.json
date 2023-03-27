@@ -10,7 +10,8 @@
     "target": "esnext",
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "typeRoots": ["./node_modules/@types"]
+    "typeRoots": ["./node_modules/@types"],
+    "declaration": true
     //"esModuleInterop": true,
   },
   "compileOnSave": true,
