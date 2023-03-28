@@ -1,7 +1,7 @@
 import { inputParamTypeNames, getMeta, getDependencyGraph } from "./reflect.js";
 import _ from "lodash";
 import { TypeORMHandler } from "./typeorm.js";
-import * as chalk from "chalk";
+import chalk from "chalk";
 
 /**
  * A Handler is a leaf node dependency, eg. type ORM DataSource and similar.
