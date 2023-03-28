@@ -7,7 +7,7 @@ Actio is a lightweight framework that enables you to start your codebase as a mo
 - [A basic Actio service](#a-basic-service-exposed-over-http)
 - [Goals and nongoals](#goals)
 - [Running as microservices](#running-as-microservices)
-- [Multitenancy and testing][#multitenancy-and-testing]
+- [Multitenancy and testing](#multitenancy-and-testing)
 - [Credit](#credit)
 
 ## A basic service exposed over http
@@ -19,48 +19,65 @@ mkdir myproject; cd myproject
 npm init --yes
 npm i -s @crufters/actio
 npm i -s express; npm i -s @types/express
-npm i typescript --save-dev
+npm i --save-dev typescript; npm i --save-dev @types/googlemaps
 npx tsc --init
 touch index.ts
 ```
 
-Make sure your `tsconfig.ts` has the `experimentalDecorator` flag set to true:
+Make sure your `tsconfig.ts` looks something like this
 ```js
+{
   "compilerOptions": {
-    "experimentalDecorators": true,
+    "target": "esnext",
+    "module": "esnext",
+    "outDir": "build",
+    "rootDir": "./",
+    "strict": true,
+    "noImplicitAny": true,
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "experimentalDecorators": true
+  }
+}
 ```
 
 Put this into your `index.ts`:
 
 ```typescript
-import { Service, Servicelike, Registrator } "@crufters/actio";
-import { AuthenticationService } from "@crufters/actio/service/authentication";
-import * as express from "express";
+import {
+  Service,
+  Servicelike,
+  Registrator,
+  AuthenticationService,
+} from "@crufters/actio";
+
+import express from "express";
 
 interface MyEndpointRequest {
-    token: string;
+  token: string;
 }
 
 @Service()
 class MyService implements Servicelike {
-    auth: AuthenticationService,
-    constructor(auth: AuthenticationService) {
-        this.auth = auth
-    }
+  auth: AuthenticationService;
 
-    // this endpoint will be exposed as a http endpoint, ie.
-    // curl 127.0.0.1/my-service/my-endpoint
-    async myEndpoint(req: MyEndpointRequest) {
-        let t = await this.auth.tokenRead({
-            token: req.token,
-        })
-        console.log(`The calling user's name is ${t.token.user.fullName}`);
-    }
+  constructor(auth: AuthenticationService) {
+    this.auth = auth;
+  }
 
-    async _onInit() {
-        console.log("This callback runs when the server boots up.");
-        console.log("Perfect place to run do things like seeding the database.");
-    }
+  // this endpoint will be exposed as a http endpoint, ie.
+  // curl 127.0.0.1/my-service/my-endpoint
+  async myEndpoint(req: MyEndpointRequest) {
+    let t = await this.auth.tokenRead({
+      token: req.token,
+    });
+    console.log(`The calling user's name is ${t.token?.user?.fullName}`);
+  }
+
+  async _onInit() {
+    console.log("This callback runs when the server boots up.");
+    console.log("Perfect place to run do things like seeding the database.");
+  }
 }
 
 const app = express();
@@ -76,10 +93,12 @@ app.listen(port, () => {
 });
 ```
 
-Compile and run your project:
+Compile and run your project from project root:
 ```sh
-
+npx ts-node --esm ./index.ts
 ```
+
+Should output `Server is listening on port 8080`.
 
 ## Goals
 
@@ -107,10 +126,10 @@ Let's list a few concepts that can give you a taste (without the intent of being
 
 ## Running as microservices
 
+Note: this functionality is not in the main branch yet.
+
 Turning your monolithic codebase into a microservices architecture can be done with minimal configuration.
 Simply set the addresses of services through environment variables and function calls get monkey patched into network calls.
-
-Note: this functionality is not in the main branch yet.
 
 ```
 Without configuration, service calls are just normal function calls:
