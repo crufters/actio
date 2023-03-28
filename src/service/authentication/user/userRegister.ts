@@ -15,14 +15,14 @@ import {
   UserRegisterResponse,
   platformEmail,
   roleUser,
-} from "../models";
+} from "../models.js";
 import { nanoid } from "nanoid";
 import slug from "slug";
 import * as bcrypt from "bcrypt";
-import { error } from "../../..";
+import { error } from "../../../util.js";
 // import verificationCodeSend from "./verificationCodeSend";
-import userLogin from "./userLogin";
-import { ConfigService } from "../../config";
+import userLogin from "./userLogin.js";
+import { ConfigService } from "../../config/index.js";
 
 export default async (
   connection: DataSource,

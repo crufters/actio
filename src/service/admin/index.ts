@@ -1,10 +1,10 @@
-import teardown from "./teardown";
+import teardown from "./teardown.js";
 
-import { TeardownRequest } from "./models";
+import { TeardownRequest } from "./models.js";
 
 import { DataSource } from "typeorm";
-import { Service } from "../..";
-import { Servicelike } from "../..";
+import { Service } from "../../reflect.js";
+import { Servicelike } from "../../util.js";
 
 @Service()
 export class AdminService implements Servicelike {

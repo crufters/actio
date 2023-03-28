@@ -6,7 +6,7 @@
  */
 
 import { DataSource } from "typeorm";
-import { Config, ConfigReadResponse } from "./models";
+import { Config, ConfigReadResponse } from "./models.js";
 
 export default async (
   connection: DataSource,

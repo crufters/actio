@@ -6,7 +6,7 @@
  */
 
 import { DataSource } from "typeorm";
-import { Secret, SecretReadResponse } from "./models";
+import { Secret, SecretReadResponse } from "./models.js";
 
 export default async (
   connection: DataSource,

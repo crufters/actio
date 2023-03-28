@@ -1,6 +1,6 @@
-import { inputParamTypeNames, getMeta, getDependencyGraph } from "./reflect";
+import { inputParamTypeNames, getMeta, getDependencyGraph } from "./reflect.js";
 import * as _ from "lodash";
-import { TypeORMHandler } from "./typeorm";
+import { TypeORMHandler } from "./typeorm.js";
 import * as chalk from "chalk";
 
 /**

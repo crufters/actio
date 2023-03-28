@@ -9,7 +9,7 @@ import * as bcrypt from "bcrypt";
 import { nanoid } from "nanoid";
 import slug from "slug";
 import { DataSource } from "typeorm";
-import { error } from "../../..";
+import { error } from "../../../util.js";
 import {
   Contact,
   Department,
@@ -24,9 +24,9 @@ import {
   UserBrandRegisterResponse,
   roles,
   Config,
-} from "../models";
+} from "../models.js";
 
-import { ConfigService } from "../../config";
+import { ConfigService } from "../../config/index.js";
 // import verificationCodeSend from "./verificationCodeSend";
 
 export default async (

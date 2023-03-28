@@ -11,7 +11,7 @@ import {
   Token,
   TokenAdminGetRequest,
   TokenAdminGetResponse,
-} from "../models";
+} from "../models.js";
 
 export default async (
   connection: DataSource,

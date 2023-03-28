@@ -6,10 +6,10 @@
  */
 
 import { DataSource } from "typeorm";
-import { TeardownRequest, TeardownResponse } from "./models";
-import { Token, roleAdmin } from "../authentication/models";
-import { error } from "../..";
-import { default as env } from "../../env";
+import { TeardownRequest, TeardownResponse } from "./models.js";
+import { Token, roleAdmin } from "../authentication/models.js";
+import { error } from "../../util.js";
+import { default as env } from "../../env.js";
 
 export default async (
   connection: DataSource,

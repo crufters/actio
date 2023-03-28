@@ -14,7 +14,7 @@ import {
   roleUser,
   RegisterOrLoginWithProvenIdentityRequest,
   RegisterOrLoginWithProvenIdentityResponse,
-} from "../models";
+} from "../models.js";
 import { nanoid } from "nanoid";
 
 // can be used for facebook and all oauth registrations after the

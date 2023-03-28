@@ -6,7 +6,7 @@
  */
 
 import { DataSource } from "typeorm";
-import { OauthInfoRequest, OauthInfoResponse } from "../models";
+import { OauthInfoRequest, OauthInfoResponse } from "../models.js";
 
 export default async (
   connection: DataSource,

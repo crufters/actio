@@ -6,12 +6,11 @@
  */
 
 import { DataSource } from "typeorm";
-import { error } from "../..";
-import { copy } from "../..";
-import { roleAdmin } from "../authentication/models";
-import { AuthenticationService } from "../authentication";
-import { Secret, SecretSaveRequest, SecretSaveResponse } from "./models";
-import { mergeDeep } from "./configSaveS2S";
+import { error, copy } from "../../util.js";
+import { roleAdmin } from "../authentication/models.js";
+import { AuthenticationService } from "../authentication/index.js";
+import { Secret, SecretSaveRequest, SecretSaveResponse } from "./models.js";
+import { mergeDeep } from "./configSaveS2S.js";
 
 export default async (
   connection: DataSource,

@@ -1,5 +1,5 @@
-import { Injector } from "./injector";
-import { Service } from "./reflect";
+import { Injector } from "./injector.js";
+import { Service } from "./reflect.js";
 import { expect, test } from "@jest/globals";
 import { nanoid } from "nanoid";
 import { random } from "lodash";

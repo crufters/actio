@@ -6,11 +6,11 @@
  */
 
 import { DataSource } from "typeorm";
-import { SystemBalanceRequest, SystemBalanceResponse } from "./models";
+import { SystemBalanceRequest, SystemBalanceResponse } from "./models.js";
 
-import { AuthenticationService } from "../authentication";
-import { roleAdmin } from "../authentication/models";
-import { error } from "../..";
+import { AuthenticationService } from "../authentication/index.js";
+import { roleAdmin } from "../authentication/models.js";
+import { error } from "../../util.js";
 
 export default async (
   connection: DataSource,

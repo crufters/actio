@@ -6,7 +6,7 @@
  */
 
 import { DataSource } from "typeorm";
-import { error } from "../../..";
+import { error } from "../../../util.js";
 import {
   roleAdmin,
   roleBusiness,
@@ -14,7 +14,7 @@ import {
   User,
   UserListRequest,
   UserListResponse,
-} from "../models";
+} from "../models.js";
 
 export default async (
   connection: DataSource,

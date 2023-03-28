@@ -1,28 +1,28 @@
-import { Service, Unexposed } from "../..";
-import { Servicelike } from "../..";
+import { Service, Unexposed } from "../../reflect.js";
+import { Servicelike } from "../../util.js";
 import { DataSource } from "typeorm";
 
-import departmentList from "./department/departmentList";
-import verificationCodeSend from "./user/verificationCodeSend";
-import verificationCodeVerify from "./user/verificationCodeVerify";
-import passwordSendReset from "./user/passwordSendReset";
-import passwordChange from "./user/passwordChange";
-import passwordChangeWithOld from "./user/passwordChangeWithOld";
-import userSlugCheck from "./user/userSlugCheck";
-import platformList from "./platform/platformList";
-import tokenRead from "./token/tokenRead";
-import userLogin from "./user/userLogin";
-import userList from "./user/userList";
-import userSave from "./user/userSave";
-import userRegister from "./user/userRegister";
-import userBrandRegister from "./user/userBrandRegister";
-import userDepartmentRegister from "./user/userDepartmentRegister";
-import userUnGhost from "./user/userUnGhost";
-import roleList from "./role/roleList";
-import tokenAdminGet from "./user/tokenAdminGet";
-import oauthInfo from "./oauth/oauthInfo";
-import facebookLogin from "./oauth/facebookLogin";
-import registerOrLoginWithProvenIdentity from "./oauth/registerOrLoginWithProvenIdentity";
+import departmentList from "./department/departmentList.js";
+import verificationCodeSend from "./user/verificationCodeSend.js";
+import verificationCodeVerify from "./user/verificationCodeVerify.js";
+import passwordSendReset from "./user/passwordSendReset.js";
+import passwordChange from "./user/passwordChange.js";
+import passwordChangeWithOld from "./user/passwordChangeWithOld.js";
+import userSlugCheck from "./user/userSlugCheck.js";
+import platformList from "./platform/platformList.js";
+import tokenRead from "./token/tokenRead.js";
+import userLogin from "./user/userLogin.js";
+import userList from "./user/userList.js";
+import userSave from "./user/userSave.js";
+import userRegister from "./user/userRegister.js";
+import userBrandRegister from "./user/userBrandRegister.js";
+import userDepartmentRegister from "./user/userDepartmentRegister.js";
+import userUnGhost from "./user/userUnGhost.js";
+import roleList from "./role/roleList.js";
+import tokenAdminGet from "./user/tokenAdminGet.js";
+import oauthInfo from "./oauth/oauthInfo.js";
+import facebookLogin from "./oauth/facebookLogin.js";
+import registerOrLoginWithProvenIdentity from "./oauth/registerOrLoginWithProvenIdentity.js";
 import { Geometry } from "geojson";
 
 import {
@@ -61,8 +61,8 @@ import {
   OauthInfoRequest,
   FacebookLoginRequest,
   RegisterOrLoginWithProvenIdentityRequest,
-} from "./models";
-import { ConfigService } from "../config";
+} from "./models.js";
+import { ConfigService } from "../config/index.js";
 
 function toGeometry(lat: number, lng: number): Geometry {
   return {

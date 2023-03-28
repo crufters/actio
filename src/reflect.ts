@@ -2,7 +2,7 @@
 // see `backend/framework/form/field.ts`
 import "reflect-metadata";
 
-import { ServiceMeta } from "./util";
+import { ServiceMeta } from "./util.js";
 import * as _ from "lodash";
 
 // The decorators that are empty here only exist to trigger

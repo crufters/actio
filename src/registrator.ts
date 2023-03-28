@@ -7,10 +7,10 @@
 
 import * as express from "express";
 // import * as cr from "./crypt";
-import { Error, error } from "./util";
-import { Injector } from "./injector";
+import { Error, error } from "./util.js";
+import { Injector } from "./injector.js";
 import * as chalk from "chalk";
-import { isUnexposed, isRaw } from "./reflect";
+import { isUnexposed, isRaw } from "./reflect.js";
 
 // Registrator's responsibility is registering endpoints of a service
 export class Registrator {

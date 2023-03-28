@@ -6,8 +6,8 @@
  */
 
 import { DataSource } from "typeorm";
-import { FacebookLoginRequest, FacebookLoginResponse } from "../models";
-import registerOrLoginWithProvenIdentity from "./registerOrLoginWithProvenIdentity";
+import { FacebookLoginRequest, FacebookLoginResponse } from "../models.js";
+import registerOrLoginWithProvenIdentity from "./registerOrLoginWithProvenIdentity.js";
 import axios from "axios";
 
 interface MeResponse {

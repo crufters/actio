@@ -6,7 +6,7 @@
  */
 
 import { DataSource } from "typeorm";
-import { Role, RoleListResponse } from "../models";
+import { Role, RoleListResponse } from "../models.js";
 
 export default async (
   connection: DataSource,

@@ -6,14 +6,14 @@
  */
 
 import { DataSource } from "typeorm";
-import { error } from "../../..";
+import { error } from "../../../util.js";
 import {
   roleAdmin,
   Token,
   User,
   UserSaveRequest,
   UserSaveResponse,
-} from "../models";
+} from "../models.js";
 
 export default async (
   connection: DataSource,

@@ -8,7 +8,7 @@
 import * as bcrypt from "bcrypt";
 import { nanoid } from "nanoid";
 import { DataSource } from "typeorm";
-import { error } from "../../..";
+import { error } from "../../../util.js";
 import {
   Contact,
   Password,
@@ -16,7 +16,7 @@ import {
   Token,
   UserLoginRequest,
   UserLoginResponse,
-} from "../models";
+} from "../models.js";
 
 const err = error("incorrect credentials", 400);
 

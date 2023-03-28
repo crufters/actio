@@ -6,7 +6,7 @@
  */
 
 import { DataSource } from "typeorm";
-import { error } from "../..";
+import { error } from "../../util.js";
 import {
   TopupRequest,
   TopupResponse,
@@ -17,11 +17,11 @@ import {
   Transaction,
   TransactionEntry,
   Card,
-} from "./models";
+} from "./models.js";
 import { nanoid } from "nanoid";
 import Stripe from "stripe";
-import { AuthenticationService } from "../authentication";
-import { platformEmail } from "../authentication/models";
+import { AuthenticationService } from "../authentication/index.js";
+import { platformEmail } from "../authentication/models.js";
 
 export default async (
   connection: DataSource,

@@ -1,5 +1,5 @@
-import { Connector } from "./db";
-import { getMeta } from "./reflect";
+import { Connector } from "./db.js";
+import { getMeta } from "./reflect.js";
 import { DataSource } from "typeorm";
 import { MixedList, EntitySchema } from "typeorm";
 

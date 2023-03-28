@@ -12,7 +12,7 @@ import {
   EntitySchema,
 } from "typeorm";
 
-import env from "./env";
+import env from "./env.js";
 
 let defaultConnectionOptions: DataSourceOptions = {
   name: "deflt",

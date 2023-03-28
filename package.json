@@ -1,6 +1,6 @@
 {
   "name": "@crufters/actio",
-  "version": "0.0.28",
+  "version": "0.0.32",
   "type": "module",
   "description": "Evolve your node.js monolith into microservices any time without code changes by using this library.",
   "main": "lib/index.js",

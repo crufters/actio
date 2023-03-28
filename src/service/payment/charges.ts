@@ -6,9 +6,9 @@
  */
 
 import { DataSource } from "typeorm";
-import { ChargesRequest, ChargesResponse, Charge } from "./models";
+import { ChargesRequest, ChargesResponse, Charge } from "./models.js";
 
-import { AuthenticationService } from "../authentication";
+import { AuthenticationService } from "../authentication/index.js";
 
 export default async (
   connection: DataSource,

@@ -6,8 +6,8 @@
  */
 
 import { DataSource } from "typeorm";
-import { error } from "../../..";
-import { Token, TokenReadRequest, TokenReadResponse } from "../models";
+import { error } from "../../../util.js";
+import { Token, TokenReadRequest, TokenReadResponse } from "../models.js";
 
 export default async (
   connection: DataSource,

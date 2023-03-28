@@ -1,9 +1,9 @@
-import { Service, Unexposed } from "../..";
+import { Service, Unexposed } from "../../reflect.js";
 import { DataSource } from "typeorm";
 
-import configRead from "./configRead";
-import configSave from "./configSave";
-import configSaveS2S from "./configSaveS2S";
+import configRead from "./configRead.js";
+import configSave from "./configSave.js";
+import configSaveS2S from "./configSaveS2S.js";
 
 import {
   Config,
@@ -12,11 +12,11 @@ import {
   ConfigReadRequest,
   SecretReadRequest,
   SecretSaveRequest,
-} from "./models";
-import { Servicelike } from "../..";
-import { AuthenticationService } from "../authentication";
-import secretRead from "./secretRead";
-import secretSave from "./secretSave";
+} from "./models.js";
+import { Servicelike } from "../../util.js";
+import { AuthenticationService } from "../authentication/index.js";
+import secretRead from "./secretRead.js";
+import secretSave from "./secretSave.js";
 
 @Service()
 export class ConfigService implements Servicelike {

@@ -1,11 +1,11 @@
 //import teardown from "./teardown";
-import fileUpload from "./fileUpload";
-import fileServe from "./httpFileServe";
+import fileUpload from "./fileUpload.js";
+import fileServe from "./httpFileServe.js";
 
-import { File } from "./models";
-import { Service, Raw } from "../..";
-import { Servicelike } from "../..";
-import { ConfigService } from "../config";
+import { File } from "./models.js";
+import { Service, Raw } from "../../reflect.js";
+import { Servicelike } from "../../util.js";
+import { ConfigService } from "../config/index.js";
 import * as fs from "fs";
 import * as express from "express";
 

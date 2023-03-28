@@ -1,6 +1,6 @@
 import { expect, test } from "@jest/globals";
 import { nanoid } from "nanoid";
-import { getDependencyGraph, isUnexposed, Service, Unexposed } from "./reflect";
+import { getDependencyGraph, isUnexposed, Service, Unexposed } from "./reflect.js";
 
 @Service()
 class G {}

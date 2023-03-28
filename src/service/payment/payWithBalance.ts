@@ -6,7 +6,7 @@
  */
 
 import { DataSource } from "typeorm";
-import { error } from "../..";
+import { error } from "../../util.js";
 import {
   PayWithBalanceRequest,
   PayWithBalanceResponse,
@@ -15,9 +15,9 @@ import {
   Transaction,
   TransactionEntry,
   accountCompanyStripe,
-} from "./models";
+} from "./models.js";
 import { nanoid } from "nanoid";
-import { AuthenticationService } from "../authentication";
+import { AuthenticationService } from "../authentication/index.js";
 
 export default async (
   connection: DataSource,

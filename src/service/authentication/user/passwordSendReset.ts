@@ -11,11 +11,11 @@ import {
   PasswordSendResetResponse,
   User,
   SecretCode,
-} from "../models";
-import * as sendgrid from "@sendgrid/mail";
-import { Error, error } from "../../..";
+} from "../models.js";
+import sendgrid from "@sendgrid/mail";
+import { Error, error } from "../../../util.js";
 import { nanoid } from "nanoid";
-import { default as configRead } from "../../config/configRead";
+import { default as configRead } from "../../config/configRead.js";
 
 export default async (
   connection: DataSource,

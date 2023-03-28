@@ -8,7 +8,7 @@
 import * as bcrypt from "bcrypt";
 import { nanoid } from "nanoid";
 import { DataSource } from "typeorm";
-import { error } from "../../..";
+import { error } from "../../../util.js";
 import {
   Password,
   PasswordChangeRequest,
@@ -16,7 +16,7 @@ import {
   SecretCode,
   Token,
   User,
-} from "../models";
+} from "../models.js";
 
 export default async (
   connection: DataSource,

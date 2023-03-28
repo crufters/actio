@@ -13,11 +13,11 @@ import {
   Token,
   SecretCode,
   Config,
-} from "../models";
-import * as sendgrid from "@sendgrid/mail";
-import { Error, error } from "../../..";
+} from "../models.js";
+import sendgrid from "@sendgrid/mail";
+import { Error, error } from "../../../util.js";
 import { nanoid } from "nanoid";
-import { ConfigService } from "../../config";
+import { ConfigService } from "../../config/index.js";
 
 // @todo
 function getSendgridKey(): string {

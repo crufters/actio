@@ -14,8 +14,8 @@ import {
   DepartmentListResponse,
   roleAdmin,
   roleBusiness,
-} from "../models";
-import { error } from "../../..";
+} from "../models.js";
+import { error } from "../../../util.js";
 
 export default async (
   connection: DataSource,

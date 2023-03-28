@@ -18,7 +18,7 @@ import {
   Index,
   Unique,
 } from "typeorm";
-import { File } from "../file/models";
+import { File } from "../file/models.js";
 import { Geometry } from "geojson";
 import { nanoid } from "nanoid";
 

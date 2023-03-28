@@ -7,14 +7,14 @@
 
 import * as bcrypt from "bcrypt";
 import { DataSource } from "typeorm";
-import { error } from "../../..";
+import { error } from "../../../util.js";
 import {
   Contact,
   Password,
   PasswordChangeWithOldRequest,
   PasswordChangeWithOldResponse,
   platformEmail,
-} from "../models";
+} from "../models.js";
 
 const err = error("incorrect credentials", 400);
 

@@ -6,7 +6,7 @@
  */
 
 import { DataSource } from "typeorm";
-import { Platform, PlatformListResponse } from "../models";
+import { Platform, PlatformListResponse } from "../models.js";
 
 export default async (
   connection: DataSource,

@@ -14,7 +14,7 @@
 import * as express from "express";
 import * as path from "path";
 
-import { ConfigService } from "../config";
+import { ConfigService } from "../config/index.js";
 
 export default async (
   req: express.Request,

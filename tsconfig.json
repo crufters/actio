@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
+    "module": "esnext",
     "noImplicitReturns": false,
     "noUnusedLocals": true,
     "outDir": "lib",
@@ -12,10 +12,11 @@
     "emitDecoratorMetadata": true,
     "typeRoots": ["./node_modules/@types"],
     "declaration": true,
-    "esModuleInterop": true
+    //"lib": ["esnext"],
+    "esModuleInterop": true,
+    "moduleResolution": "nodenext"
   },
   "compileOnSave": true,
-  "target": "esnext",
   "include": ["src"],
   "exclude": ["node_modules", "lib"],
   "allowSyntheticDefaultImports": true

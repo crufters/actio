@@ -7,8 +7,8 @@
 
 //import { nanoid } from "nanoid";
 import { DataSource } from "typeorm";
-import { copy } from "../..";
-import { Config, ConfigSaveRequest, ConfigSaveResponse } from "./models";
+import { copy } from "../../util.js";
+import { Config, ConfigSaveRequest, ConfigSaveResponse } from "./models.js";
 
 export default async (
   connection: DataSource,

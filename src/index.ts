@@ -1,14 +1,27 @@
-export { Service, Raw, Unexposed } from "./reflect";
-export * from "./injector";
-import { Registrator } from "./registrator";
-export { Registrator };
-export * from "./registrator";
-import { Servicelike, ServiceMeta } from "./util";
-export { Servicelike, ServiceMeta };
-export * from "./util";
+import { Service, Raw, Unexposed } from "./reflect.js";
+import { Injector } from "./injector.js";
+import { Registrator } from "./registrator.js";
+import { error, Error, copy, Servicelike, ServiceMeta } from "./util.js";
+import { AuthenticationService } from "./service/authentication/index.js";
+import { AdminService } from "./service/admin/index.js";
+import { PaymentService } from "./service/payment/index.js";
+import { ConfigService } from "./service/config/index.js";
+import { FileService } from "./service/file/index.js";
 
-export { AuthenticationService } from "./service/authentication";
-export { AdminService } from "./service/admin";
-export { PaymentService } from "./service/payment";
-export { ConfigService } from "./service/config";
-export { FileService } from "./service/file";
+export {
+  Service,
+  Raw,
+  Unexposed,
+  ServiceMeta,
+  Servicelike,
+  Injector,
+  Registrator,
+  error,
+  Error,
+  copy,
+  AuthenticationService,
+  AdminService,
+  PaymentService,
+  ConfigService,
+  FileService,
+};

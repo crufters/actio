@@ -1,7 +1,7 @@
 import { test, expect, describe } from "@jest/globals";
-import { Injector } from "../../injector";
+import { Injector } from "../../injector.js";
 import { nanoid } from "nanoid";
-import { ConfigService } from "./index";
+import { ConfigService } from "./index.js";
 
 describe("Config tests", () => {
   var config: ConfigService;

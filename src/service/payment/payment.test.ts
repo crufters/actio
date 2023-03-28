@@ -1,11 +1,11 @@
 import { test, expect, describe } from "@jest/globals";
-import { Injector } from "../../injector";
+import { Injector } from "../../injector.js";
 import { nanoid } from "nanoid";
-import { PaymentService } from "./index";
-import { AuthenticationService } from "../authentication/index";
-import { UserRegisterResponse } from "../authentication/models";
-import { ConfigService } from "../config/index";
-import { AccountType, gatewayStripe } from "./models";
+import { PaymentService } from "./index.js";
+import { AuthenticationService } from "../authentication/index.js";
+import { UserRegisterResponse } from "../authentication/models.js";
+import { ConfigService } from "../config/index.js";
+import { AccountType, gatewayStripe } from "./models.js";
 // import Stripe from "stripe";
 
 describe("Check balance and payment history", () => {

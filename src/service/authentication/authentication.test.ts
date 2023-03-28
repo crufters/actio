@@ -1,14 +1,14 @@
 import { test, expect, describe } from "@jest/globals";
-import { Injector } from "../../injector";
+import { Injector } from "../../injector.js";
 import { nanoid } from "nanoid";
-import { AuthenticationService } from "./index";
-import { ConfigService } from "../config/index";
+import { AuthenticationService } from "./index.js";
+import { ConfigService } from "../config/index.js";
 import {
   DepartmentListResponse,
   platformEmail,
   roleUser,
   UserRegisterResponse,
-} from "./models";
+} from "./models.js";
 
 describe("Config free auth works", () => {
   var auth: AuthenticationService;

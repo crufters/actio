@@ -1,5 +1,5 @@
-import { Service } from "../..";
-import { Servicelike } from "../..";
+import { Service } from "../../reflect.js";
+import { Servicelike } from "../../util.js";
 import { DataSource } from "typeorm";
 
 import {
@@ -18,14 +18,14 @@ import {
   TransactionEntry,
   PayWithBalanceRequest,
   SystemBalanceRequest,
-} from "./models";
-import { ConfigService } from "../config";
-import topup from "./topup";
-import balance from "./balance";
-import payments from "./charges";
-import payWithBalance from "./payWithBalance";
-import systemBalance from "./systemBalance";
-import { AuthenticationService } from "../authentication";
+} from "./models.js";
+import { ConfigService } from "../config/index.js";
+import topup from "./topup.js";
+import balance from "./balance.js";
+import payments from "./charges.js";
+import payWithBalance from "./payWithBalance.js";
+import systemBalance from "./systemBalance.js";
+import { AuthenticationService } from "../authentication/index.js";
 
 @Service()
 export class PaymentService implements Servicelike {

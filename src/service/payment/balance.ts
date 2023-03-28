@@ -6,9 +6,9 @@
  */
 
 import { DataSource } from "typeorm";
-import { BalanceRequest, BalanceResponse } from "./models";
+import { BalanceRequest, BalanceResponse } from "./models.js";
 
-import { AuthenticationService } from "../authentication";
+import { AuthenticationService } from "../authentication/index.js";
 
 export default async (
   connection: DataSource,
