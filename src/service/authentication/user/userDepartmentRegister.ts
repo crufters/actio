@@ -7,7 +7,7 @@
 
 import * as bcrypt from "bcrypt";
 import { nanoid } from "nanoid";
-import * as slug from "slug";
+import slug from "slug";
 import { DataSource } from "typeorm";
 import { error } from "../../..";
 import {

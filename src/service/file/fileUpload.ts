@@ -24,7 +24,7 @@ import * as express from "express";
 
 // Node.js doesn't have a built-in multipart/form-data parsing library.
 // Instead, we can use the 'busboy' library from NPM to parse these requests.
-import * as busboy from "busboy";
+import busboy from "busboy";
 import { default as env } from "../../env";
 import { ConfigService } from "../config";
 

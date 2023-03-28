@@ -1,9 +1,9 @@
 import { expect, test } from "@jest/globals";
 
 import { Registrator } from "./registrator";
-import * as express from "express";
+import express from "express";
 import { Service, Unexposed, Raw } from "./reflect";
-import * as request from "supertest";
+import {default as request } from "supertest";
 
 @Service()
 class A1 {

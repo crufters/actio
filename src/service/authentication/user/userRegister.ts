@@ -17,7 +17,7 @@ import {
   roleUser,
 } from "../models";
 import { nanoid } from "nanoid";
-import * as slug from "slug";
+import slug from "slug";
 import * as bcrypt from "bcrypt";
 import { error } from "../../..";
 // import verificationCodeSend from "./verificationCodeSend";
