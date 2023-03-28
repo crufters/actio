@@ -1,8 +1,13 @@
 {
   "name": "@crufters/actio",
-  "version": "0.0.23",
+  "version": "0.0.28",
   "type": "module",
   "description": "Evolve your node.js monolith into microservices any time without code changes by using this library.",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "files": [
+    "lib/**/*"
+  ],
   "dependencies": {
     "@google-cloud/storage": "^6.7.0",
     "@sendgrid/mail": "^7.7.0",
@@ -68,7 +73,5 @@
   },
   "engines": {
     "node": "16"
-  },
-  "main": "lib/index.js",
-  "types": "lib/index.d.ts"
+  }
 }

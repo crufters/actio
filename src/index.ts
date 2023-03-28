@@ -1,6 +1,10 @@
 export { Service, Raw, Unexposed } from "./reflect";
 export * from "./injector";
+import { Registrator } from "./registrator";
+export { Registrator };
 export * from "./registrator";
+import { Servicelike, ServiceMeta } from "./util";
+export { Servicelike, ServiceMeta };
 export * from "./util";
 
 export { AuthenticationService } from "./service/authentication";
