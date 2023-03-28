@@ -25,6 +25,7 @@ touch index.ts
 ```
 
 Make sure your `tsconfig.ts` looks something like this
+
 ```js
 {
   "compilerOptions": {
@@ -40,6 +41,8 @@ Make sure your `tsconfig.ts` looks something like this
   }
 }
 ```
+
+and make sure the `package.json` has `"type": "module"`.
 
 Put this into your `index.ts`:
 
