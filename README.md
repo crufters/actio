@@ -12,6 +12,8 @@ It enables you to start your codebase as a monolith and move into a microservice
 
 Somewhat inspired by Angular, in essence it is a dependency injection framework that comes with builtin services that help you solve real world problems - such as handling database connections, authentication, file uploads and more.
 
+This project is currently being extracted from a private codebase, if you like what you see please drop a star to keep me motivated as it's a lot of work. Thanks.
+
 ## Table of contents
 
 - [A basic service exposed over http](#a-basic-service-exposed-over-http)
