@@ -73,8 +73,7 @@ class MyService implements Servicelike {
     this.auth = auth;
   }
 
-  // this endpoint will be exposed as a http endpoint, ie.
-  // curl 127.0.0.1/my-service/my-endpoint
+  // this endpoint will be exposed as a http endpoint
   async myEndpoint(req: MyEndpointRequest) {
     let t = await this.auth.tokenRead({
       token: req.token,
@@ -114,7 +113,8 @@ Make sure your `tsconfig.ts` looks something like this
     "noImplicitAny": true,
     "moduleResolution": "node",
     "esModuleInterop": true,
-    "experimentalDecorators": true
+    "experimentalDecorators": true,
+     "emitDecoratorMetadata": true
   }
 }
 ```
@@ -128,6 +128,12 @@ npx ts-node --esm ./index.ts
 ```
 
 Should output `Server is listening on port 8080`.
+
+Now do a curl:
+
+```sh
+curl 127.0.0.1:8080/MyService/myEndpoint
+```
 
 ## Running as microservices
 

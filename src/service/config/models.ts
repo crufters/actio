@@ -1,9 +1,4 @@
-/**
- * Copyright (C) Dobronszki János - All Rights Reserved
- * Unauthorized copying of the files in this repo, via any medium is strictly prohibited
- * Proprietary and confidential
- * Written by Dobronszki János <dobronszki@gmail.com>, 2021
- */
+
 
 // (like default missions, admin accounts etc.) should come from `contets.ts`
 import { Entity, PrimaryColumn, Column } from "typeorm";
