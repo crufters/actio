@@ -10,10 +10,10 @@ import _ from "lodash";
 // https://gist.github.com/crufter/5fac85071864c41775cc3079015aac71
 
 /**
- * Marks a class as a service. The constructor of your endpoint
+ * Marks a class as a service. The constructor of your service
  * can accept the following list of allowed dependencies:
  *    - other services marked with this decorator
- *    - import { DataSource } from "typeorm"
+ *    - import { DataSource } from "typeorm" and other types handled by handlers
  */
 export const Service = (): ClassDecorator => {
   return (target) => {
