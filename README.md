@@ -173,6 +173,16 @@ Namespaces are useful for two reasons:
 
 To see an example of this look at any of the jest tests in Actio, for example the config service test starts like this:
 
+## Framework development
+
+This section is about developing Actio.
+### Testing
+
+Running a single test:
+```sh
+npm test -- -t 'Init only happens once'
+```
+
 ```ts
 describe("Config tests", () => {
   var config: ConfigService;

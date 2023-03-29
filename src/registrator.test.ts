@@ -4,6 +4,7 @@ import { Registrator } from "./registrator.js";
 import express from "express";
 import { Service, Unexposed, Raw } from "./reflect.js";
 import { default as request } from "supertest";
+import { error } from "./util.js";
 
 @Service()
 class A1 {
@@ -107,4 +108,46 @@ test("test raw", async () => {
     .send({});
   expect(response.status).toBe(200);
   expect(response.body).toEqual({ hi: "hello" });
+});
+
+@Service()
+class C {
+  constructor() {}
+
+  async a() {
+    throw error("oh noes");
+  }
+
+  async b() {
+    let a;
+    // trigger an undefined error
+    console.log(a.x);
+  }
+}
+
+test("test errors", async () => {
+  const app = express();
+  app.use(express.json());
+
+  let reg = new Registrator(app);
+
+  reg.register([C]);
+
+  let response = await await request(app)
+    .post("/C/a")
+    .set({ hi: "hello" })
+    .send({});
+  expect(response.status).toBe(500);
+  expect(response.body).toEqual({ error: "oh noes" });
+
+  response = await await request(app)
+    .post("/C/b")
+    .set({ hi: "hello" })
+    .send({});
+  expect(response.status).toBe(500);
+  expect(
+    JSON.stringify(response.body).includes(
+      "TypeError: Cannot read properties of undefined (reading 'x')"
+    )
+  ).toEqual(true);
 });
