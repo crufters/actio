@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "module": "esnext",
+    "noImplicitReturns": false,
+    "noUnusedLocals": true,
+    "outDir": "lib",
+    "sourceMap": true,
+    //"strictNullChecks": true,
+    //"strict": true,
+    "target": "esnext",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "typeRoots": ["./node_modules/@types"],
+    "declaration": true,
+    //"lib": ["esnext"],
+    "esModuleInterop": true,
+    "moduleResolution": "nodenext"
+  },
+  "compileOnSave": true,
+  "include": ["src"],
+  "exclude": ["node_modules", "lib"],
+  "allowSyntheticDefaultImports": true
+}
