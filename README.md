@@ -1,8 +1,8 @@
-# Actio
 
 <p align="center">
 <img width="200" height="200" src="assets/actiologo.png">
 </p>
+<h1 align="center">Actio</h1>
 <p align="center">
 <img src="https://github.com/crufters/actio/actions/workflows/build.yaml/badge.svg">
 </p>
