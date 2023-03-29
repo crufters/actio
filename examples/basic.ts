@@ -1,36 +1,24 @@
-import {
-  Service,
-  Servicelike,
-  Registrator,
-  AuthenticationService,
-} from "@crufters/actio";
+import { Service, Servicelike, Registrator } from "@crufters/actio";
 
 import express from "express";
 
 interface MyEndpointRequest {
-  token: string;
+  name?: string;
 }
 
 @Service()
 class MyService implements Servicelike {
-  auth: AuthenticationService;
+  constructor() {}
 
-  constructor(auth: AuthenticationService) {
-    this.auth = auth;
-  }
-
-  // this endpoint will be exposed as a http endpoint, ie.
-  // curl 127.0.0.1/my-service/my-endpoint
+  // this endpoint will be exposed as a http endpoint
   async myEndpoint(req: MyEndpointRequest) {
-    let t = await this.auth.tokenRead({
-      token: req.token,
-    });
-    console.log(`The calling user's name is ${t.token?.user?.fullName}`);
+    return { hi: req.name };
   }
 
   async _onInit() {
-    console.log("This callback runs when the server boots up.");
-    console.log("Perfect place to run do things like seeding the database.");
+    console.log(
+      "MyService: This callback runs when the server boots up. Perfect place to run do things like seeding the database."
+    );
   }
 }
 

@@ -15,16 +15,16 @@ Somewhat inspired by Angular, in essence it is a dependency injection framework 
 ## Table of contents
 
 - [A basic service exposed over http](#a-basic-service-exposed-over-http)
-  * [Existing examples](#existing-examples)
-  * [Creating a basic Actio application](#creating-a-basic-actio-application)
+  - [Existing examples](#existing-examples)
+  - [Creating a basic Actio application](#creating-a-basic-actio-application)
 - [Running as microservices](#running-as-microservices)
-  * [Multiple instances for resiliency](#multiple-instances-for-resiliency)
+  - [Multiple instances for resiliency](#multiple-instances-for-resiliency)
 - [Multitenancy and testing](#multitenancy-and-testing)
 - [Framework development](#framework-development)
-  * [Testing](#testing)
+  - [Testing](#testing)
 - [Configuration](#configuration)
 - [Goals](#goals)
-  * [Nongoals:](#nongoals-)
+  - [Nongoals:](#nongoals-)
 - [Credits](#credits)
 
 ## A basic service exposed over http
@@ -52,38 +52,27 @@ touch index.ts
 Put this into your `index.ts`:
 
 ```typescript
-import {
-  Service,
-  Servicelike,
-  Registrator,
-  AuthenticationService,
-} from "@crufters/actio";
+import { Service, Servicelike, Registrator } from "@crufters/actio";
 
 import express from "express";
 
 interface MyEndpointRequest {
-  token: string;
+  name?: string;
 }
 
 @Service()
 class MyService implements Servicelike {
-  auth: AuthenticationService;
-
-  constructor(auth: AuthenticationService) {
-    this.auth = auth;
-  }
+  constructor() {}
 
   // this endpoint will be exposed as a http endpoint
   async myEndpoint(req: MyEndpointRequest) {
-    let t = await this.auth.tokenRead({
-      token: req.token,
-    });
-    console.log(`The calling user's name is ${t.token?.user?.fullName}`);
+    return { hi: req.name };
   }
 
   async _onInit() {
-    console.log("This callback runs when the server boots up.");
-    console.log("Perfect place to run do things like seeding the database.");
+    console.log(
+      "MyService: This callback runs when the server boots up. Perfect place to run do things like seeding the database."
+    );
   }
 }
 
@@ -132,8 +121,16 @@ Should output `Server is listening on port 8080`.
 Now do a curl:
 
 ```sh
-curl 127.0.0.1:8080/MyService/myEndpoint
+curl -XPOST -H "Content-Type: application/json" -d '{"name":"Johnny"}' 127.0.0.1:8080/MyService/myEndpoint
 ```
+
+The output should be:
+
+```sh
+{"hi":"Johnny"}
+```
+
+You can find this script we've just built in the `examples/basic.ts` file.
 
 ## Running as microservices
 
@@ -212,9 +209,11 @@ are easy to run.
 ## Developing Actio
 
 This section is about developing Actio.
+
 ### Testing
 
 Running a single test:
+
 ```sh
 npm test -- -t 'Init only happens once'
 ```
