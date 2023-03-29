@@ -1,9 +1,4 @@
-/**
- * Copyright (C) Dobronszki János - All Rights Reserved
- * Unauthorized copying of the files in this repo, via any medium is strictly prohibited
- * Proprietary and confidential
- * Written by Dobronszki János <dobronszki@gmail.com>, 2021
- */
+
 
 // https://cloud.google.com/functions/docs/writing/http#multipart_data_and_file_uploads
 

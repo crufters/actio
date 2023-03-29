@@ -1,0 +1,4 @@
+CONNECTION_NAME=127.0.0.1
+SQL_USER=postgres
+SQL_PASSWORD=postgres
+SQL_NAME=postgres
