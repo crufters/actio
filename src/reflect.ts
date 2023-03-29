@@ -1,5 +1,3 @@
-// For other usages of the decorators in this codebase
-// see `backend/framework/form/field.ts`
 import "reflect-metadata";
 
 import { ServiceMeta } from "./util.js";
