@@ -1,4 +1,3 @@
-
 <p align="center">
 <img width="200" height="200" src="assets/actiologo.png">
 </p>
@@ -16,12 +15,20 @@ Somewhat inspired by Angular, in essence it is a dependency injection framework 
 ## Table of contents
 
 - [A basic Actio service](#a-basic-service-exposed-over-http)
-- [Goals and nongoals](#goals)
 - [Running as microservices](#running-as-microservices)
 - [Multitenancy and testing](#multitenancy-and-testing)
+- [Goals and nongoals](#goals)
 - [Credit](#credit)
 
 ## A basic service exposed over http
+
+### Existing examples
+
+If you just want to run existing examples, check `examples` folder.
+
+After `npm install` in the `examples` folder you can use `npx ts-node --esm ./basic.ts` to run the application we are going to build from scratch below.
+
+### Creating a basic Actio application.
 
 Let's create a new project:
 
@@ -115,30 +122,6 @@ npx ts-node --esm ./index.ts
 
 Should output `Server is listening on port 8080`.
 
-## Goals
-
-- [ ] Transition from monolith to services should be effortless
-- [x] Service persistence layer (ie. database) should be isolated to prevent antipatterns like sidestepping service boundaries (eg. joins across services) etc.
-- [x] Handle multitenancy (ie. namespaces) so a single instance deployed can run multiple side projects
-- [x] Handle basic concepts like bootstrapping and seeding in a minimalistic way
-- [x] Enable easy introduction of new infrastructure dependencies
-- [x] Do not dictate ways of deployment and deployment architecture
-- [ ] Support clients in multiple frameworks (React, Angular) for easy frontend consumption
-
-### Nongoals:
-
-- Supporting writing services in multiple languages is not a near term goal.
-
-Actio also aims to be batteries included: it contains a bunch of services that help you bootstrap your system (but does not force you to use these) faster:
-
-- [x] Authentication service for login, register, oauth (facebook etc.) login
-- [x] File service for file upload. Upload to a local disk or to Google Storage ec.
-- [x] Config service for handling public configuration and secret values.
-- [ ] Payment service with Stripe and other payment provider supports and a ledger that helps you keep track of money and accounts in case your system operates with topups.
-- ...and many others that the community will find useful.
-
-Let's list a few concepts that can give you a taste (without the intent of being complete or 100% easy to follow)
-
 ## Running as microservices
 
 Note: this functionality is not in the main branch yet.
@@ -216,6 +199,30 @@ are easy to run.
 ## Configuration
 
 TBD
+
+## Goals
+
+- [ ] Transition from monolith to services should be effortless
+- [x] Service persistence layer (ie. database) should be isolated to prevent antipatterns like sidestepping service boundaries (eg. joins across services) etc.
+- [x] Handle multitenancy (ie. namespaces) so a single instance deployed can run multiple side projects
+- [x] Handle basic concepts like bootstrapping and seeding in a minimalistic way
+- [x] Enable easy introduction of new infrastructure dependencies
+- [x] Do not dictate ways of deployment and deployment architecture
+- [ ] Support clients in multiple frameworks (React, Angular) for easy frontend consumption
+
+### Nongoals:
+
+- Supporting writing services in multiple languages is not a near term goal.
+
+Actio also aims to be batteries included: it contains a bunch of services that help you bootstrap your system (but does not force you to use these) faster:
+
+- [x] Authentication service for login, register, oauth (facebook etc.) login
+- [x] File service for file upload. Upload to a local disk or to Google Storage ec.
+- [x] Config service for handling public configuration and secret values.
+- [ ] Payment service with Stripe and other payment provider supports and a ledger that helps you keep track of money and accounts in case your system operates with topups.
+- ...and many others that the community will find useful.
+
+Let's list a few concepts that can give you a taste (without the intent of being complete or 100% easy to follow)
 
 ## Credits
 
