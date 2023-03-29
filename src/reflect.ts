@@ -1,5 +1,3 @@
-// For other usages of the decorators in this codebase
-// see `backend/framework/form/field.ts`
 import "reflect-metadata";
 
 import { ServiceMeta } from "./util.js";
@@ -12,10 +10,10 @@ import _ from "lodash";
 // https://gist.github.com/crufter/5fac85071864c41775cc3079015aac71
 
 /**
- * Marks a class as a service. The constructor of your endpoint
+ * Marks a class as a service. The constructor of your service
  * can accept the following list of allowed dependencies:
  *    - other services marked with this decorator
- *    - import { DataSource } from "typeorm"
+ *    - import { DataSource } from "typeorm" and other types handled by handlers
  */
 export const Service = (): ClassDecorator => {
   return (target) => {
@@ -68,7 +66,7 @@ export function inputParamTypes(t: any): any[] {
   if (!types) {
     return [];
   }
-  // @todod why this filter is needed I'm not sure
+  // @todo why this filter is needed I'm not sure
   // there is likely a hidden bug here. investigate.
   return types.filter((t) => t !== undefined);
 }

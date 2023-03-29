@@ -1,8 +1,8 @@
 {
   "name": "@crufters/actio",
-  "version": "0.0.36",
+  "version": "0.0.37",
   "type": "module",
-  "description": "Evolve your node.js monolith into microservices any time without code changes by using this library.",
+  "description": "Actio is a lightweight, batteries included Node.js framework for your backend applications.",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "files": [

@@ -65,7 +65,7 @@ export class Registrator {
       err = e;
       if (e instanceof Error) {
         rsp = response
-          .status(e.status)
+          .status(e.status ? e.status : 500)
           .send(
             JSON.stringify({
               error: e.message,
@@ -77,7 +77,8 @@ export class Registrator {
           .status(500)
           .send(
             JSON.stringify({
-              error: e,
+              // https://stackoverflow.com/questions/18391212/is-it-not-possible-to-stringify-an-error-using-json-stringify
+              error: JSON.stringify(e, Object.getOwnPropertyNames(e)),
             })
           )
           .end();
