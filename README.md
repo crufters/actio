@@ -1,6 +1,10 @@
 # Actio
 
-Actio is a lightweight framework that enables you to start your codebase as a monolith and move into a microservices architecture at any point without code changes. In essence it is a batteries included (has support for database dependencies and even services like authentication, file upload etc.) dependency injection library that is designed with a microservices focus.
+Actio is a lightweight, batteries included Node.js framework for your backend applications.
+
+It enables you to start your codebase as a monolith and move into a microservices architecture at any point without code changes.
+
+Somewhat inspired by Angular, in essence it is a dependency injection framework that comes with builtin services that help you solve real world problems - such as handling database connections, authentication, file uploads and more.
 
 ## Table of contents
 
