@@ -66,7 +66,7 @@ export function inputParamTypes(t: any): any[] {
   if (!types) {
     return [];
   }
-  // @todod why this filter is needed I'm not sure
+  // @todo why this filter is needed I'm not sure
   // there is likely a hidden bug here. investigate.
   return types.filter((t) => t !== undefined);
 }
