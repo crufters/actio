@@ -3,7 +3,7 @@
 </p>
 <h1 align="center">Actio</h1>
 <p align="center">
-<img src="https://github.com/crufters/actio/actions/workflows/build.yaml/badge.svg">
+<img src="https://github.com/crufters/actio/actions/workflows/build.yaml/badge.svg" /> [![License: AGPL v3](https://img.shields.io/badge/License-AGPL_v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
 </p>
 
 Actio is a lightweight, batteries included Node.js framework for your backend applications.
