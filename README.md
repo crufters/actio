@@ -1,5 +1,12 @@
 # Actio
 
+<p align="center">
+<img width="200" height="200" src="assets/actiologo.png">
+</p>
+<p align="center">
+<img src="https://github.com/crufters/actio/actions/workflows/build.yaml/badge.svg">
+</p>
+
 Actio is a lightweight, batteries included Node.js framework for your backend applications.
 
 It enables you to start your codebase as a monolith and move into a microservices architecture at any point without code changes.
@@ -101,6 +108,7 @@ app.listen(port, () => {
 ```
 
 Compile and run your project from project root:
+
 ```sh
 npx ts-node --esm ./index.ts
 ```
@@ -114,7 +122,7 @@ Should output `Server is listening on port 8080`.
 - [x] Handle multitenancy (ie. namespaces) so a single instance deployed can run multiple side projects
 - [x] Handle basic concepts like bootstrapping and seeding in a minimalistic way
 - [x] Enable easy introduction of new infrastructure dependencies
-- [x] Do not dictate ways of deployment and deployment architecture 
+- [x] Do not dictate ways of deployment and deployment architecture
 - [ ] Support clients in multiple frameworks (React, Angular) for easy frontend consumption
 
 ### Nongoals:
@@ -176,6 +184,7 @@ envar LOGIN_SERVICE_ADDRESS=0.0.0.1:6061,0.0.0.2:6061
 
 Actio support multitenancy by either passing the `namespace` as either a header or a cookie.
 Namespaces are useful for two reasons:
+
 - they enable you to serve multiple frontends/applications from the same backend server
 - they enable you to do integration or end to end tests effortlessly without overwriting your existing data
 
@@ -198,7 +207,7 @@ describe("Config tests", () => {
   });
 
   // to see more check the `config.test.ts` file
-})
+});
 ```
 
 It is best practice to write services in a way that requires the least amount of configuration so tests
