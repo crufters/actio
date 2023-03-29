@@ -14,11 +14,18 @@ Somewhat inspired by Angular, in essence it is a dependency injection framework 
 
 ## Table of contents
 
-- [A basic Actio service](#a-basic-service-exposed-over-http)
+- [A basic service exposed over http](#a-basic-service-exposed-over-http)
+  * [Existing examples](#existing-examples)
+  * [Creating a basic Actio application](#creating-a-basic-actio-application)
 - [Running as microservices](#running-as-microservices)
+  * [Multiple instances for resiliency](#multiple-instances-for-resiliency)
 - [Multitenancy and testing](#multitenancy-and-testing)
-- [Goals and nongoals](#goals)
-- [Credit](#credit)
+- [Framework development](#framework-development)
+  * [Testing](#testing)
+- [Configuration](#configuration)
+- [Goals](#goals)
+  * [Nongoals:](#nongoals-)
+- [Credits](#credits)
 
 ## A basic service exposed over http
 
@@ -28,7 +35,7 @@ If you just want to run existing examples, check `examples` folder.
 
 After `npm install` in the `examples` folder you can use `npx ts-node --esm ./basic.ts` to run the application we are going to build from scratch below.
 
-### Creating a basic Actio application.
+### Creating a basic Actio application
 
 Let's create a new project:
 
