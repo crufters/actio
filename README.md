@@ -14,11 +14,18 @@ Somewhat inspired by Angular, in essence it is a dependency injection framework 
 
 ## Table of contents
 
-- [A basic Actio service](#a-basic-service-exposed-over-http)
+- [A basic service exposed over http](#a-basic-service-exposed-over-http)
+  * [Existing examples](#existing-examples)
+  * [Creating a basic Actio application](#creating-a-basic-actio-application)
 - [Running as microservices](#running-as-microservices)
+  * [Multiple instances for resiliency](#multiple-instances-for-resiliency)
 - [Multitenancy and testing](#multitenancy-and-testing)
-- [Goals and nongoals](#goals)
-- [Credit](#credit)
+- [Framework development](#framework-development)
+  * [Testing](#testing)
+- [Configuration](#configuration)
+- [Goals](#goals)
+  * [Nongoals:](#nongoals-)
+- [Credits](#credits)
 
 ## A basic service exposed over http
 
@@ -28,7 +35,7 @@ If you just want to run existing examples, check `examples` folder.
 
 After `npm install` in the `examples` folder you can use `npx ts-node --esm ./basic.ts` to run the application we are going to build from scratch below.
 
-### Creating a basic Actio application.
+### Creating a basic Actio application
 
 Let's create a new project:
 
@@ -41,26 +48,6 @@ npm i --save-dev typescript; npm i --save-dev @types/googlemaps
 npx tsc --init
 touch index.ts
 ```
-
-Make sure your `tsconfig.ts` looks something like this
-
-```js
-{
-  "compilerOptions": {
-    "target": "esnext",
-    "module": "esnext",
-    "outDir": "build",
-    "rootDir": "./",
-    "strict": true,
-    "noImplicitAny": true,
-    "moduleResolution": "node",
-    "esModuleInterop": true,
-    "experimentalDecorators": true
-  }
-}
-```
-
-and make sure the `package.json` has `"type": "module"`.
 
 Put this into your `index.ts`:
 
@@ -113,6 +100,26 @@ app.listen(port, () => {
   console.log(`Server is listening on port ${port}`);
 });
 ```
+
+Make sure your `tsconfig.ts` looks something like this
+
+```js
+{
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "esnext",
+    "outDir": "build",
+    "rootDir": "./",
+    "strict": true,
+    "noImplicitAny": true,
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "experimentalDecorators": true
+  }
+}
+```
+
+and make sure the `package.json` has `"type": "module"`.
 
 Compile and run your project from project root:
 
