@@ -208,12 +208,11 @@ are easy to run.
 
 ## Developing Actio
 
-This section is about developing Actio.
+This section is about developing Actio itself.
 
 ### Testing
 
 Running a single test:
-
 ```sh
 npm test -- -t 'Init only happens once'
 ```
@@ -248,6 +247,6 @@ Let's list a few concepts that can give you a taste (without the intent of being
 
 ## Credits
 
-Inspired by other microservices systems such as Micro[https://github.com/micro/micro] and the author's previous work with Asim Aslam.
+Inspired by other microservices systems such as [Micro](https://github.com/micro/micro) and the author's previous work with Asim Aslam.
 Author: [János Dobronszki](https://github.com/crufter).
-Contributors: Dávid Dobronszki[https://github.com/Dobika], Asim Aslam[https://github.com/asim], Viktor Veress[].
+Contributors: [Dávid Dobronszki](https://github.com/Dobika), [Asim Aslam](https://github.com/asim), [Viktor Veress]().
