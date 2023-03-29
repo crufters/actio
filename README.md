@@ -42,26 +42,6 @@ npx tsc --init
 touch index.ts
 ```
 
-Make sure your `tsconfig.ts` looks something like this
-
-```js
-{
-  "compilerOptions": {
-    "target": "esnext",
-    "module": "esnext",
-    "outDir": "build",
-    "rootDir": "./",
-    "strict": true,
-    "noImplicitAny": true,
-    "moduleResolution": "node",
-    "esModuleInterop": true,
-    "experimentalDecorators": true
-  }
-}
-```
-
-and make sure the `package.json` has `"type": "module"`.
-
 Put this into your `index.ts`:
 
 ```typescript
@@ -113,6 +93,26 @@ app.listen(port, () => {
   console.log(`Server is listening on port ${port}`);
 });
 ```
+
+Make sure your `tsconfig.ts` looks something like this
+
+```js
+{
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "esnext",
+    "outDir": "build",
+    "rootDir": "./",
+    "strict": true,
+    "noImplicitAny": true,
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "experimentalDecorators": true
+  }
+}
+```
+
+and make sure the `package.json` has `"type": "module"`.
 
 Compile and run your project from project root:
 
