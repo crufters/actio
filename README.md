@@ -21,6 +21,8 @@ This project is currently being extracted from a private codebase, if you like w
   - [Creating a basic Actio application](#creating-a-basic-actio-application)
   - [More example applications](#more-example-applications)
 - [Tutorial](#tutorial)
+- [Services included](#services-included)
+- [Supported infrastructure dependencies](#supported-infrastructure-dependencies)
 - [Running as microservices](#running-as-microservices)
   - [Multiple instances for resiliency](#multiple-instances-for-resiliency)
 - [Multitenancy and testing](#multitenancy-and-testing)
@@ -140,6 +142,24 @@ You can find this script we've just built in the [`examples/basic.ts`](examples/
 
 The readme in the [`examples` folder](examples) is your best place if you are looking for a tutorial.
 
+## Services included
+
+Actio aims to be batteries included: it contains a bunch of services that help you bootstrap your system (but tries to not force you to use these) faster:
+
+- [x] Authentication service for login, register, oauth (facebook etc.) login
+- [x] File service for file upload. Upload to a local disk or to Google Storage etc in production.
+- [x] Config service for handling public configuration and secret values.
+- [x] Payment service with Stripe and other payment provider supports and a ledger that helps you keep track of money and accounts in case your system operates with topups.
+- [ ] ...and many others that the community will find useful.
+
+Let's list a few concepts that can give you a taste (without the intent of being complete or 100% easy to follow)
+
+## Supported infrastructure dependencies
+
+- [x] Postgres
+- [ ] Redis
+- [ ] Many more coming
+
 ## Running as microservices
 
 Note: this functionality is not in the main branch yet.
@@ -186,8 +206,9 @@ envar LOGIN_SERVICE_ADDRESS=0.0.0.1:6061,0.0.0.2:6061
 Actio support multitenancy by either passing the `namespace` as either a header or a cookie.
 Namespaces are useful for two reasons:
 
-- they enable you to serve multiple frontends/applications from the same backend server
-- they enable you to do integration or end to end tests effortlessly without overwriting your existing data
+- They enable you to serve multiple frontends/applications from the same backend server.
+- They enable you to do integration or end to end tests effortlessly without overwriting your existing data.
+- Services and their data are isolated anyway to avoid the classic microservices faux pas where services sidestep API boundaries and read each others data directly. This happens more often than you think in systems where there's no safeguard against this.
 
 To see an example of this look at any of the jest tests in Actio, for example the config service test starts like this:
 
@@ -237,16 +258,6 @@ TBD
 ### Nongoals:
 
 - Supporting writing services in multiple languages is not a near term goal.
-
-Actio also aims to be batteries included: it contains a bunch of services that help you bootstrap your system (but does not force you to use these) faster:
-
-- [x] Authentication service for login, register, oauth (facebook etc.) login
-- [x] File service for file upload. Upload to a local disk or to Google Storage ec.
-- [x] Config service for handling public configuration and secret values.
-- [ ] Payment service with Stripe and other payment provider supports and a ledger that helps you keep track of money and accounts in case your system operates with topups.
-- ...and many others that the community will find useful.
-
-Let's list a few concepts that can give you a taste (without the intent of being complete or 100% easy to follow)
 
 ## Credits
 
