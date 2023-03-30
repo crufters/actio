@@ -20,7 +20,7 @@ This project is currently being extracted from a private codebase, if you like w
   - [Existing examples](#existing-examples)
   - [Creating a basic Actio application](#creating-a-basic-actio-application)
   - [More example applications](#more-example-applications)
-- [Tutorial](#tutorial)
+- [Tutorials](#tutorials)
 - [Services included](#services-included)
 - [Supported infrastructure dependencies](#supported-infrastructure-dependencies)
 - [Running as microservices](#running-as-microservices)
@@ -138,9 +138,9 @@ The output should be:
 
 You can find this script we've just built in the [`examples/basic.ts`](examples/basic.ts) file and other apps in the [`examples` folder](examples).
 
-## Tutorial
+## Tutorials
 
-The readme in the [`examples` folder](examples) is your best place if you are looking for a tutorial.
+The readme in the [`examples` folder](examples) is your best place if you are looking for tutorials.
 
 ## Services included
 
