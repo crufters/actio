@@ -28,7 +28,7 @@ This project is currently being extracted from a private codebase, if you like w
   * [Testing](#testing)
 - [Configuration](#configuration)
 - [Goals](#goals)
-  * [Nongoals:](#nongoals-)
+  * [Nongoals](#nongoals)
 - [Credits](#credits)
 
 ## A basic Actio application
@@ -192,7 +192,7 @@ TBD
 - [x] Do not dictate ways of deployment and deployment architecture
 - [ ] Support clients in multiple frameworks (React, Angular) for easy frontend consumption
 
-### Nongoals:
+### Nongoals
 
 - Supporting writing services in multiple languages is not a near term goal.
 
