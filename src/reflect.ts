@@ -14,6 +14,13 @@ import _ from "lodash";
  * can accept the following list of allowed dependencies:
  *    - other services marked with this decorator
  *    - import { DataSource } from "typeorm" and other types handled by handlers
+ *
+ * Services should not panic if they are not supplied with all the dependencies
+ * at the time of construction.
+ *
+ * The endpoints of a service are its method:
+ * - Method names starting with underscore are callbacks to specific events,
+ * see examples below.
  */
 export const Service = (): ClassDecorator => {
   return (target) => {
@@ -23,6 +30,10 @@ export const Service = (): ClassDecorator => {
 
 let unexposedMethods = new Set<string>();
 
+/**
+ * Class methods decorated with the `@Unexposed()` decorator will not be
+ * exposed as HTTP endpoints.
+ */
 export function Unexposed() {
   return function (
     target: any,
@@ -39,6 +50,14 @@ export function isUnexposed(_class: any, methodName: string): boolean {
 
 let rawMethods = new Set<string>();
 
+/**
+ * Methods annotated with the `@Raw()` decorator will be registered as
+ * direct HTTP methods and have access to HTTP request and response types.
+ * A prime example of this is a file upload endpoint.
+ *
+ * Methods that are not annotated with `@Raw()` will only have access to their JSON request data.
+ * That is favorable to raw HTTP methods as it is cleaner, enables testing etc.
+ */
 export function Raw() {
   return function (
     target: any,

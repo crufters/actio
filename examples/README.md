@@ -3,12 +3,12 @@
 This folder contains example scripts using Actio which are being referred to from the root README.
 
 - [How to run these examples](#how-to-run-these-examples)
-  * [How to create a new project from scratch](#how-to-create-a-new-project-from-scratch)
+  - [How to create a new project from scratch](#how-to-create-a-new-project-from-scratch)
 - [Authentication](#authentication)
 - [Endpoint decorators](#endpoint-decorators)
-  * [Unexposed](#unexposed)
-    + [Why Unexposed is important](#why-unexposed-is-important)
-  * [Raw](#raw)
+  - [Unexposed](#unexposed)
+    - [Why Unexposed is important](#why-unexposed-is-important)
+  - [Raw](#raw)
 
 ## How to run these examples
 
@@ -191,7 +191,7 @@ $ curl -XPOST -H "Content-Type: application/json" -d '{"name":"Johnny"}' 127.0.0
 The server log should show something like this:
 
 ```sh
-MyService/myEndpoint 4ms 200 
+MyService/myEndpoint 4ms 200
 MyService/notMyEndpoint 1ms 404 Error { message: 'endpoint not found' }
 ```
 
