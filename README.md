@@ -19,10 +19,12 @@ This project is currently being extracted from a private codebase, if you like w
 - [A basic service exposed over http](#a-basic-service-exposed-over-http)
   - [Existing examples](#existing-examples)
   - [Creating a basic Actio application](#creating-a-basic-actio-application)
+  - [More example applications](#more-example-applications)
+- [Tutorial](#tutorial)
 - [Running as microservices](#running-as-microservices)
   - [Multiple instances for resiliency](#multiple-instances-for-resiliency)
 - [Multitenancy and testing](#multitenancy-and-testing)
-- [Framework development](#framework-development)
+- [Developing Actio](#developing-actio)
   - [Testing](#testing)
 - [Configuration](#configuration)
 - [Goals](#goals)
@@ -72,9 +74,7 @@ class MyService implements Servicelike {
   }
 
   async _onInit() {
-    console.log(
-      "MyService: _onInit runs whenever the server boots up."
-    );
+    console.log("MyService: _onInit runs whenever the server boots up.");
   }
 }
 
@@ -205,7 +205,6 @@ describe("Config tests", () => {
 });
 ```
 
-
 It is best practice to write services in a way that requires the least amount of configuration so tests
 are easy to run.
 
@@ -216,6 +215,7 @@ This section is about developing Actio itself.
 ### Testing
 
 Running a single test:
+
 ```sh
 npm test -- -t 'Init only happens once'
 ```
