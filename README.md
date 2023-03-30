@@ -46,7 +46,7 @@ interface MyEndpointRequest {
 class MyService implements Servicelike {
   constructor() {}
 
-  // this endpoint will be exposed as a http endpoint
+  // this method will be exposed as an HTTP endpoint
   async myEndpoint(req: MyEndpointRequest) {
     return { hi: req.name };
   }
@@ -69,7 +69,7 @@ app.listen(port, () => {
 });
 ```
 
-If you want to see the tsconfig and other requirements see [this section](examples/README.md#how-to-create-a-new-project-from-scratch).
+If you want to see how to set up your own project with Actio (required `tsconfig.json` options etc.) see [this section](examples/README.md#how-to-create-a-new-project-from-scratch).
 
 ### Other examples
 
@@ -84,12 +84,10 @@ The readme in the [`examples` folder](examples) is your best place if you are lo
 Actio aims to be batteries included: it contains a bunch of services that help you bootstrap your system (but tries to not force you to use these) faster:
 
 - [x] Authentication service for login, register, oauth (facebook etc.) login
-- [x] File service for file upload. Upload to a local disk or to Google Storage etc in production.
+- [x] File service for file upload. Upload to a local disk or to Google Storage etc. in production.
 - [x] Config service for handling public configuration and secret values.
 - [x] Payment service with Stripe and other payment provider supports and a ledger that helps you keep track of money and accounts in case your system operates with topups.
 - [ ] ...and many others that the community will find useful.
-
-Let's list a few concepts that can give you a taste (without the intent of being complete or 100% easy to follow)
 
 ## Supported infrastructure dependencies
 
@@ -130,6 +128,10 @@ envar LOGIN_SERVICE_ADDRESS=0.0.0.1
 Calls to the login service become network calls automatically.
 ```
 
+Naturally, you need to keep your services stateless - ie. no public class variables, only method.
+
+@todo could use some CLI tooling to prevent stateful applications with a linter
+
 ### Multiple instances for resiliency
 
 Use a comma separated list of addresses to randomly call any of the instances:
@@ -147,7 +149,7 @@ Namespaces are useful for two reasons:
 - They enable you to do integration or end to end tests effortlessly without overwriting your existing data.
 - Services and their data are isolated anyway to avoid the classic microservices faux pas where services sidestep API boundaries and read each others data directly. This happens more often than you think in systems where there's no safeguard against this.
 
-To see an example of this look at any of the jest tests in Actio, for example the config service test starts like this:
+To see an example of multitenancy look at any of the jest tests in Actio, for example the config service test starts like this:
 
 ```ts
 describe("Config tests", () => {
@@ -162,6 +164,10 @@ describe("Config tests", () => {
   // to see more check the `config.test.ts` file
 });
 ```
+
+Each test has its own namespace so tests don't step on each others toes.
+
+### Tests and config
 
 It is best practice to write services in a way that requires the least amount of configuration so tests
 are easy to run.
