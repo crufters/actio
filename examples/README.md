@@ -2,9 +2,74 @@
 
 This folder contains example scripts using Actio which are being referred to from the root README.
 
+- [How to run these examples](#how-to-run-these-examples)
+  * [How to create a new project from scratch](#how-to-create-a-new-project-from-scratch)
+- [Authentication](#authentication)
+- [Endpoint decorators](#endpoint-decorators)
+  * [Unexposed](#unexposed)
+    + [Why Unexposed is important](#why-unexposed-is-important)
+  * [Raw](#raw)
+
+## How to run these examples
+
 Run `npm install` and `docker-compose up -d` in this folder and run a given script with `npx ts-node --esm ./basic.ts`. Replace `basic.ts` with the file you want to run.
 
 This folder does not aim to be in depth for each service - that will be the job of the READMEs in the specific service folders, instead it aims to read more like a tutorial.
+
+### How to create a new project from scratch
+
+Run the following in your terminal:
+
+```sh
+mkdir myproject; cd myproject
+npm init --yes
+npm i -s @crufters/actio
+npm i -s express; npm i -s @types/express
+npm i --save-dev typescript; npm i --save-dev @types/googlemaps
+npx tsc --init
+touch index.ts
+```
+
+Make sure your `tsconfig.ts` looks something like this
+
+```js
+{
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "esnext",
+    "outDir": "build",
+    "rootDir": "./",
+    "strict": true,
+    "noImplicitAny": true,
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+     "emitDecoratorMetadata": true
+  }
+}
+```
+
+and make sure the `package.json` has `"type": "module"`.
+
+Compile and run your project from project root:
+
+```sh
+npx ts-node --esm ./index.ts
+```
+
+Should output `Server is listening on port 8080`.
+
+Now do a curl:
+
+```sh
+curl -XPOST -H "Content-Type: application/json" -d '{"name":"Johnny"}' 127.0.0.1:8080/MyService/myEndpoint
+```
+
+The output should be:
+
+```sh
+{"hi":"Johnny"}
+```
 
 ## Authentication
 
@@ -76,7 +141,7 @@ As you can see we successfully called the `AuthenticationService` from our own a
 
 ## Endpoint decorators
 
-### @Unexposed
+### Unexposed
 
 You can use the `@Unexposed` decorator to mark a method as one that should not be exposed as a HTTP endpoint.
 
@@ -130,13 +195,13 @@ MyService/myEndpoint 4ms 200
 MyService/notMyEndpoint 1ms 404 Error { message: 'endpoint not found' }
 ```
 
-#### Why @Unexposed is important
+#### Why Unexposed is important
 
 The `@Unexposed` decorator is supremely important because it enables us to build endpoints only available to other services but not available to end users at the API gateway level.
 
 @todo: For monoliths the current implementation is fine but for a microservices setup we need to build out a service to service call mechanism driven by this decorator.
 
-### @Raw
+### Raw
 
 Class methods get turned into JSON expecting HTTP endpoints by Actio. This works fine for most use cases but sometimes we need access to the underlying HTTP request and response types. A prime example of that is the `FileService`:
 

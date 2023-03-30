@@ -16,46 +16,22 @@ This project is currently being extracted from a private codebase, if you like w
 
 ## Table of contents
 
-- [A basic service exposed over http](#a-basic-service-exposed-over-http)
-  - [Existing examples](#existing-examples)
-  - [Creating a basic Actio application](#creating-a-basic-actio-application)
-  - [More example applications](#more-example-applications)
+- [A basic Actio application](#a-basic-actio-application)
+  * [Other examples](#other-examples)
 - [Tutorials](#tutorials)
 - [Services included](#services-included)
 - [Supported infrastructure dependencies](#supported-infrastructure-dependencies)
 - [Running as microservices](#running-as-microservices)
-  - [Multiple instances for resiliency](#multiple-instances-for-resiliency)
+  * [Multiple instances for resiliency](#multiple-instances-for-resiliency)
 - [Multitenancy and testing](#multitenancy-and-testing)
 - [Developing Actio](#developing-actio)
-  - [Testing](#testing)
+  * [Testing](#testing)
 - [Configuration](#configuration)
 - [Goals](#goals)
-  - [Nongoals:](#nongoals-)
+  * [Nongoals:](#nongoals-)
 - [Credits](#credits)
 
-## A basic service exposed over http
-
-### Existing examples
-
-If you just want to run existing examples, check `examples` folder.
-
-After `npm install` in the `examples` folder you can use `npx ts-node --esm ./basic.ts` to run the application we are going to build from scratch below.
-
-### Creating a basic Actio application
-
-Let's create a new project:
-
-```sh
-mkdir myproject; cd myproject
-npm init --yes
-npm i -s @crufters/actio
-npm i -s express; npm i -s @types/express
-npm i --save-dev typescript; npm i --save-dev @types/googlemaps
-npx tsc --init
-touch index.ts
-```
-
-Put this into your `index.ts`:
+## A basic Actio application
 
 ```typescript
 import { Service, Servicelike, Registrator } from "@crufters/actio";
@@ -93,50 +69,11 @@ app.listen(port, () => {
 });
 ```
 
-Make sure your `tsconfig.ts` looks something like this
+If you want to see the tsconfig and other requirements see [this section](examples/README.md#how-to-create-a-new-project-from-scratch).
 
-```js
-{
-  "compilerOptions": {
-    "target": "esnext",
-    "module": "esnext",
-    "outDir": "build",
-    "rootDir": "./",
-    "strict": true,
-    "noImplicitAny": true,
-    "moduleResolution": "node",
-    "esModuleInterop": true,
-    "experimentalDecorators": true,
-     "emitDecoratorMetadata": true
-  }
-}
-```
+### Other examples
 
-and make sure the `package.json` has `"type": "module"`.
-
-Compile and run your project from project root:
-
-```sh
-npx ts-node --esm ./index.ts
-```
-
-Should output `Server is listening on port 8080`.
-
-Now do a curl:
-
-```sh
-curl -XPOST -H "Content-Type: application/json" -d '{"name":"Johnny"}' 127.0.0.1:8080/MyService/myEndpoint
-```
-
-The output should be:
-
-```sh
-{"hi":"Johnny"}
-```
-
-### More example applications
-
-You can find this script we've just built in the [`examples/basic.ts`](examples/basic.ts) file and other apps in the [`examples` folder](examples).
+For more in depth examples and tutorials see the [examples folder](./examples).
 
 ## Tutorials
 
