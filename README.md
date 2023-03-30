@@ -19,10 +19,12 @@ This project is currently being extracted from a private codebase, if you like w
 - [A basic service exposed over http](#a-basic-service-exposed-over-http)
   - [Existing examples](#existing-examples)
   - [Creating a basic Actio application](#creating-a-basic-actio-application)
+  - [More example applications](#more-example-applications)
+- [Tutorial](#tutorial)
 - [Running as microservices](#running-as-microservices)
   - [Multiple instances for resiliency](#multiple-instances-for-resiliency)
 - [Multitenancy and testing](#multitenancy-and-testing)
-- [Framework development](#framework-development)
+- [Developing Actio](#developing-actio)
   - [Testing](#testing)
 - [Configuration](#configuration)
 - [Goals](#goals)
@@ -72,9 +74,7 @@ class MyService implements Servicelike {
   }
 
   async _onInit() {
-    console.log(
-      "MyService: This callback runs when the server boots up. Perfect place to run do things like seeding the database."
-    );
+    console.log("MyService: _onInit runs whenever the server boots up.");
   }
 }
 
@@ -132,7 +132,13 @@ The output should be:
 {"hi":"Johnny"}
 ```
 
-You can find this script we've just built in the `examples/basic.ts` file.
+### More example applications
+
+You can find this script we've just built in the [`examples/basic.ts`](examples/basic.ts) file and other apps in the [`examples` folder](examples).
+
+## Tutorial
+
+The readme in the [`examples` folder](examples) is your best place if you are looking for a tutorial.
 
 ## Running as microservices
 
@@ -195,12 +201,6 @@ describe("Config tests", () => {
     config = await i.getInstance("ConfigService", namespace);
   });
 
-  test("config read basics", async () => {
-    expect(config).toBeTruthy();
-    let rsp = await config.configRead({});
-    expect(rsp.config?.data).toBeTruthy();
-  });
-
   // to see more check the `config.test.ts` file
 });
 ```
@@ -215,6 +215,7 @@ This section is about developing Actio itself.
 ### Testing
 
 Running a single test:
+
 ```sh
 npm test -- -t 'Init only happens once'
 ```
@@ -251,4 +252,4 @@ Let's list a few concepts that can give you a taste (without the intent of being
 
 Inspired by other microservices systems such as [Micro](https://github.com/micro/micro) and the author's previous work with Asim Aslam.
 Author: [János Dobronszki](https://github.com/crufter).
-Contributors: [Dávid Dobronszki](https://github.com/Dobika), [Asim Aslam](https://github.com/asim), [Viktor Veress]().
+Contributors: [Dávid Dobronszki](https://github.com/Dobika), [Asim Aslam](https://github.com/asim), [Viktor Veress](https://github.com/vvik91).
