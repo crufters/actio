@@ -73,7 +73,7 @@ class MyService implements Servicelike {
 
   async _onInit() {
     console.log(
-      "MyService: This callback runs when the server boots up. Perfect place to run do things like seeding the database."
+      "MyService: _onInit runs whenever the server boots up."
     );
   }
 }
@@ -132,7 +132,13 @@ The output should be:
 {"hi":"Johnny"}
 ```
 
-You can find this script we've just built in the `examples/basic.ts` file.
+### More example applications
+
+You can find this script we've just built in the [`examples/basic.ts`](examples/basic.ts) file and other apps in the [`examples` folder](examples).
+
+## Tutorial
+
+The readme in the [`examples` folder](examples) is your best place if you are looking for a tutorial.
 
 ## Running as microservices
 
@@ -195,15 +201,10 @@ describe("Config tests", () => {
     config = await i.getInstance("ConfigService", namespace);
   });
 
-  test("config read basics", async () => {
-    expect(config).toBeTruthy();
-    let rsp = await config.configRead({});
-    expect(rsp.config?.data).toBeTruthy();
-  });
-
   // to see more check the `config.test.ts` file
 });
 ```
+
 
 It is best practice to write services in a way that requires the least amount of configuration so tests
 are easy to run.
@@ -251,4 +252,4 @@ Let's list a few concepts that can give you a taste (without the intent of being
 
 Inspired by other microservices systems such as [Micro](https://github.com/micro/micro) and the author's previous work with Asim Aslam.
 Author: [János Dobronszki](https://github.com/crufter).
-Contributors: [Dávid Dobronszki](https://github.com/Dobika), [Asim Aslam](https://github.com/asim), [Viktor Veress]().
+Contributors: [Dávid Dobronszki](https://github.com/Dobika), [Asim Aslam](https://github.com/asim), [Viktor Veress](https://github.com/vvik91).
