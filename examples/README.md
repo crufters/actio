@@ -73,3 +73,83 @@ $ curl -XPOST -H "Content-Type: application/json" -d '{"token":"4o11JVud5mIFiFWC
 ```
 
 As you can see we successfully called the `AuthenticationService` from our own and read the name of the calling user.
+
+## Endpoint decorators
+
+### @Unexposed
+
+You can use the `@Unexposed` decorator to mark a method as one that should not be exposed as a HTTP endpoint.
+
+See `unexposed.ts`:
+
+```ts
+@Service()
+class MyService {
+  constructor() {}
+
+  // this method will be exposed as an HTTP endpoint
+  async myEndpoint(req: MyEndpointRequest) {
+    return { hi: req.name };
+  }
+
+  // this method WILL NOT be exposed as an HTTP endpoint
+  @Unexposed()
+  async notMyEndpoint(req: MyEndpointRequest) {
+    return { hi: req.name };
+  }
+}
+```
+
+Let's fire it up
+
+```sh
+$ npx ts-node --esm ./unexposed.ts
+Server is listening on port 8080
+```
+
+If we curl `myEndpoint`, it returns as expected:
+
+```sh
+$ curl -XPOST -H "Content-Type: application/json" -d '{"name":"Johnny"}' 127.0.0.1:8080/MyService/myEndpoint
+
+{"hi":"Johnny"}
+```
+
+Curling `notMyEndpoint`, marked with the `@Unexposed` decorator returns a 404:
+
+```sh
+$ curl -XPOST -H "Content-Type: application/json" -d '{"name":"Johnny"}' 127.0.0.1:8080/MyService/notMyEndpoint
+
+{"error":"endpoint not found"}
+```
+
+The server log should show something like this:
+
+```sh
+MyService/myEndpoint 4ms 200 
+MyService/notMyEndpoint 1ms 404 Error { message: 'endpoint not found' }
+```
+
+#### Why @Unexposed is important
+
+The `@Unexposed` decorator is supremely important because it enables us to build endpoints only available to other services but not available to end users at the API gateway level.
+
+@todo: For monoliths the current implementation is fine but for a microservices setup we need to build out a service to service call mechanism driven by this decorator.
+
+### @Raw
+
+Class methods get turned into JSON expecting HTTP endpoints by Actio. This works fine for most use cases but sometimes we need access to the underlying HTTP request and response types. A prime example of that is the `FileService`:
+
+```ts
+  @Raw()
+  httpFileUpload(req: express.Request, rsp: express.Response) {
+    fileUpload(req, rsp, this.config);
+  }
+
+  @Raw()
+  httpFileServe(req: express.Request, rsp: express.Response) {
+    fileServe(req, rsp, this.config);
+  }
+```
+
+The prefix if `http` in the method name is not mandatory.
