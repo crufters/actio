@@ -2,6 +2,7 @@ import { inputParamTypeNames, getMeta, getDependencyGraph } from "./reflect.js";
 import _ from "lodash";
 import { TypeORMHandler } from "./typeorm.js";
 import chalk from "chalk";
+import axios from "axios";
 
 /**
  * A Handler is a leaf node dependency, eg. type ORM DataSource and similar.
@@ -30,6 +31,7 @@ interface Handler {
  * Lazily instantiates classes.
  */
 export class Injector {
+  public addresses = new Map<string, string>();
   public turnoffOnInit = false;
   log = false;
 
@@ -147,11 +149,36 @@ export class Injector {
       // mark this class as in progress
       this.inProgressByClassNameAndNamespace.set(className + namespace, true);
 
+      // initiate a new instance of this class
       let instance;
+      let _class = this.classes.find((c) => c.name == className);
+
+      // if there is an envar set for this class, create an instance
+      // without dependencies monkey patch the class methods to make them
+      // service calls
+      let address = process.env[className] || this.addresses.get(className);
+      if (address) {
+        this.log &&
+          console.log(
+            `${logPrefix} creating instance of ${className} from envar`
+          );
+        instance = this.monkeyPatchServiceMethods(
+          new _class(),
+          className,
+          address
+        );
+        this.inProgressByClassNameAndNamespace.delete(className + namespace);
+        this.instancesByClassNameAndNamespace.set(
+          className + namespace,
+          instance
+        );
+        resolve(instance);
+        return;
+      }
+
       try {
         this.log && console.log(`${logPrefix} initiating class`);
 
-        let _class = this.classes.find((c) => c.name == className);
         if (_class == undefined) {
           reject(
             `injector cannot find ${className} (namespace ${namespace}) amongst available classes: ${this.availableClassNames().join(
@@ -250,6 +277,40 @@ export class Injector {
       // finally block?
       this.inProgressByClassNameAndNamespace.delete(className + namespace);
       resolve(instance);
+    });
+  }
+
+  monkeyPatchServiceMethods(instance, className, address) {
+    let methods = Object.getOwnPropertyNames(instance.__proto__).filter(
+      (m) => m != "constructor"
+    );
+    for (const m of methods) {
+      instance[m] = async (arg) => {
+        let result = await this.serviceCall(address, className, m, arg);
+        return result;
+      };
+    }
+    return instance;
+  }
+
+  // make a JSON over HTTP call
+  private serviceCall(address, className, method, arg) {
+    return new Promise((resolve, reject) => {
+      let url = `${address}/${className}/${method}`;
+      axios({
+        url: url,
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        data: JSON.stringify(arg),
+      })
+        .then((rsp) => {
+          resolve(rsp.data);
+        })
+        .catch((e) => {
+          reject(e);
+        });
     });
   }
 }

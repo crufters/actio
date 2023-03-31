@@ -7,6 +7,7 @@ import { isUnexposed, isRaw } from "./reflect.js";
 
 // Registrator's responsibility is registering endpoints of a service
 export class Registrator {
+  public addresses = new Map<string, string>();
   app: express.Application;
   injector: Injector;
 
@@ -16,6 +17,7 @@ export class Registrator {
 
   register(serviceClasses: any[]) {
     this.injector = new Injector(serviceClasses);
+    this.injector.addresses = this.addresses;
     this.injector.log = true;
 
     // can't simply pass this.route as callback due to this issue:
@@ -170,11 +172,12 @@ function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-export function startServer(serviceClasses: any[]) {
+export function startServer(serviceClasses: any[], port?: number) {
+  if (!port) {
+    port = 8080;
+  }
   const app = express();
   app.use(express.json());
-
-  const port = 8080;
 
   let reg = new Registrator(app);
   reg.register([serviceClasses]);
