@@ -1,6 +1,4 @@
-import { Service, Registrator, Unexposed } from "@crufters/actio";
-
-import express from "express";
+import { Service, startServer, Unexposed } from "@crufters/actio";
 
 interface MyEndpointRequest {
   name?: string;
@@ -10,26 +8,16 @@ interface MyEndpointRequest {
 class MyService {
   constructor() {}
 
-  // this method will be exposed as a HTTP endpoint
+  // this method will be exposed as an HTTP endpoint
   async myEndpoint(req: MyEndpointRequest) {
     return { hi: req.name };
   }
 
-  // this method WILL NOT be exposed as a HTTP endpoint
+  // this method WILL NOT be exposed as an HTTP endpoint
   @Unexposed()
   async notMyEndpoint(req: MyEndpointRequest) {
     return { hi: req.name };
   }
 }
 
-const app = express();
-app.use(express.json());
-
-const port = 8080;
-
-let reg = new Registrator(app);
-reg.register([MyService]);
-
-app.listen(port, () => {
-  console.log(`Server is listening on port ${port}`);
-});
+startServer([MyService]);

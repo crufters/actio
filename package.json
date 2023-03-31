@@ -1,6 +1,6 @@
 {
   "name": "@crufters/actio",
-  "version": "0.0.37",
+  "version": "0.0.38",
   "type": "module",
   "description": "Actio is a lightweight, batteries included Node.js framework for your backend applications.",
   "main": "lib/index.js",

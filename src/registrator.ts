@@ -1,6 +1,4 @@
-
-
-import * as express from "express";
+import express from "express";
 // import * as cr from "./crypt";
 import { Error, error } from "./util.js";
 import { Injector } from "./injector.js";
@@ -170,4 +168,18 @@ export function cors(request: express.Request, response: express.Response) {
 
 function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+export function startServer(serviceClasses: any[]) {
+  const app = express();
+  app.use(express.json());
+
+  const port = 8080;
+
+  let reg = new Registrator(app);
+  reg.register([serviceClasses]);
+
+  app.listen(port, () => {
+    console.log(`Server is listening on port ${port}`);
+  });
 }
