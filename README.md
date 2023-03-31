@@ -2,6 +2,7 @@
 <img width="200" height="200" src="assets/actiologo.png">
 </p>
 <h1 align="center">Actio</h1>
+The Node.js framework for monoliths and microservices.
 <p align="center">
 <img src="https://github.com/crufters/actio/actions/workflows/build.yaml/badge.svg" /> <a href="https://www.gnu.org/licenses/agpl-3.0"><img src="https://img.shields.io/badge/License-AGPL_v3-blue.svg" alt="License: AGPL v3"/></a> <img src="https://img.shields.io/badge/semver-0.1.0-yellow" />
 </p>
