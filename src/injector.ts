@@ -156,7 +156,11 @@ export class Injector {
       // if there is an envar set for this class, create an instance
       // without dependencies monkey patch the class methods to make them
       // service calls
-      let address = process.env[className] || this.addresses.get(className);
+      let address =
+        process.env[className] ||
+        process.env[toSnakeCase(className)] ||
+        this.addresses.get(className) ||
+        this.addresses.get(toSnakeCase(className));
       if (address) {
         this.log &&
           console.log(
@@ -338,4 +342,8 @@ function until(
   };
 
   return new Promise(poll);
+}
+
+function toSnakeCase(str) {
+  return str.replace(/([A-Z])/g, (g) => "_" + g[0].toUpperCase());
 }

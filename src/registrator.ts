@@ -7,6 +7,12 @@ import { isUnexposed, isRaw } from "./reflect.js";
 
 // Registrator's responsibility is registering endpoints of a service
 export class Registrator {
+  /**
+   * There are two ways to set addresses of services,
+   * envars and this map.
+   * @todo injector also has an addresses member, remove this duplication
+   * if possible
+   */
   public addresses = new Map<string, string>();
   app: express.Application;
   injector: Injector;

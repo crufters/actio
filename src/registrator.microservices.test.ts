@@ -6,10 +6,7 @@ import { Service } from "./reflect.js";
 import { default as request } from "supertest";
 
 @Service()
-class MSA {
-  meta = {
-    name: "msa",
-  };
+class MserviceA {
   constructor() {}
 
   async a(dat) {
@@ -19,13 +16,9 @@ class MSA {
 }
 
 @Service()
-class MSB {
-  meta = {
-    name: "msb",
-  };
-
-  aService: MSA;
-  constructor(aService: MSA) {
+class MserviceB {
+  aService: MserviceA;
+  constructor(aService: MserviceA) {
     this.aService = aService;
   }
 
@@ -36,7 +29,7 @@ class MSB {
   }
 }
 
-test("test microservice call", async () => {
+test("microservice call", async () => {
   let randomPortNumber = Math.floor(Math.random() * 10000) + 10000;
 
   const appA = express();
@@ -44,7 +37,7 @@ test("test microservice call", async () => {
 
   let reg = new Registrator(appA);
 
-  reg.register([MSA]);
+  reg.register([MserviceA]);
 
   let server;
   setTimeout(() => {
@@ -55,11 +48,11 @@ test("test microservice call", async () => {
   appB.use(express.json());
 
   let regB = new Registrator(appB);
-  regB.addresses.set("MSA", "http://localhost:" + randomPortNumber);
-  regB.register([MSB]);
+  regB.addresses.set("MserviceA", "http://localhost:" + randomPortNumber);
+  regB.register([MserviceB]);
 
   let response = await request(appB)
-    .post("/MSB/b")
+    .post("/MserviceB/b")
     .set({})
     .send({ hi: "hello" })
     .retry(0);
@@ -76,11 +69,11 @@ test("microservice proof", async () => {
   appB.use(express.json());
 
   let regB = new Registrator(appB);
-  regB.addresses.set("MSA", "http://localhost:" + randomPortNumber);
-  regB.register([MSB]);
+  regB.addresses.set("MserviceA", "http://localhost:" + randomPortNumber);
+  regB.register([MserviceB]);
 
   let response = await request(appB)
-    .post("/MSB/b")
+    .post("/MsericeB/b")
     .set({})
     .send({ hi: "hello" })
     .retry(0);
