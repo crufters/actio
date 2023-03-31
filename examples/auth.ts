@@ -1,8 +1,6 @@
 import "./env.js";
 
-import { Service, Registrator, AuthenticationService } from "@crufters/actio";
-
-import express from "express";
+import { Service, startServer, AuthenticationService } from "@crufters/actio";
 
 interface MyEndpointRequest {
   token: string;
@@ -23,14 +21,4 @@ class MyService {
   }
 }
 
-const app = express();
-app.use(express.json());
-
-const port = 8080;
-
-let reg = new Registrator(app);
-reg.register([MyService]);
-
-app.listen(port, () => {
-  console.log(`Server is listening on port ${port}`);
-});
+startServer([MyService]);

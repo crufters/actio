@@ -1,5 +1,3 @@
-
-
 export class Error {
   /** Error message */
   message: string;

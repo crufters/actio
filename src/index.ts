@@ -1,6 +1,6 @@
 import { Service, Raw, Unexposed } from "./reflect.js";
 import { Injector } from "./injector.js";
-import { Registrator } from "./registrator.js";
+import { Registrator, startServer } from "./registrator.js";
 import { error, Error, copy, Servicelike, ServiceMeta } from "./util.js";
 import { AuthenticationService } from "./service/authentication/index.js";
 import { AdminService } from "./service/admin/index.js";
@@ -24,4 +24,5 @@ export {
   PaymentService,
   ConfigService,
   FileService,
+  startServer,
 };

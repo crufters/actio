@@ -1,4 +1,4 @@
-import { Service, Servicelike, Registrator } from "@crufters/actio";
+import { Service, Servicelike, startServer } from "@crufters/actio";
 
 import express from "express";
 
@@ -22,14 +22,4 @@ class MyService implements Servicelike {
   }
 }
 
-const app = express();
-app.use(express.json());
-
-const port = 8080;
-
-let reg = new Registrator(app);
-reg.register([MyService]);
-
-app.listen(port, () => {
-  console.log(`Server is listening on port ${port}`);
-});
+startServer([MyService]);

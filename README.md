@@ -3,7 +3,7 @@
 </p>
 <h1 align="center">Actio</h1>
 <p align="center">
-<img src="https://github.com/crufters/actio/actions/workflows/build.yaml/badge.svg" /> <a href="https://www.gnu.org/licenses/agpl-3.0"><img src="https://img.shields.io/badge/License-AGPL_v3-blue.svg" alt="License: AGPL v3"/></a> <img src="https://img.shields.io/badge/semver-0.0.37-yellow" />
+<img src="https://github.com/crufters/actio/actions/workflows/build.yaml/badge.svg" /> <a href="https://www.gnu.org/licenses/agpl-3.0"><img src="https://img.shields.io/badge/License-AGPL_v3-blue.svg" alt="License: AGPL v3"/></a> <img src="https://img.shields.io/badge/semver-0.0.38-yellow" />
 </p>
 
 Actio is a lightweight, batteries included Node.js framework for your backend applications.
@@ -17,26 +17,24 @@ This project is currently being extracted from a private codebase, if you like w
 ## Table of contents
 
 - [A basic Actio application](#a-basic-actio-application)
-  * [Other examples](#other-examples)
+  - [Other examples](#other-examples)
 - [Tutorials](#tutorials)
 - [Services included](#services-included)
 - [Supported infrastructure dependencies](#supported-infrastructure-dependencies)
 - [Running as microservices](#running-as-microservices)
-  * [Multiple instances for resiliency](#multiple-instances-for-resiliency)
+  - [Multiple instances for resiliency](#multiple-instances-for-resiliency)
 - [Multitenancy and testing](#multitenancy-and-testing)
 - [Developing Actio](#developing-actio)
-  * [Testing](#testing)
+  - [Testing](#testing)
 - [Configuration](#configuration)
 - [Goals](#goals)
-  * [Nongoals](#nongoals)
+  - [Nongoals](#nongoals)
 - [Credits](#credits)
 
 ## A basic Actio application
 
 ```typescript
-import { Service, Servicelike, Registrator } from "@crufters/actio";
-
-import express from "express";
+import { Service, Servicelike, startServer } from "@crufters/actio";
 
 interface MyEndpointRequest {
   name?: string;
@@ -56,17 +54,7 @@ class MyService implements Servicelike {
   }
 }
 
-const app = express();
-app.use(express.json());
-
-const port = 8080;
-
-let reg = new Registrator(app);
-reg.register([MyService]);
-
-app.listen(port, () => {
-  console.log(`Server is listening on port ${port}`);
-});
+startServer([MyService]);
 ```
 
 If you want to see how to set up your own project with Actio (required `tsconfig.json` options etc.) see [this section](examples/README.md#how-to-create-a-new-project-from-scratch).
