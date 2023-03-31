@@ -1,5 +1,3 @@
-
-
 import { DataSource } from "typeorm";
 import { Secret, SecretReadResponse } from "./models.js";
 

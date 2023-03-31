@@ -1,5 +1,3 @@
-
-
 // https://cloud.google.com/functions/docs/writing/http#multipart_data_and_file_uploads
 
 /**

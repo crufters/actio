@@ -1,5 +1,3 @@
-
-
 import { DataSource } from "typeorm";
 import { error, copy } from "../../util.js";
 import { roleAdmin } from "../authentication/models.js";
