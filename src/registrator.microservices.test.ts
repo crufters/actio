@@ -73,9 +73,16 @@ test("microservice proof", async () => {
   regB.register([MserviceB]);
 
   let response = await request(appB)
-    .post("/MsericeB/b")
+    .post("/MserviceB/b")
     .set({})
     .send({ hi: "hello" })
     .retry(0);
   expect(response.status).toBe(500);
+
+  response = await request(appB)
+  .post("/Notexisting/b")
+  .set({})
+  .send({ hi: "hello" })
+  .retry(0);
+expect(response.status).toBe(404);
 });
