@@ -3,7 +3,7 @@
 </p>
 <h1 align="center">Actio</h1>
 <p align="center">
-<img src="https://github.com/crufters/actio/actions/workflows/build.yaml/badge.svg" /> <a href="https://www.gnu.org/licenses/agpl-3.0"><img src="https://img.shields.io/badge/License-AGPL_v3-blue.svg" alt="License: AGPL v3"/></a> <img src="https://img.shields.io/badge/semver-0.0.38-yellow" />
+<img src="https://github.com/crufters/actio/actions/workflows/build.yaml/badge.svg" /> <a href="https://www.gnu.org/licenses/agpl-3.0"><img src="https://img.shields.io/badge/License-AGPL_v3-blue.svg" alt="License: AGPL v3"/></a> <img src="https://img.shields.io/badge/semver-0.1.0-yellow" />
 </p>
 
 Actio is a lightweight, batteries included Node.js framework for your backend applications.
@@ -85,17 +85,15 @@ Actio aims to be batteries included: it contains a bunch of services that help y
 
 ## Running as microservices
 
-Note: this functionality is not in the main branch yet.
-
 Turning your monolithic codebase into a microservices architecture can be done with minimal configuration.
 Simply set the addresses of services through environment variables and function calls get monkey patched into network calls.
 
 ```
 Without configuration, service calls are just normal function calls:
 --------------------------------
-|  Login Service    <-|  <-|   |
-| Payment Service ----|    |   |
-|  Order Service  ---------|   |
+|  LoginService     <-|  <-|   |
+| PaymentService  ----|    |   |
+|  OrderService   ---------|   |
 -------------------------------|
  instance address
      0.0.0.0
@@ -106,12 +104,12 @@ With some lightweight configuration a true services based
 architecture can be achieved, without code changes:
 
 -------------------                     -----------------
-| Payment Service |-------------------> | Login Service |
-|  Order Service  |-------------------> |               |
+| PaymentService  |-------------------> | LoginService  |
+|  OrderService   |-------------------> |               |
 -------------------                     -----------------
  instance address                        instance address
      0.0.0.0                                 0.0.0.1
-envar LOGIN_SERVICE_ADDRESS=0.0.0.1
+envar LOGIN_SERVICE=0.0.0.1
 
 Calls to the login service become network calls automatically.
 ```
@@ -122,10 +120,12 @@ Naturally, you need to keep your services stateless - ie. no public class variab
 
 ### Multiple instances for resiliency
 
+Note: this is not implemented yet
+
 Use a comma separated list of addresses to randomly call any of the instances:
 
 ```
-envar LOGIN_SERVICE_ADDRESS=0.0.0.1:6061,0.0.0.2:6061
+envar LOGIN_SERVICE=0.0.0.1:6061,0.0.0.2:6061
 ```
 
 ## Multitenancy and testing
