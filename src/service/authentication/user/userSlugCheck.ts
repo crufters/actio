@@ -1,7 +1,9 @@
-
-
 import { DataSource } from "typeorm";
-import { User, UserSlugCheckRequest, UserSlugCheckResponse } from "../models.js";
+import {
+  User,
+  UserSlugCheckRequest,
+  UserSlugCheckResponse,
+} from "../models.js";
 
 export default async (
   connection: DataSource,

@@ -1,5 +1,3 @@
-
-
 // (like default missions, admin accounts etc.) should come from `contets.ts`
 import { Entity, PrimaryColumn, Column } from "typeorm";
 

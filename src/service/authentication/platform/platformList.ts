@@ -1,5 +1,3 @@
-
-
 import { DataSource } from "typeorm";
 import { Platform, PlatformListResponse } from "../models.js";
 

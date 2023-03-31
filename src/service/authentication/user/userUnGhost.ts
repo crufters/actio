@@ -1,5 +1,3 @@
-
-
 import { DataSource } from "typeorm";
 import { error } from "../../../util.js";
 import * as bcrypt from "bcrypt";

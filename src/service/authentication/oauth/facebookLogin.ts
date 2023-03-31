@@ -1,5 +1,3 @@
-
-
 import { DataSource } from "typeorm";
 import { FacebookLoginRequest, FacebookLoginResponse } from "../models.js";
 import registerOrLoginWithProvenIdentity from "./registerOrLoginWithProvenIdentity.js";
