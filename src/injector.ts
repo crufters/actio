@@ -322,6 +322,12 @@ export class Injector {
           resolve(rsp.data);
         })
         .catch((e) => {
+          // if there is no response, it's a network error
+          // we throw it back as it is
+          if (!e.response) {
+            reject(e);
+            return;
+          }
           // response data already has an "error" field
           reject(error(e.response.data.error, e.response.status));
         });
