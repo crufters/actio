@@ -34,6 +34,10 @@ This project is currently being extracted from a private codebase, if you like w
 
 ## A basic Actio application
 
+```sh
+npm i --save @crufters/actio
+```
+
 ```typescript
 import { Service, Servicelike, startServer } from "@crufters/actio";
 
@@ -58,7 +62,16 @@ class MyService implements Servicelike {
 startServer([MyService]);
 ```
 
-If you want to see how to set up your own project with Actio (required `tsconfig.json` options etc.) see [this section](examples/README.md#how-to-create-a-new-project-from-scratch).
+Make sure these are set in your `tsconfig.json`:
+
+```ts
+    "module": "esnext",
+    "moduleResolution": "node",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
+```
+
+For more info on setting up your own project with Actio (required `tsconfig.json` options etc.) see [this section](examples/README.md#how-to-create-a-new-project-from-scratch).
 
 ### Other examples
 
