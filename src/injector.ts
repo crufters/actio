@@ -3,6 +3,7 @@ import _ from "lodash";
 import { TypeORMHandler } from "./typeorm.js";
 import chalk from "chalk";
 import axios from "axios";
+import { error } from "./util.js";
 
 /**
  * A Handler is a leaf node dependency, eg. type ORM DataSource and similar.
@@ -290,8 +291,16 @@ export class Injector {
     );
     for (const m of methods) {
       instance[m] = async (arg) => {
-        let result = await this.serviceCall(address, className, m, arg);
-        return result;
+        return new Promise(async (resolve, reject) => {
+          let result;
+          try {
+            result = await this.serviceCall(address, className, m, arg);
+          } catch (e) {
+            reject(e);
+            return;
+          }
+          return resolve(result);
+        });
       };
     }
     return instance;
@@ -313,7 +322,14 @@ export class Injector {
           resolve(rsp.data);
         })
         .catch((e) => {
-          reject(e);
+          // if there is no response, it's a network error
+          // we throw it back as it is
+          if (!e.response) {
+            reject(e);
+            return;
+          }
+          // response data already has an "error" field
+          reject(error(e.response.data.error, e.response.status));
         });
     });
   }
