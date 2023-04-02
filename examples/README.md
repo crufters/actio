@@ -218,3 +218,11 @@ Class methods get turned into JSON expecting HTTP endpoints by Actio. This works
 ```
 
 The prefix if `http` in the method name is not mandatory.
+
+## Testing
+
+Running a single test:
+
+```sh
+npm test -- -t 'Init only happens once'
+```
