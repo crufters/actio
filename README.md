@@ -102,7 +102,7 @@ Actio manages your infra dependencies just like your service dependencies.
 - [ ] Redis
 - [ ] Many more coming
 
-## With testing in mind
+## Testing made easy
 
 Run integration tests easily including all of your services and infrastructure dependencies. No need for mocking.
 
