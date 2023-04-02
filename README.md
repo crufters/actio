@@ -48,7 +48,6 @@ Your services can easily call each other just by accepting a constructor paramet
 ```ts
 @Service()
 class MyService implements Servicelike {
-  other: OtherService;
   constructor(otherService: MyOtherService) {}
 }
 ```
@@ -102,7 +101,7 @@ Actio manages your infra dependencies just like your service dependencies.
 - [ ] Redis
 - [ ] Many more coming
 
-## Testing made easy
+## Testing without the hassle
 
 Run integration tests easily including all of your services and infrastructure dependencies. No need for mocking.
 
