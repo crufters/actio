@@ -24,9 +24,70 @@ import _ from "lodash";
  */
 export const Service = (): ClassDecorator => {
   return (target) => {
-    // console.log(Reflect.getMetadata("design:paramtypes", target));
+    classDecoratorLogParameterTypes(target);
   };
 };
+
+export const Endpoint = (): MethodDecorator => {
+  return (target, propertyKey, descriptor) => {
+    methodDecoratorLogParameterTypes(target, propertyKey as string);
+  };
+};
+
+function methodDecoratorLogParameterTypes(target: any, key: string) {
+  const types = Reflect.getMetadata("design:paramtypes", target, key);
+  const paramNames = methodDecoratorGetParamNames(target[key]);
+  console.log(
+    `mmm Method ${key} parameter types:`,
+    paramNames.map((name, i) => `${name}: ${types[i].name} ${types[i]}`).join(", ")
+  );
+}
+
+function methodDecoratorGetParamNames(func: Function) {
+  const funcStr = func
+    .toString()
+    .replace(/((\/\/.*$)|(\/\*[\s\S]*?\*\/))/gm, "");
+  const result = funcStr
+    .slice(funcStr.indexOf("(") + 1, funcStr.indexOf(")"))
+    .match(/([^\s,]+)/g);
+  return result === null ? [] : result;
+}
+
+// @todo types are not being extracted here
+function classDecoratorLogParameterTypes(target: any) {
+  const methods = Object.getOwnPropertyNames(target.prototype);
+  for (const method of methods) {
+    const descriptor = Object.getOwnPropertyDescriptor(
+      target.prototype,
+      method
+    );
+    if (!descriptor || typeof descriptor.value !== "function") {
+      continue;
+    }
+    const types = Reflect.getMetadata(
+      "design:paramtypes",
+      target.prototype,
+      method
+    );
+    const paramNames = classDecoratorGetParamNames(descriptor.value);
+    console.log(
+      `${target.name} method ${method} parameter types:`,
+      paramNames
+        .map((name, i) => `${name}: ${types ? types[i].name : "not found"}`)
+        .join(", ")
+    );
+  }
+}
+
+function classDecoratorGetParamNames(func: Function) {
+  const funcStr = func
+    .toString()
+    .replace(/((\/\/.*$)|(\/\*[\s\S]*?\*\/))/gm, "");
+  const result = funcStr
+    .slice(funcStr.indexOf("(") + 1, funcStr.indexOf(")"))
+    .match(/([^\s,]+)/g);
+  return result === null ? [] : result;
+}
 
 let unexposedMethods = new Set<string>();
 

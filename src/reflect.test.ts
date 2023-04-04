@@ -1,6 +1,7 @@
 import { expect, test } from "@jest/globals";
 import { nanoid } from "nanoid";
 import {
+  Endpoint,
   getDependencyGraph,
   isUnexposed,
   Service,
@@ -68,10 +69,12 @@ test("Test dependency graph", async () => {
   expect(deps[5].name).toBe("G");
 });
 
+@Service()
 class H {
   constructor() {}
 
-  a() {
+  @Endpoint()
+  a(a: number, b: string, c: C) {
     return 1;
   }
 
@@ -81,7 +84,7 @@ class H {
   }
 }
 
-test("Test unexposed", async () => {
+test("Test unexposedd", async () => {
   expect(isUnexposed(H, "a")).toBe(false);
   expect(isUnexposed(H, "b")).toBe(true);
 });
