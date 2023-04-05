@@ -199,7 +199,7 @@ export function startServer(serviceClasses: any[], port?: number) {
   app.use(express.json());
 
   let reg = new Registrator(app);
-  reg.register([serviceClasses]);
+  reg.register(serviceClasses);
 
   app.listen(port, () => {
     console.log(`Server is listening on port ${port}`);
