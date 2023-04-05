@@ -29,10 +29,7 @@ class A2Service {
 
 test("test meta name", async () => {
   const app = express();
-  app.use(express.json());
-
   let reg = new Registrator(app);
-
   reg.register([A1, A2Service]);
 
   let response = await request(app).post("/aone/a1").send({});
@@ -66,10 +63,7 @@ class A {
 
 test("test unexposed", async () => {
   const app = express();
-  app.use(express.json());
-
   let reg = new Registrator(app);
-
   reg.register([A]);
 
   let response = await request(app).post("/A/a").send({});
@@ -96,16 +90,13 @@ class B {
 
 test("test raw", async () => {
   const app = express();
-  app.use(express.json());
-
   let reg = new Registrator(app);
-
   reg.register([B]);
 
   let response = await await request(app)
     .post("/B/b")
     .set({ hi: "hello" })
-    .send({});
+    .send();
   expect(response.status).toBe(200);
   expect(response.body).toEqual({ hi: "hello" });
 });
@@ -127,23 +118,14 @@ class C {
 
 test("test errors", async () => {
   const app = express();
-  app.use(express.json());
-
   let reg = new Registrator(app);
-
   reg.register([C]);
 
-  let response = await await request(app)
-    .post("/C/a")
-    .set({ hi: "hello" })
-    .send({});
+  let response = await await request(app).post("/C/a").send({ hi: "hello" });
   expect(response.status).toBe(500);
   expect(response.body).toEqual({ error: "oh noes" });
 
-  response = await await request(app)
-    .post("/C/b")
-    .set({ hi: "hello" })
-    .send({});
+  response = await await request(app).post("/C/b").send({ hi: "hello" });
   expect(response.status).toBe(500);
   expect(
     JSON.stringify(response.body).includes(

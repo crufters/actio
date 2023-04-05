@@ -161,7 +161,12 @@ export class Registrator {
       // raw request
       return await service[endpointName](request, response);
     } else {
-      let req = JSON.parse(request.body);
+      // @todo maybe remove this and always parse
+      let req =
+        typeof request.body === "string"
+          ? JSON.parse(request.body)
+          : request.body;
+      //req = JSON.parse(request.body);
       // json request
 
       let rsp;
@@ -192,10 +197,14 @@ function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-export function startServer(serviceClasses: any[], port?: number) {
-  if (!port) {
-    port = 8080;
-  }
+interface CreateAppOptions {
+  addresses: Map<string, string>;
+}
+
+export function createApp(
+  serviceClasses: any[],
+  options?: CreateAppOptions
+): express.Application {
   const app = express();
 
   // https://stackoverflow.com/questions/68680900/express-4-17-get-raw-body-for-one-endpoint
@@ -217,8 +226,16 @@ export function startServer(serviceClasses: any[], port?: number) {
   });
 
   let reg = new Registrator(app);
+  if (options?.addresses) {
+    reg.addresses = options.addresses;
+  }
   reg.register(serviceClasses);
 
+  return app;
+}
+
+export function startServer(serviceClasses: any[], port?: number) {
+  let app = createApp(serviceClasses);
   app.listen(port, () => {
     console.log(`Server is listening on port ${port}`);
   });

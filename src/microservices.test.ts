@@ -1,7 +1,6 @@
 import { expect, test } from "@jest/globals";
 
-import { Registrator } from "./registrator.js";
-import express from "express";
+import { createApp } from "./registrator.js";
 import { Service } from "./reflect.js";
 import { default as request } from "supertest";
 import { error } from "./util.js";
@@ -33,48 +32,35 @@ class MultiParamProxy {
 }
 
 test("multiparam api call", async () => {
-  const appA = express();
-  appA.use(express.json());
-
-  let regB = new Registrator(appA);
-  regB.register([MultiParam]);
+  let appA = createApp([MultiParam]);
 
   let response = await request(appA)
     .post("/MultiParam/multiParam")
-    .send([1, "2"])
-    .retry(0);
+    .send([1, "2"]);
+
   expect(response.status).toBe(200);
   expect(response.body).toEqual("ok");
 
-  response = await request(appA)
-    .post("/MultiParam/multiParam")
-    .send([1, "3"])
-    .retry(0);
+  response = await request(appA).post("/MultiParam/multiParam").send([1, "3"]);
   expect(response.status).toBe(200);
   expect(response.body).toEqual("not ok");
 });
 
 test("multiParam microservice call", async () => {
   let randomPortNumber = Math.floor(Math.random() * 10000) + 10000;
-
-  const appA = express();
-  appA.use(express.json());
-
-  let reg = new Registrator(appA);
-
-  reg.register([MultiParam]);
+  let appA = createApp([MultiParam]);
 
   let server;
   setTimeout(() => {
     server = appA.listen(randomPortNumber);
   }, 1);
 
-  const appB = express();
-  appB.use(express.json());
-
-  let regB = new Registrator(appB);
-  regB.addresses.set("MultiParamCall", "http://localhost:" + randomPortNumber);
-  regB.register([MultiParamProxy]);
+  let appB = createApp([MultiParamProxy], {
+    addresses: new Map().set(
+      "MultiParamCall",
+      "http://localhost:" + randomPortNumber
+    ),
+  });
 
   let response = await request(appB)
     .post("/MultiParamProxy/multiParamProxy")
@@ -117,25 +103,16 @@ class HiProxy {
 
 test("microservice call", async () => {
   let randomPortNumber = Math.floor(Math.random() * 10000) + 10000;
-
-  const appA = express();
-  appA.use(express.json());
-
-  let reg = new Registrator(appA);
-
-  reg.register([Hi]);
+  let appA = createApp([Hi]);
 
   let server;
   setTimeout(() => {
     server = appA.listen(randomPortNumber);
   }, 1);
 
-  const appB = express();
-  appB.use(express.json());
-
-  let regB = new Registrator(appB);
-  regB.addresses.set("Hi", "http://localhost:" + randomPortNumber);
-  regB.register([HiProxy]);
+  let appB = createApp([HiProxy], {
+    addresses: new Map().set("Hi", "http://localhost:" + randomPortNumber),
+  });
 
   let response = await request(appB)
     .post("/HiProxy/hiProxy")
@@ -150,12 +127,9 @@ test("microservice call", async () => {
 test("microservice proof", async () => {
   let randomPortNumber = Math.floor(Math.random() * 10000) + 10000;
 
-  const appB = express();
-  appB.use(express.json());
-
-  let regB = new Registrator(appB);
-  regB.addresses.set("Hi", "http://localhost:" + randomPortNumber);
-  regB.register([HiProxy]);
+  const appB = createApp([HiProxy], {
+    addresses: new Map().set("Hi", "http://localhost:" + randomPortNumber),
+  });
 
   let response = await request(appB)
     .post("/Hi/hi")
@@ -217,24 +191,19 @@ class ProxyErr {
 test("microservice error propagates", async () => {
   let randomPortNumber = Math.floor(Math.random() * 10000) + 10000;
 
-  const appA = express();
-  appA.use(express.json());
-
-  let reg = new Registrator(appA);
-
-  reg.register([DirectErr]);
+  let appA = createApp([DirectErr]);
 
   let server;
   setTimeout(() => {
     server = appA.listen(randomPortNumber);
   }, 1);
 
-  const appB = express();
-  appB.use(express.json());
-
-  let regB = new Registrator(appB);
-  regB.addresses.set("DirectErr", "http://localhost:" + randomPortNumber);
-  regB.register([ProxyErr]);
+  let appB = createApp([ProxyErr], {
+    addresses: new Map().set(
+      "DirectErr",
+      "http://localhost:" + randomPortNumber
+    ),
+  });
 
   let response = await request(appB)
     .post("/ProxyErr/directJsErr")
@@ -296,11 +265,7 @@ class ArrayProxy {
 }
 
 test("array api call", async () => {
-  const appA = express();
-  appA.use(express.json());
-
-  let regB = new Registrator(appA);
-  regB.register([Array]);
+  let appA = createApp([Array]);
 
   let response = await request(appA).post("/Array/sum").send([1]).retry(0);
   expect(response.status).toBe(200);
@@ -313,25 +278,16 @@ test("array api call", async () => {
 
 test("array proxy api call", async () => {
   let randomPortNumber = Math.floor(Math.random() * 10000) + 10000;
-
-  const appA = express();
-  appA.use(express.json());
-
-  let reg = new Registrator(appA);
-
-  reg.register([Array]);
+  let appA = createApp([Array]);
 
   let server;
   setTimeout(() => {
     server = appA.listen(randomPortNumber);
   }, 1);
 
-  const appB = express();
-  appB.use(express.json());
-
-  let regB = new Registrator(appB);
-  regB.addresses.set("Array", "http://localhost:" + randomPortNumber);
-  regB.register([ArrayProxy]);
+  let appB = createApp([ArrayProxy], {
+    addresses: new Map().set("Array", "http://localhost:" + randomPortNumber),
+  });
 
   let response = await request(appB)
     .post("/ArrayProxy/sumProxy")
