@@ -4,7 +4,7 @@ import { Error, error } from "./util.js";
 import { Injector } from "./injector.js";
 import chalk from "chalk";
 import { isUnexposed, isRaw } from "./reflect.js";
-import { isArray } from "lodash";
+import _ from "lodash";
 
 // Registrator's responsibility is registering endpoints of a service
 export class Registrator {
@@ -170,7 +170,7 @@ export class Registrator {
       // ie.
       // async foo(a: array, b?, c?) {}  <-- if we receive an array, is it a, or a and b and c?
       // @todo think about this and test each edge case
-      if (isArray(request.body) && service[endpointName].length > 1) {
+      if (_.isArray(request.body) && service[endpointName].length > 1) {
         rsp = await service[endpointName](...request.body);
       } else {
         rsp = await service[endpointName](request.body);
