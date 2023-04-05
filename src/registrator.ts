@@ -161,6 +161,7 @@ export class Registrator {
       // raw request
       return await service[endpointName](request, response);
     } else {
+      let req = JSON.parse(request.body);
       // json request
 
       let rsp;
@@ -170,10 +171,10 @@ export class Registrator {
       // ie.
       // async foo(a: array, b?, c?) {}  <-- if we receive an array, is it a, or a and b and c?
       // @todo think about this and test each edge case
-      if (_.isArray(request.body) && service[endpointName].length > 1) {
-        rsp = await service[endpointName](...request.body);
+      if (_.isArray(req) && service[endpointName].length > 1) {
+        rsp = await service[endpointName](...req);
       } else {
-        rsp = await service[endpointName](request.body);
+        rsp = await service[endpointName](req);
       }
       return response.status(200).send(JSON.stringify(rsp)).end();
     }
@@ -196,7 +197,24 @@ export function startServer(serviceClasses: any[], port?: number) {
     port = 8080;
   }
   const app = express();
-  app.use(express.json());
+
+  // https://stackoverflow.com/questions/68680900/express-4-17-get-raw-body-for-one-endpoint
+  // @todo should probably use a bytes buffer here or similar?
+  app.use((req, res, next) => {
+    let rawBody = "";
+    req.on("data", (chunk) => {
+      rawBody += chunk;
+    });
+    req.on("end", () => {
+      try {
+        req.body = rawBody;
+        next();
+      } catch (err) {
+        console.log("Error parsing body", err);
+        next();
+      }
+    });
+  });
 
   let reg = new Registrator(app);
   reg.register(serviceClasses);
