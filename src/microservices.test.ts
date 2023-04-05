@@ -7,59 +7,6 @@ import { default as request } from "supertest";
 import { error } from "./util.js";
 
 @Service()
-class MserviceA {
-  constructor() {}
-
-  async a(dat) {
-    return { hi: dat.hi };
-  }
-
-  async aerr() {
-    throw new Error("oops");
-  }
-
-  async aerr2() {
-    throw error("oops2", 502);
-  }
-}
-
-@Service()
-class MserviceB {
-  aService: MserviceA;
-  constructor(aService: MserviceA) {
-    this.aService = aService;
-  }
-
-  async b(dat) {
-    let rsp = await this.aService.a(dat);
-    return { hi: rsp.hi + "b2" };
-  }
-
-  async appendHi(dat) {
-    let rsp = await this.aService.a(dat);
-    return { hi: rsp.hi + "hi again" };
-  }
-
-  async berr() {
-    let rsp = await this.aService.aerr();
-    return rsp;
-  }
-
-  async berr2() {
-    let rsp = await this.aService.aerr2();
-    return rsp;
-  }
-
-  async directErr() {
-    throw new Error("oops3");
-  }
-
-  async directErr2() {
-    throw error("oops4", 502);
-  }
-}
-
-@Service()
 class ArrayCall {
   constructor() {}
 
@@ -190,7 +137,7 @@ test("microservice call", async () => {
   appB.use(express.json());
 
   let regB = new Registrator(appB);
-  regB.addresses.set("MserviceA", "http://localhost:" + randomPortNumber);
+  regB.addresses.set("Hi", "http://localhost:" + randomPortNumber);
   regB.register([HiProxy]);
 
   let response = await request(appB)
@@ -211,23 +158,66 @@ test("microservice proof", async () => {
   appB.use(express.json());
 
   let regB = new Registrator(appB);
-  regB.addresses.set("MserviceA", "http://localhost:" + randomPortNumber);
-  regB.register([MserviceB]);
+  regB.addresses.set("Hi", "http://localhost:" + randomPortNumber);
+  regB.register([HiProxy]);
 
   let response = await request(appB)
-    .post("/MserviceB/b")
+    .post("/Hi/hi")
     .set({})
     .send({ hi: "hello" })
     .retry(0);
   expect(response.status).toBe(500);
 
   response = await request(appB)
-    .post("/Notexisting/b")
+    .post("/Notexisting/hi")
     .set({})
     .send({ hi: "hello" })
     .retry(0);
   expect(response.status).toBe(404);
 });
+
+@Service()
+class DirectErr {
+  constructor() {}
+
+  async a(dat) {
+    return { hi: dat.hi };
+  }
+
+  async directJsErr() {
+    throw new Error("directJsErr");
+  }
+
+  async directFrameworkErr() {
+    throw error("directFrameworkErr", 502);
+  }
+}
+
+@Service()
+class ProxyErr {
+  directErrService: DirectErr;
+  constructor(directErrService: DirectErr) {
+    this.directErrService = directErrService;
+  }
+
+  async proxyJsErr() {
+    let rsp = await this.directErrService.directJsErr();
+    return rsp;
+  }
+
+  async proxyFrameworkErr() {
+    let rsp = await this.directErrService.directFrameworkErr();
+    return rsp;
+  }
+
+  async directJsErr() {
+    throw new Error("proxy:directJsErr");
+  }
+
+  async directFrameworkErr() {
+    throw error("proxy:directFrameworkErr", 502);
+  }
+}
 
 // @todo these tests are a bit hard to follow
 test("microservice error propagates", async () => {
@@ -238,7 +228,7 @@ test("microservice error propagates", async () => {
 
   let reg = new Registrator(appA);
 
-  reg.register([MserviceA]);
+  reg.register([DirectErr]);
 
   let server;
   setTimeout(() => {
@@ -249,44 +239,46 @@ test("microservice error propagates", async () => {
   appB.use(express.json());
 
   let regB = new Registrator(appB);
-  regB.addresses.set("MserviceA", "http://localhost:" + randomPortNumber);
-  regB.register([MserviceB]);
+  regB.addresses.set("DirectErr", "http://localhost:" + randomPortNumber);
+  regB.register([ProxyErr]);
 
   let response = await request(appB)
-    .post("/MserviceB/directErr")
+    .post("/ProxyErr/directJsErr")
     .set({})
     .send({})
     .retry(0);
   expect(response.status).toBe(500);
   expect(
-    (response.body.error as string).startsWith('{"stack":"Error: oops3')
+    (response.body.error as string).startsWith(
+      '{"stack":"Error: proxy:directJsErr'
+    )
   ).toBe(true);
 
   response = await request(appB)
-    .post("/MserviceB/berr")
+    .post("/ProxyErr/proxyJsErr")
     .set({})
     .send({ hi: "hello" })
     .retry(0);
   expect(response.status).toBe(500);
   expect(
-    (response.body.error as string).startsWith('{"stack":"Error: oops')
+    (response.body.error as string).startsWith('{"stack":"Error: directJsErr')
   ).toBe(true);
 
   response = await request(appB)
-    .post("/MserviceB/directErr2")
+    .post("/ProxyErr/proxyFrameworkErr")
     .set({})
     .send({ hi: "hey" })
     .retry(0);
   expect(response.status).toBe(502);
-  expect(response.body.error).toBe("oops4");
+  expect(response.body.error).toBe("directFrameworkErr");
 
   response = await request(appB)
-    .post("/MserviceB/berr2")
+    .post("/ProxyErr/directFrameworkErr")
     .set({})
     .send({ hi: "ho" })
     .retry(0);
   expect(response.status).toBe(502);
-  expect(response.body.error).toBe("oops2");
+  expect(response.body.error).toBe("proxy:directFrameworkErr");
 
   server.close();
 });
