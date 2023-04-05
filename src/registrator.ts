@@ -4,6 +4,7 @@ import { Error, error } from "./util.js";
 import { Injector } from "./injector.js";
 import chalk from "chalk";
 import { isUnexposed, isRaw } from "./reflect.js";
+import { isArray } from "lodash";
 
 // Registrator's responsibility is registering endpoints of a service
 export class Registrator {
@@ -161,7 +162,19 @@ export class Registrator {
       return await service[endpointName](request, response);
     } else {
       // json request
-      let rsp = await service[endpointName](request.body);
+
+      let rsp;
+      // @multiParamSupport
+      // support endoints with multiple parameters
+      // it will be hard to support optional parameters and multiple parameters at the same time,
+      // ie.
+      // async foo(a: array, b?, c?) {}  <-- if we receive an array, is it a, or a and b and c?
+      // @todo think about this and test each edge case
+      if (isArray(request.body) && service[endpointName].length > 1) {
+        rsp = await service[endpointName](...request.body);
+      } else {
+        rsp = await service[endpointName](request.body);
+      }
       return response.status(200).send(JSON.stringify(rsp)).end();
     }
   }
@@ -186,7 +199,7 @@ export function startServer(serviceClasses: any[], port?: number) {
   app.use(express.json());
 
   let reg = new Registrator(app);
-  reg.register([serviceClasses]);
+  reg.register(serviceClasses);
 
   app.listen(port, () => {
     console.log(`Server is listening on port ${port}`);
