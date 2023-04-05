@@ -290,11 +290,17 @@ export class Injector {
       (m) => m != "constructor"
     );
     for (const m of methods) {
-      instance[m] = async (arg) => {
+      instance[m] = async (...args) => {
         return new Promise(async (resolve, reject) => {
           let result;
           try {
-            result = await this.serviceCall(address, className, m, arg);
+            result = await this.serviceCall(
+              address,
+              className,
+              m,
+              args,
+              arguments.length > 1
+            );
           } catch (e) {
             reject(e);
             return;
@@ -307,16 +313,26 @@ export class Injector {
   }
 
   // make a JSON over HTTP call
-  private serviceCall(address, className, method, arg) {
+  private serviceCall(
+    address,
+    className,
+    method,
+    args,
+    isMultiParamCall: boolean
+  ) {
     return new Promise((resolve, reject) => {
       let url = `${address}/${className}/${method}`;
+
       axios({
         url: url,
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        data: JSON.stringify(arg),
+        // @multiParamSupport
+        data: JSON.stringify(
+          args.length == 1 && !isMultiParamCall ? args[0] : args
+        ),
       })
         .then((rsp) => {
           resolve(rsp.data);
