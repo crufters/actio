@@ -1,7 +1,5 @@
 import { Service, Servicelike, startServer } from "@crufters/actio";
 
-import express from "express";
-
 interface MyEndpointRequest {
   name?: string;
 }
