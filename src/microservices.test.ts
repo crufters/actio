@@ -7,10 +7,10 @@ import { default as request } from "supertest";
 import { error } from "./util.js";
 
 @Service()
-class ArrayCall {
+class MultiParam {
   constructor() {}
 
-  async array(a: number, b: string) {
+  async multiParam(a: number, b: string) {
     if (a == 1 && b == "2") {
       return "ok";
     }
@@ -19,27 +19,27 @@ class ArrayCall {
 }
 
 @Service()
-class ArrayProxy {
-  arrayCallService: ArrayCall;
-  constructor(arrayCallService: ArrayCall) {
-    this.arrayCallService = arrayCallService;
+class MultiParamProxy {
+  multiParamService: MultiParam;
+  constructor(multiParamService: MultiParam) {
+    this.multiParamService = multiParamService;
   }
 
-  async arrayProxy(a: number, b: string) {
-    let rsp = await this.arrayCallService.array(a, b);
+  async multiParamProxy(a: number, b: string) {
+    let rsp = await this.multiParamService.multiParam(a, b);
     return rsp;
   }
 }
 
-test("array api call", async () => {
+test("multiparam api call", async () => {
   const appA = express();
   appA.use(express.json());
 
   let regB = new Registrator(appA);
-  regB.register([ArrayCall]);
+  regB.register([MultiParam]);
 
   let response = await request(appA)
-    .post("/ArrayCall/array")
+    .post("/MultiParam/multiParam")
     .set({})
     .send([1, "2"])
     .retry(0);
@@ -47,7 +47,7 @@ test("array api call", async () => {
   expect(response.body).toEqual("ok");
 
   response = await request(appA)
-    .post("/ArrayCall/array")
+    .post("/MultiParam/multiParam")
     .set({})
     .send([1, "3"])
     .retry(0);
@@ -55,7 +55,7 @@ test("array api call", async () => {
   expect(response.body).toEqual("not ok");
 });
 
-test("array microservice call", async () => {
+test("multiParam microservice call", async () => {
   let randomPortNumber = Math.floor(Math.random() * 10000) + 10000;
 
   const appA = express();
@@ -63,7 +63,7 @@ test("array microservice call", async () => {
 
   let reg = new Registrator(appA);
 
-  reg.register([ArrayCall]);
+  reg.register([MultiParam]);
 
   let server;
   setTimeout(() => {
@@ -74,11 +74,11 @@ test("array microservice call", async () => {
   appB.use(express.json());
 
   let regB = new Registrator(appB);
-  regB.addresses.set("ArrayCall", "http://localhost:" + randomPortNumber);
-  regB.register([ArrayProxy]);
+  regB.addresses.set("MultiParamCall", "http://localhost:" + randomPortNumber);
+  regB.register([MultiParamProxy]);
 
   let response = await request(appB)
-    .post("/ArrayProxy/arrayProxy")
+    .post("/MultiParamProxy/multiParamProxy")
     .set({})
     .send([1, "2"])
     .retry(0);
@@ -86,7 +86,7 @@ test("array microservice call", async () => {
   expect(response.body).toEqual("ok");
 
   response = await request(appB)
-    .post("/ArrayProxy/arrayProxy")
+    .post("/multiParamProxy/multiParamProxy")
     .set({})
     .send([1, "3"])
     .retry(0);
