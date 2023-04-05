@@ -294,13 +294,7 @@ export class Injector {
         return new Promise(async (resolve, reject) => {
           let result;
           try {
-            result = await this.serviceCall(
-              address,
-              className,
-              m,
-              args,
-              arguments.length > 1
-            );
+            result = await this.serviceCall(address, className, m, ...args);
           } catch (e) {
             reject(e);
             return;
@@ -313,14 +307,9 @@ export class Injector {
   }
 
   // make a JSON over HTTP call
-  private serviceCall(
-    address,
-    className,
-    method,
-    args,
-    isMultiParamCall: boolean
-  ) {
+  private serviceCall(address, className, method, ...args) {
     return new Promise((resolve, reject) => {
+      let isMultiParamCall = arguments.length - 3 > 1;
       let url = `${address}/${className}/${method}`;
 
       axios({

@@ -170,7 +170,7 @@ export class Registrator {
       // ie.
       // async foo(a: array, b?, c?) {}  <-- if we receive an array, is it a, or a and b and c?
       // @todo think about this and test each edge case
-      if (isArray(request.body) && service[endpointName].length > 0) {
+      if (isArray(request.body) && service[endpointName].length > 1) {
         rsp = await service[endpointName](...request.body);
       } else {
         rsp = await service[endpointName](request.body);

@@ -5,6 +5,7 @@ import express from "express";
 import { Service } from "./reflect.js";
 import { default as request } from "supertest";
 import { error } from "./util.js";
+import _ from "lodash";
 
 @Service()
 class MultiParam {
@@ -40,7 +41,6 @@ test("multiparam api call", async () => {
 
   let response = await request(appA)
     .post("/MultiParam/multiParam")
-    .set({})
     .send([1, "2"])
     .retry(0);
   expect(response.status).toBe(200);
@@ -48,7 +48,6 @@ test("multiparam api call", async () => {
 
   response = await request(appA)
     .post("/MultiParam/multiParam")
-    .set({})
     .send([1, "3"])
     .retry(0);
   expect(response.status).toBe(200);
@@ -79,7 +78,6 @@ test("multiParam microservice call", async () => {
 
   let response = await request(appB)
     .post("/MultiParamProxy/multiParamProxy")
-    .set({})
     .send([1, "2"])
     .retry(0);
   expect(response.status).toBe(200);
@@ -87,7 +85,6 @@ test("multiParam microservice call", async () => {
 
   response = await request(appB)
     .post("/multiParamProxy/multiParamProxy")
-    .set({})
     .send([1, "3"])
     .retry(0);
   expect(response.status).toBe(200);
@@ -142,7 +139,6 @@ test("microservice call", async () => {
 
   let response = await request(appB)
     .post("/HiProxy/hiProxy")
-    .set({})
     .send({ hi: "hello" })
     .retry(0);
   expect(response.status).toBe(200);
@@ -163,14 +159,12 @@ test("microservice proof", async () => {
 
   let response = await request(appB)
     .post("/Hi/hi")
-    .set({})
     .send({ hi: "hello" })
     .retry(0);
   expect(response.status).toBe(500);
 
   response = await request(appB)
     .post("/Notexisting/hi")
-    .set({})
     .send({ hi: "hello" })
     .retry(0);
   expect(response.status).toBe(404);
@@ -244,7 +238,6 @@ test("microservice error propagates", async () => {
 
   let response = await request(appB)
     .post("/ProxyErr/directJsErr")
-    .set({})
     .send({})
     .retry(0);
   expect(response.status).toBe(500);
@@ -256,7 +249,6 @@ test("microservice error propagates", async () => {
 
   response = await request(appB)
     .post("/ProxyErr/proxyJsErr")
-    .set({})
     .send({ hi: "hello" })
     .retry(0);
   expect(response.status).toBe(500);
@@ -266,7 +258,6 @@ test("microservice error propagates", async () => {
 
   response = await request(appB)
     .post("/ProxyErr/proxyFrameworkErr")
-    .set({})
     .send({ hi: "hey" })
     .retry(0);
   expect(response.status).toBe(502);
@@ -274,11 +265,87 @@ test("microservice error propagates", async () => {
 
   response = await request(appB)
     .post("/ProxyErr/directFrameworkErr")
-    .set({})
     .send({ hi: "ho" })
     .retry(0);
   expect(response.status).toBe(502);
   expect(response.body.error).toBe("proxy:directFrameworkErr");
+
+  server.close();
+});
+
+@Service()
+class Array {
+  constructor() {}
+
+  async sum(as: number[]): Promise<number> {
+    return _.sum(as);
+  }
+}
+
+@Service()
+class ArrayProxy {
+  arrayService: Array;
+  constructor(arrayService: Array) {
+    this.arrayService = arrayService;
+  }
+
+  async sumProxy(as: number[]) {
+    let rsp = await this.arrayService.sum(as);
+    return rsp;
+  }
+}
+
+test("array api call", async () => {
+  const appA = express();
+  appA.use(express.json());
+
+  let regB = new Registrator(appA);
+  regB.register([Array]);
+
+  let response = await request(appA).post("/Array/sum").send([1]).retry(0);
+  expect(response.status).toBe(200);
+  expect(response.body).toEqual(1);
+
+  response = await request(appA).post("/Array/sum").send([1, 2]).retry(0);
+  expect(response.status).toBe(200);
+  expect(response.body).toEqual(3);
+});
+
+test("array proxy api call", async () => {
+  let randomPortNumber = Math.floor(Math.random() * 10000) + 10000;
+
+  const appA = express();
+  appA.use(express.json());
+
+  let reg = new Registrator(appA);
+
+  reg.register([Array]);
+
+  let server;
+  setTimeout(() => {
+    server = appA.listen(randomPortNumber);
+  }, 1);
+
+  const appB = express();
+  appB.use(express.json());
+
+  let regB = new Registrator(appB);
+  regB.addresses.set("Array", "http://localhost:" + randomPortNumber);
+  regB.register([ArrayProxy]);
+
+  let response = await request(appB)
+    .post("/ArrayProxy/sumProxy")
+    .send([1])
+    .retry(0);
+  expect(response.status).toBe(200);
+  expect(response.body).toEqual(1);
+
+  response = await request(appB)
+    .post("/ArrayProxy/sumProxy")
+    .send([1, 2])
+    .retry(3);
+  expect(response.status).toBe(200);
+  expect(response.body).toEqual(3);
 
   server.close();
 });
