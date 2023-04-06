@@ -41,4 +41,7 @@ test("array field", async () => {
   expect(fields[0].name).toBe("a");
   expect(fields[0].type).toBe(Array);
   expect(fields[0].arrayOf).toBe(J);
+
+  let classes = listClasses();
+  expect(classes.find((c) => c.name == "K")).toBeTruthy();
 });

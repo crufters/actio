@@ -32,7 +32,7 @@ export function listFields(target: any | string): FieldData[] {
 
 export function listClasses(): any[] {
   let ret = [];
-  fieldMap.forEach((value) => {
+  classMap.forEach((value) => {
     ret.push(value);
   });
   return ret;
@@ -42,7 +42,7 @@ export const Field = (
   options?: Omit<FieldData, "target" | "type">
 ): PropertyDecorator => {
   return function (target, propertyKey) {
-    classMap.set(target.constructor.name, target);
+    classMap.set(target.constructor.name, target.constructor);
 
     let opts: FieldData = {
       target,
