@@ -24,25 +24,43 @@ import _ from "lodash";
  */
 export const Service = (): ClassDecorator => {
   return (target) => {
-    classDecoratorLogParameterTypes(target);
+    // this does nothing, ignore it
+    classDecoratorSaveParameterTypes(target);
   };
 };
 
 export const Endpoint = (): MethodDecorator => {
   return (target, propertyKey, descriptor) => {
-    methodDecoratorLogParameterTypes(target, propertyKey as string);
+    methodDecoratorSaveParameterTypes(target, propertyKey as string);
   };
 };
 
-function methodDecoratorLogParameterTypes(target: any, key: string) {
+interface ParamsInfo {
+  target: any; // class
+  methodName: string; // method name
+  paramNames: any[];
+  paramTypes: any[];
+}
+
+let classNameToParamInfo = new Map<string, ParamsInfo[]>();
+
+function methodDecoratorSaveParameterTypes(target: any, key: string) {
   const types = Reflect.getMetadata("design:paramtypes", target, key);
   const paramNames = methodDecoratorGetParamNames(target[key]);
-  console.log(
-    `methodDecorator: Method ${key} parameter types:`,
-    paramNames
-      .map((name, i) => `${name}: ${types[i].name} ${types[i]}`)
-      .join(", ")
-  );
+
+  if (!classNameToParamInfo.has(target.constructor.name)) {
+    classNameToParamInfo.set(target.constructor.name, []);
+  }
+  classNameToParamInfo.get(target.constructor.name).push({
+    target,
+    methodName: key,
+    paramNames,
+    paramTypes: types,
+  });
+}
+
+export function getMethodParamsInfo(className: string) {
+  return classNameToParamInfo.get(className);
 }
 
 function methodDecoratorGetParamNames(func: Function) {
@@ -55,8 +73,11 @@ function methodDecoratorGetParamNames(func: Function) {
   return result === null ? [] : result;
 }
 
-// @todo types are not being extracted here
-function classDecoratorLogParameterTypes(target: any) {
+let devNull = (a, b) => {};
+
+// @todo types are not being extracted here unless method are decorated
+// with @Endpoint (or any decorator)
+function classDecoratorSaveParameterTypes(target: any) {
   const methods = Object.getOwnPropertyNames(target.prototype);
   for (const method of methods) {
     const descriptor = Object.getOwnPropertyDescriptor(
@@ -72,12 +93,7 @@ function classDecoratorLogParameterTypes(target: any) {
       method
     );
     const paramNames = classDecoratorGetParamNames(descriptor.value);
-    console.log(
-      `classDecorator: ${target.name} method ${method} parameter types:`,
-      paramNames
-        .map((name, i) => `${name}: ${types ? types[i].name : "not found"}`)
-        .join(", ")
-    );
+    devNull(types, paramNames);
   }
 }
 
