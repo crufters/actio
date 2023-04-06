@@ -38,8 +38,10 @@ function methodDecoratorLogParameterTypes(target: any, key: string) {
   const types = Reflect.getMetadata("design:paramtypes", target, key);
   const paramNames = methodDecoratorGetParamNames(target[key]);
   console.log(
-    `mmm Method ${key} parameter types:`,
-    paramNames.map((name, i) => `${name}: ${types[i].name} ${types[i]}`).join(", ")
+    `methodDecorator: Method ${key} parameter types:`,
+    paramNames
+      .map((name, i) => `${name}: ${types[i].name} ${types[i]}`)
+      .join(", ")
   );
 }
 
@@ -71,7 +73,7 @@ function classDecoratorLogParameterTypes(target: any) {
     );
     const paramNames = classDecoratorGetParamNames(descriptor.value);
     console.log(
-      `${target.name} method ${method} parameter types:`,
+      `classDecorator: ${target.name} method ${method} parameter types:`,
       paramNames
         .map((name, i) => `${name}: ${types ? types[i].name : "not found"}`)
         .join(", ")

@@ -4,7 +4,7 @@
 <h1 align="center">Actio</h1>
 <h4 align="center">The Node.js framework for monoliths and microservices.</h4>
 <p align="center">
-<img src="https://github.com/crufters/actio/actions/workflows/build.yaml/badge.svg" /> <a href="https://www.gnu.org/licenses/agpl-3.0"><img src="https://img.shields.io/badge/License-AGPL_v3-blue.svg" alt="License: AGPL v3"/></a> <img src="https://img.shields.io/badge/semver-0.1.2-yellow" />
+<img src="https://github.com/crufters/actio/actions/workflows/build.yaml/badge.svg" /> <a href="https://www.gnu.org/licenses/agpl-3.0"><img src="https://img.shields.io/badge/License-AGPL_v3-blue.svg" alt="License: AGPL v3"/></a> <img src="https://img.shields.io/badge/semver-0.2.5-yellow" />
 </p>
 
 Actio is a modern, batteries included Node.js (Typescript) framework for your backend applications.

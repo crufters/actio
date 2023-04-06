@@ -84,7 +84,21 @@ class H {
   }
 }
 
-test("Test unexposedd", async () => {
+test("unexposed", async () => {
   expect(isUnexposed(H, "a")).toBe(false);
   expect(isUnexposed(H, "b")).toBe(true);
+});
+
+@Service()
+class I {
+  constructor() {}
+
+  @Endpoint()
+  a(a: number, b: string, c: C) {
+    return 1;
+  }
+}
+
+test("method types", async () => {
+  expect(isUnexposed(H, "a")).toBe(false);
 });
