@@ -29,7 +29,7 @@ test("field", async () => {
 class K {
   constructor() {}
 
-  @Field()
+  @Field({ arrayOf: J })
   a: J[];
 }
 
@@ -38,8 +38,7 @@ test("array field", async () => {
   let fields = listFields("K");
   expect(fields.length).toBe(1);
   expect(fields[0].target.constructor.name).toBe("K");
-    expect(fields[0].name).toBe("a");
-    expect(fields[0].type).toBe(Array);
-    
-
+  expect(fields[0].name).toBe("a");
+  expect(fields[0].type).toBe(Array);
+  expect(fields[0].arrayOf).toBe(J);
 });

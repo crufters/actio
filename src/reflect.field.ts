@@ -50,20 +50,11 @@ export const Field = (
     if (!options) {
       options = {};
     }
-    if (options.arrayOf) {
-      if (typeof options.arrayOf != "string") {
-        opts.arrayOf = options.arrayOf.name;
-      }
-    }
-
+    opts.arrayOf = options.arrayOf;
     let name = target.constructor.name;
 
-    if (options.arrayOf) {
-      opts.type = "Array";
-    }
-
     let t = Reflect.getMetadata("design:type", target, propertyKey);
-    if (!t || t.name.length == 1) {
+    if (!t) {
       throw `actio: Type for key '${String(
         propertyKey
       )}' in '${name}'' can not be determined. This is probably because it is not defined yet or source code transformators stripped the class name. Move type declarations around or specify the type in the 'type' property. This is a known shortcoming.`;
