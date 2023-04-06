@@ -35,6 +35,13 @@ export const Endpoint = (): MethodDecorator => {
   };
 };
 
+export const Type = (): ClassDecorator => {
+  return (target) => {
+    // this does nothing, ignore it
+    classDecoratorSaveParameterTypes(target);
+  };
+};
+
 interface ParamsInfo {
   target: any; // class
   methodName: string; // method name
