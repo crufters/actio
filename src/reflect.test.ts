@@ -1,10 +1,12 @@
 import { expect, test } from "@jest/globals";
 import { nanoid } from "nanoid";
 import {
+  Endpoint,
   getDependencyGraph,
   isUnexposed,
   Service,
   Unexposed,
+  getMethodParamsInfo,
 } from "./reflect.js";
 
 @Service()
@@ -68,6 +70,7 @@ test("Test dependency graph", async () => {
   expect(deps[5].name).toBe("G");
 });
 
+@Service()
 class H {
   constructor() {}
 
@@ -81,7 +84,32 @@ class H {
   }
 }
 
-test("Test unexposed", async () => {
+test("unexposed", async () => {
   expect(isUnexposed(H, "a")).toBe(false);
   expect(isUnexposed(H, "b")).toBe(true);
+});
+
+@Service()
+class I {
+  constructor() {}
+
+  @Endpoint()
+  a(a: number, b: string, c: C) {
+    return 1;
+  }
+}
+
+test("method types", async () => {
+  console.log(I);
+  let inf = getMethodParamsInfo("I");
+  expect(inf.length).toBe(1);
+  expect(inf[0].target.constructor.name).toBe("I");
+  expect(inf[0].methodName).toBe("a");
+  expect(inf[0].paramNames.length).toBe(3);
+  expect(inf[0].paramNames).toEqual(["_a", "b", "c"]);
+  expect(inf[0].paramTypes.length).toBe(3);
+  expect(inf[0].paramTypes[0]).toBe(Number);
+  expect(inf[0].paramTypes[1]).toBe(String);
+  expect(inf[0].paramTypes[2]).toBe(C);
+  expect(inf[0].paramTypes[2].name).toBe("C");
 });

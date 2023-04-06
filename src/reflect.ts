@@ -24,9 +24,95 @@ import _ from "lodash";
  */
 export const Service = (): ClassDecorator => {
   return (target) => {
-    // console.log(Reflect.getMetadata("design:paramtypes", target));
+    // this does nothing, ignore it
+    classDecoratorSaveParameterTypes(target);
   };
 };
+
+export const Endpoint = (): MethodDecorator => {
+  return (target, propertyKey, descriptor) => {
+    methodDecoratorSaveParameterTypes(target, propertyKey as string);
+  };
+};
+
+export const Type = (): ClassDecorator => {
+  return (target) => {
+    // this does nothing, ignore it
+    classDecoratorSaveParameterTypes(target);
+  };
+};
+
+interface ParamsInfo {
+  target: any; // class
+  methodName: string; // method name
+  paramNames: any[];
+  paramTypes: any[];
+}
+
+let classNameToParamInfo = new Map<string, ParamsInfo[]>();
+
+function methodDecoratorSaveParameterTypes(target: any, key: string) {
+  const types = Reflect.getMetadata("design:paramtypes", target, key);
+  const paramNames = methodDecoratorGetParamNames(target[key]);
+
+  if (!classNameToParamInfo.has(target.constructor.name)) {
+    classNameToParamInfo.set(target.constructor.name, []);
+  }
+  classNameToParamInfo.get(target.constructor.name).push({
+    target,
+    methodName: key,
+    paramNames,
+    paramTypes: types,
+  });
+}
+
+export function getMethodParamsInfo(className: string) {
+  return classNameToParamInfo.get(className);
+}
+
+function methodDecoratorGetParamNames(func: Function) {
+  const funcStr = func
+    .toString()
+    .replace(/((\/\/.*$)|(\/\*[\s\S]*?\*\/))/gm, "");
+  const result = funcStr
+    .slice(funcStr.indexOf("(") + 1, funcStr.indexOf(")"))
+    .match(/([^\s,]+)/g);
+  return result === null ? [] : result;
+}
+
+let devNull = (a, b) => {};
+
+// @todo types are not being extracted here unless method are decorated
+// with @Endpoint (or any decorator)
+function classDecoratorSaveParameterTypes(target: any) {
+  const methods = Object.getOwnPropertyNames(target.prototype);
+  for (const method of methods) {
+    const descriptor = Object.getOwnPropertyDescriptor(
+      target.prototype,
+      method
+    );
+    if (!descriptor || typeof descriptor.value !== "function") {
+      continue;
+    }
+    const types = Reflect.getMetadata(
+      "design:paramtypes",
+      target.prototype,
+      method
+    );
+    const paramNames = classDecoratorGetParamNames(descriptor.value);
+    devNull(types, paramNames);
+  }
+}
+
+function classDecoratorGetParamNames(func: Function) {
+  const funcStr = func
+    .toString()
+    .replace(/((\/\/.*$)|(\/\*[\s\S]*?\*\/))/gm, "");
+  const result = funcStr
+    .slice(funcStr.indexOf("(") + 1, funcStr.indexOf(")"))
+    .match(/([^\s,]+)/g);
+  return result === null ? [] : result;
+}
 
 let unexposedMethods = new Set<string>();
 
