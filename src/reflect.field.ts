@@ -8,7 +8,7 @@ interface FieldData {
    */
   type?: any;
   /**
-   * Means field is an array. Value can be the type itself, ie: `arrayOf: 'Mission'` or a string ie. `arrayOf: 'Mission'`
+   * Means field is an array. Value can be the type itself, ie: `arrayOf: 'User'` or a string ie. `arrayOf: 'User'`
    *
    * This is needed because array types can not be retrieved with typescript reflection, so we need some help from the caller:
    * https://stackoverflow.com/questions/35022658/how-do-i-get-array-item-type-in-typescript-using-the-reflection-api
@@ -16,6 +16,7 @@ interface FieldData {
   arrayOf?: any;
 }
 
+let classMap = new Map<string, any>();
 let fieldMap = new Map<string, FieldData[]>();
 
 export function listFields(target: any | string): FieldData[] {
@@ -29,10 +30,10 @@ export function listFields(target: any | string): FieldData[] {
   return fieldMap.get(key);
 }
 
-export function listTypes(): string[] {
+export function listClasses(): any[] {
   let ret = [];
-  fieldMap.forEach((_, key) => {
-    ret.push(key);
+  fieldMap.forEach((value) => {
+    ret.push(value);
   });
   return ret;
 }
@@ -41,6 +42,8 @@ export const Field = (
   options?: Omit<FieldData, "target" | "type">
 ): PropertyDecorator => {
   return function (target, propertyKey) {
+    classMap.set(target.constructor.name, target);
+
     let opts: FieldData = {
       target,
     };
