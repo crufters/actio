@@ -10,17 +10,17 @@ import _ from "lodash";
 // https://gist.github.com/crufter/5fac85071864c41775cc3079015aac71
 
 /**
- * Marks a class as a service. The constructor of your service
+ * Makes the methods of a class available as API endpoints.
+ * See `startServer` function or the `Registrator` class for a more manual
+ * way to start a server.
+ *
+ * The constructor of your service
  * can accept the following list of allowed dependencies:
  *    - other services marked with this decorator
  *    - import { DataSource } from "typeorm" and other types handled by handlers
  *
  * Services should not panic if they are not supplied with all the dependencies
  * at the time of construction.
- *
- * The endpoints of a service are its method:
- * - Method names starting with underscore are callbacks to specific events,
- * see examples below.
  */
 export const Service = (): ClassDecorator => {
   return (target) => {
@@ -29,9 +29,31 @@ export const Service = (): ClassDecorator => {
   };
 };
 
-export const Endpoint = (): MethodDecorator => {
+export interface EndpointOptions {
+  /**
+   * The types contained in higher order types (`Array`, `Promise` etc.) in the parameter list of an endpoint.
+   *
+   * Due to Typescript reflection limitations, contained types (ie. the `User` in `Promise<User>` or `string` in `string[]`/`Array<string>`) can't be automatically inferred.
+   *
+   * Example: If your endpoint is
+   *
+   * `async function getUser(userID: string): Promise<User>`
+   *
+   * then `returns` should be `User`.
+   *
+   * This option is only required to enable API documentation and API client generation.
+   * See also the `containedTypes` option for a similar concept but for the endpoint parameter types.
+   */
+  returns: any;
+}
+
+/**
+ * The `Endpoint` decorator makes a method visible to API docs and API client generation.
+ * Your endpoint will function fine without this decorator.
+ */
+export const Endpoint = (options?: EndpointOptions): MethodDecorator => {
   return (target, propertyKey, descriptor) => {
-    methodDecoratorSaveParameterTypes(target, propertyKey as string);
+    methodDecoratorSaveParameterTypes(options, target, propertyKey as string);
   };
 };
 
@@ -47,22 +69,36 @@ interface ParamsInfo {
   methodName: string; // method name
   paramNames: any[];
   paramTypes: any[];
+  returnType: any;
+  options?: EndpointOptions;
 }
 
-let classNameToParamInfo = new Map<string, ParamsInfo[]>();
+export let classNameToParamInfo = new Map<string, ParamsInfo[]>();
 
-function methodDecoratorSaveParameterTypes(target: any, key: string) {
+export function getMethodsForService(className: string): ParamsInfo[] {
+  let methods = getMethodParamsInfo(className);
+  return methods;
+}
+
+function methodDecoratorSaveParameterTypes(
+  options: EndpointOptions,
+  target: any,
+  key: string
+) {
   const types = Reflect.getMetadata("design:paramtypes", target, key);
+  const returnType = Reflect.getMetadata("design:returntype", target, key);
   const paramNames = methodDecoratorGetParamNames(target[key]);
 
   if (!classNameToParamInfo.has(target.constructor.name)) {
     classNameToParamInfo.set(target.constructor.name, []);
   }
   classNameToParamInfo.get(target.constructor.name).push({
-    target,
+    target: target.constructor,
     methodName: key,
     paramNames,
     paramTypes: types,
+    returnType,
+    options,
   });
 }
 

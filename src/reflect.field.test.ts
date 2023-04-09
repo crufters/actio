@@ -1,9 +1,9 @@
 import { expect, test } from "@jest/globals";
-import { Field, listClasses, listFields } from "./reflect.field.js";
+import { Field, listClasses, listFields, Param } from "./reflect.field.js";
+import { getMethodsForService, Service } from "./reflect.js";
+import { Endpoint } from "./reflect.js";
 
 class J {
-  constructor() {}
-
   @Field()
   a: number;
 
@@ -27,8 +27,6 @@ test("field", async () => {
 });
 
 class K {
-  constructor() {}
-
   @Field({ arrayOf: J })
   a: J[];
 }
@@ -44,4 +42,51 @@ test("array field", async () => {
 
   let classes = listClasses();
   expect(classes.find((c) => c.name == "K")).toBeTruthy();
+});
+
+@Service()
+class L {
+  constructor() {}
+
+  @Endpoint({
+    returns: J,
+  })
+  async doSomething(req: K): Promise<J> {
+    return { a: 1, b: "2" };
+  }
+
+  @Endpoint({
+    returns: K,
+  })
+  async doSomething2(@Param({ type: J }) req: J[]): Promise<K> {
+    return { a: [{ a: 1, b: "2" }] };
+  }
+}
+
+test("walk tree", async () => {
+  console.log(L);
+  let methods = getMethodsForService("L");
+  expect(methods.length).toBe(2);
+  expect(methods).toEqual([
+    {
+      target: L,
+      methodName: "doSomething",
+      paramNames: ["_x"], // ?
+      paramTypes: [K],
+      returnType: Promise,
+      options: {
+        returns: J,
+      },
+    },
+    {
+      target: L,
+      methodName: "doSomething2",
+      paramNames: ["_x2"], // ?
+      paramTypes: [Array],
+      returnType: Promise,
+      options: {
+        returns: K,
+      },
+    },
+  ]);
 });

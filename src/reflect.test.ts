@@ -103,7 +103,7 @@ test("method types", async () => {
   console.log(I);
   let inf = getMethodParamsInfo("I");
   expect(inf.length).toBe(1);
-  expect(inf[0].target.constructor.name).toBe("I");
+  expect(inf[0].target.name).toBe("I");
   expect(inf[0].methodName).toBe("a");
   expect(inf[0].paramNames.length).toBe(3);
   expect(inf[0].paramNames).toEqual(["_a", "b", "c"]);
@@ -113,3 +113,5 @@ test("method types", async () => {
   expect(inf[0].paramTypes[2]).toBe(C);
   expect(inf[0].paramTypes[2].name).toBe("C");
 });
+
+
