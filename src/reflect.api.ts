@@ -40,14 +40,24 @@ export function getAPIJSON(): APIJSON {
       newInfo.paramTypes = newInfo.paramTypes.map((type) => {
         return type.name;
       });
+      if (newInfo.options.returns) {
+        newInfo.options.returns = newInfo.options.returns?.name;
+      }
+
       api.services[serviceName][endpointInfo.methodName] = {
         info: newInfo,
-        paramOptions: endpointInfo.paramNames.map((_, index) => {
-          return getParamOptions(
-            endpointInfo.target,
-            endpointInfo.methodName,
-            index
-          );
+        paramOptions: endpointInfo.paramTypes.map((_, index) => {
+          let ret = {
+            ...getParamOptions(
+              endpointInfo.target,
+              endpointInfo.methodName,
+              index
+            ),
+          };
+          if (ret.type) {
+          ret.type = ret.type?.name;
+          }
+          return ret;
         }),
       };
     });

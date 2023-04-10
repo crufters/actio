@@ -1,5 +1,5 @@
 import { getAPIJSON } from "./reflect.api.js";
-import { Field } from "./reflect.field.js";
+import { Field, Param } from "./reflect.field.js";
 import { Service } from "./reflect.js";
 import { Endpoint } from "./reflect.js";
 import { expect, test } from "@jest/globals";
@@ -23,6 +23,13 @@ class N {
     returns: null,
   })
   async doSomething(req: M): Promise<void> {}
+
+  @Endpoint({
+    returns: M,
+  })
+  async doSomethingElse(@Param({ type: M }) req: M[]): Promise<M> {
+    return null;
+  }
 }
 
 test("api def", async () => {
@@ -48,7 +55,22 @@ test("api def", async () => {
             paramNames: ["_x"],
             paramTypes: ["M"],
           },
-          paramOptions: [null],
+          paramOptions: [{}],
+        },
+        doSomethingElse: {
+          info: {
+            methodName: "doSomethingElse",
+            options: {
+              returns: "M",
+            },
+            paramNames: ["_x2"],
+            paramTypes: ["Array"],
+          },
+          paramOptions: [
+            {
+              type: "M",
+            },
+          ],
         },
       },
     },
