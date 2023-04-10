@@ -64,7 +64,7 @@ export const Type = (): ClassDecorator => {
   };
 };
 
-interface ParamsInfo {
+export interface EndpointInfo {
   target: any; // class
   methodName: string; // method name
   paramNames: any[];
@@ -73,9 +73,9 @@ interface ParamsInfo {
   options?: EndpointOptions;
 }
 
-export let classNameToParamInfo = new Map<string, ParamsInfo[]>();
+export let classNameToEndpointInfo = new Map<string, EndpointInfo[]>();
 
-export function getMethodsForService(className: string): ParamsInfo[] {
+export function getMethodsForService(className: string): EndpointInfo[] {
   let methods = getMethodParamsInfo(className);
   return methods;
 }
@@ -89,10 +89,10 @@ function methodDecoratorSaveParameterTypes(
   const returnType = Reflect.getMetadata("design:returntype", target, key);
   const paramNames = methodDecoratorGetParamNames(target[key]);
 
-  if (!classNameToParamInfo.has(target.constructor.name)) {
-    classNameToParamInfo.set(target.constructor.name, []);
+  if (!classNameToEndpointInfo.has(target.constructor.name)) {
+    classNameToEndpointInfo.set(target.constructor.name, []);
   }
-  classNameToParamInfo.get(target.constructor.name).push({
+  classNameToEndpointInfo.get(target.constructor.name).push({
     target: target.constructor,
     methodName: key,
     paramNames,
@@ -103,7 +103,7 @@ function methodDecoratorSaveParameterTypes(
 }
 
 export function getMethodParamsInfo(className: string) {
-  return classNameToParamInfo.get(className);
+  return classNameToEndpointInfo.get(className);
 }
 
 function methodDecoratorGetParamNames(func: Function) {

@@ -1,5 +1,11 @@
 import { expect, test } from "@jest/globals";
-import { Field, listClasses, listFields, Param } from "./reflect.field.js";
+import {
+  Field,
+  getParamOptions,
+  listClasses,
+  listFields,
+  Param,
+} from "./reflect.field.js";
 import { getMethodsForService, Service } from "./reflect.js";
 import { Endpoint } from "./reflect.js";
 
@@ -89,4 +95,7 @@ test("walk tree", async () => {
       },
     },
   ]);
+  expect(getParamOptions(L, methods[1].methodName, 0)).toEqual({
+    type: J,
+  });
 });

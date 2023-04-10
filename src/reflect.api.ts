@@ -1,15 +1,22 @@
-import { classNameToParamInfo } from "./reflect.js";
-import { FieldData } from "./reflect.field.js";
-import { classMap } from "./reflect.field.js";
+import { classNameToEndpointInfo, EndpointInfo } from "./reflect.js";
+import { FieldData, getParamOptions, ParamOptions } from "./reflect.field.js";
+import { fieldMap } from "./reflect.field.js";
 
 interface APIJSON {
-  types: { [typeName: string]: FieldData[] };
+  types: {
+    [typeName: string]: {
+      [fieldName: string]: {
+        data: FieldData;
+      };
+    };
+  };
   services: {
     [serviceName: string]: {
       [methodName: string]: {
-        paramTypes: string[];
-        containedTypes: string[];
-        returns: string;
+        info?: EndpointInfo;
+        // length equals to `info.paramTypes` field
+        // contains null values for no options
+        paramOptions: ParamOptions[];
       };
     };
   };
@@ -21,29 +28,44 @@ export function getAPIJSON(): APIJSON {
     types: {},
   };
 
-  classNameToParamInfo.forEach((paramsInfo) => {
-    paramsInfo.forEach((paramInfo) => {
-      const { target, methodName, paramNames, paramTypes, returnType } =
-        paramInfo;
-      const serviceName = target.name;
+  classNameToEndpointInfo.forEach((endpointInfos) => {
+    endpointInfos.forEach((endpointInfo) => {
+      const serviceName = endpointInfo.target.name;
       if (!api.services[serviceName]) {
         api.services[serviceName] = {};
       }
-      api.services[serviceName][methodName] = {
-        paramTypes: [],
-        containedTypes: [],
-        returns: returnType.name,
+      let newInfo = {
+        ...endpointInfo,
       };
-      paramNames.forEach((paramName, i) => {
-        api.services[serviceName][methodName].paramTypes.push(
-          paramTypes[i].name
-        );
+      newInfo.paramTypes = newInfo.paramTypes.map((type) => {
+        return type.name;
       });
+      api.services[serviceName][endpointInfo.methodName] = {
+        info: newInfo,
+        paramOptions: endpointInfo.paramNames.map((_, index) => {
+          return getParamOptions(
+            endpointInfo.target,
+            endpointInfo.methodName,
+            index
+          );
+        }),
+      };
     });
   });
 
-  classMap.forEach((fields, className) => {
-    api.types[className] = fields;
+  fieldMap.forEach((fields, className) => {
+    fields.forEach((field) => {
+      if (!api.types[className]) {
+        api.types[className] = {};
+      }
+      let data = {
+        ...field,
+      };
+      delete data.target;
+      api.types[className][field.name] = {
+        data: data,
+      };
+    });
   });
 
   return api;
