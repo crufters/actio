@@ -61,7 +61,7 @@ export const Field = (
         propertyKey
       )}' in '${name}'' can not be determined.`;
     }
-    opts.type = t.name;
+    opts.type = t;
 
     let list = fieldMap.get(name);
     if (!list) {
@@ -77,16 +77,13 @@ export interface ParamOptions {
   /**
    * The type contained in higher order types (`Array`, `Promise` etc.) in the parameter list of an endpoint.
    *
-   * Due to Typescript reflection limitations, contained types (ie. the `User` in `Promise<User>` or `string` in `string[]`/`Array<string>`) can't be automatically inferred.
+   * Due to Typescript reflection limitations, contained types (ie. the `User` in `Promise<User>` or `string` in `string[]`) can't be automatically inferred.
    *
    * Example: If your endpoint is
    *
-   * `async function getComments(userIDs: string[], subs: SubID[], isVerified?: true): Promise<Comments[]>`
+   * `async function getComments(@Param({type: string}) userIDs: string[]): Promise<Comment[]>`
    *
-   * then containedTypes should be `[string, SubID]`.
-   *
-   * This option is only required to enable API documentation and API client generation.
-   * See also the `returns` option for a similar concept but for the endpoint return type.
+   * This option and accurate type information is only required to enable API documentation and API client generation.
    **/
   type: any | any[];
 }
@@ -96,8 +93,8 @@ export interface ParamOptions {
 let paramOptions = new Map<string, ParamOptions>();
 
 /**
- * The Param parameter decorator is used to specify the type of a parameter in an endpoint.
- * for higher order types. See the `type` option in `ParamOptions` for more information.
+ * The Param parameter decorator is used to specify the type of a parameter for an endpoint when the
+ * endpoint accepts higher order types (eg. arrays). See the `type` option in `ParamOptions` for more information.
  */
 export function Param(options: ParamOptions) {
   return function (target: any, methodName: string, parameterIndex: number) {

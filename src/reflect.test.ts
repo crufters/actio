@@ -113,5 +113,3 @@ test("method types", async () => {
   expect(inf[0].paramTypes[2]).toBe(C);
   expect(inf[0].paramTypes[2].name).toBe("C");
 });
-
-

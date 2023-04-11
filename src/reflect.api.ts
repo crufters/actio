@@ -22,6 +22,11 @@ interface APIJSON {
   };
 }
 
+// this method is named JSON because
+// types are returned as strings and not actual
+// types (eg. [Function Array] becomes "Array")
+//
+// this way the return values is ready to be JSON stringified
 export function getAPIJSON(): APIJSON {
   let api: APIJSON = {
     services: {},
@@ -55,7 +60,7 @@ export function getAPIJSON(): APIJSON {
             ),
           };
           if (ret.type) {
-          ret.type = ret.type?.name;
+            ret.type = ret.type?.name;
           }
           return ret;
         }),
@@ -71,6 +76,7 @@ export function getAPIJSON(): APIJSON {
       let data = {
         ...field,
       };
+      data.type = data.type?.name;
       delete data.target;
       api.types[className][field.name] = {
         data: data,
