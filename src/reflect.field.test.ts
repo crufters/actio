@@ -33,7 +33,7 @@ test("field", async () => {
 });
 
 class K {
-  @Field({ arrayOf: J })
+  @Field({ hint: J })
   a: J[];
 }
 
@@ -44,7 +44,7 @@ test("array field", async () => {
   expect(fields[0].target.constructor.name).toBe("K");
   expect(fields[0].name).toBe("a");
   expect(fields[0].type).toBe(Array);
-  expect(fields[0].arrayOf).toBe(J);
+  expect(fields[0].hint).toBe(J);
 
   let classes = listClasses();
   expect(classes.find((c) => c.name == "K")).toBeTruthy();
@@ -98,4 +98,16 @@ test("walk tree", async () => {
   expect(getParamOptions(L, methods[1].methodName, 0)).toEqual({
     type: J,
   });
+});
+
+class LambdaField {
+  @Field({ hint: () => Number })
+  a: number[];
+}
+
+test("lambda field", async () => {
+  console.log(LambdaField);
+  let fields = listFields("LambdaField");
+  expect(fields.length).toBe(1);
+  expect(fields[0].hint).toBe(Number);
 });
