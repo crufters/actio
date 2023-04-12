@@ -162,10 +162,15 @@ export class Registrator {
       return await service[endpointName](request, response);
     } else {
       // @todo maybe remove this and always parse
-      let req =
-        typeof request.body === "string"
-          ? JSON.parse(request.body)
-          : request.body;
+      let req;
+      try {
+        req =
+          typeof request.body === "string"
+            ? JSON.parse(request.body)
+            : request.body;
+      } catch (e) {
+        response.status(422).send(`{"error:" "invalid json"}`).end();
+      }
       //req = JSON.parse(request.body);
       // json request
 
@@ -235,6 +240,9 @@ export function createApp(
 }
 
 export function startServer(serviceClasses: any[], port?: number) {
+  if (!port) {
+    port = 8080;
+  }
   let app = createApp(serviceClasses);
   app.listen(port, () => {
     console.log(`Server is listening on port ${port}`);
