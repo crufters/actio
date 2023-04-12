@@ -615,18 +615,21 @@ export class Password {
 }
 
 export class VerificationCodeSendRequest {
+  @Field()
   token?: string;
 }
 
 export class VerificationCodeSendResponse {}
 
 export class VerificationCodeVerifyRequest {
+  @Field()
   code?: string;
 }
 
 export class VerificationCodeVerifyResponse {}
 
 export class PasswordSendResetRequest {
+  @Field()
   contactUrl?: string;
 }
 
@@ -634,41 +637,60 @@ export class PasswordSendResetResponse {}
 
 /** Password change by supplying an code got through email/sms etc. */
 export class PasswordChangeRequest {
+  @Field()
   code?: string;
+  @Field()
   newPassword?: string;
 }
 
 export class PasswordChangeResponse {
+  @Field()
   token: Token;
 }
 
 /** Change password by supplying the old password. */
 export class PasswordChangeWithOldRequest {
+  @Field()
   contactUrl: string;
+
+  @Field()
   oldPassword: string;
+
+  @Field()
   newPassword: string;
 }
 
 export class PasswordChangeWithOldResponse {}
 
 export class UserRegisterRequest {
+  @Field()
   user?: User;
+
+  @Field()
   password?: string;
+
   /**
    * Ghost registration means register without contact details.
    * Useful for example when we want to enable people to order
    * without actual full registration.
    */
+  @Field()
   ghostRegister?: boolean;
 }
 
 export class UserRegisterResponse {
+  @Field()
   token: Token;
 }
 
 export class UserBrandRegisterRequest {
+  @Field()
   user: User;
+
+  @Field()
   password: string;
+
+  @Field()
   organization: Organization;
 }
 
@@ -677,89 +699,132 @@ export class UserBrandRegisterResponse {
 }
 
 export class UserDepartmentRegisterRequest {
+  @Field()
   user: User;
+
+  @Field()
   password: string;
+
+  @Field()
   departmentId: string;
 }
 
 export class UserDepartmentRegisterResponse {}
 
 export class TokenReadRequest {
+  @Field()
   token: string;
 }
 
 export class TokenReadResponse {
+  @Field()
   token: Token;
 }
 
 export class UserLoginRequest {
+  @Field()
   contactUrl: string;
+
+  @Field()
   password: string;
 }
 
 export class UserLoginResponse {
+  @Field()
   token: Omit<Token, "user">;
 }
 
 export class UserListRequest {
+  @Field()
   token: string;
+
+  @Field()
   departmentId?: string;
   /** Defaults to created at */
+
+  @Field()
   orderByField?: string;
+
+  @Field()
   asc?: boolean;
+
+  @Field()
   skip?: number;
+
+  @Field()
   limit?: number;
 }
 
 export class UserListResponse {
+  @Field({ hint: User })
   users: User[];
 }
 
 export class UserSaveRequest {
+  @Field()
   token: string;
+
+  @Field()
   user: User;
 }
 
 export class UserSaveResponse {
+  @Field()
   user: User;
 }
 
 export class UserSaveAddressRequest {
+  @Field()
   token: string;
+
+  @Field()
   user: User;
 }
 
 export class UserSaveAddressResponse {
+  @Field()
   user: User;
 }
 
 export class UserSlugCheckRequest {
+  @Field()
   slug: string;
 }
 
 export class UserSlugCheckResponse {
+  @Field()
   taken: boolean;
 }
 
 export class RoleListRequest {}
 
 export class RoleListResponse {
+  @Field({ hint: Role })
   roles: Role[];
 }
 
 export class DepartmentListRequest {
+  @Field()
   token: string;
+
   // optional code fragment to full text search on
+  @Field()
   code?: string;
 }
 
 export class DepartmentListResponse {
+  @Field({ hint: Department })
   departments: Department[];
 }
 
 export class UserUnGhostRequest {
+  @Field()
   token: string;
+
+  @Field()
   password: string;
+
+  @Field()
   contact: Contact;
 }
 
@@ -768,6 +833,7 @@ export class UserUnGhostResponse {}
 export class TokenAdminGetRequest {}
 
 export class TokenAdminGetResponse {
+  @Field()
   token: Token;
 }
 
@@ -800,29 +866,39 @@ export const languages = [languageHu, languageEn];
 export class PlatformListRequest {}
 
 export class PlatformListResponse {
+  @Field({ hint: Platform })
   platforms: Platform[];
 }
 
 export class OauthInfoRequest {}
 
 export class OauthInfoResponse {
+  @Field()
   facebookAppID?: string;
 }
 
 export class FacebookLoginRequest {
+  @Field()
   accessToken: string;
 }
 
 export class FacebookLoginResponse {
+  @Field()
   token: Omit<Token, "user">;
 }
 
 export class RegisterOrLoginWithProvenIdentityRequest {
+  @Field()
   email: string;
+
+  @Field()
   firstName?: string;
+
+  @Field()
   lastName?: string;
 }
 
 export class RegisterOrLoginWithProvenIdentityResponse {
+  @Field()
   token: Omit<Token, "user">;
 }
