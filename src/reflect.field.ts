@@ -25,7 +25,16 @@ export function listFields(target: any | string): FieldData[] {
   if (!fieldMap.has(key)) {
     return [];
   }
-  return fieldMap.get(key);
+  return fieldMap.get(key).map((opts) => {
+    let ret = {
+      ...opts,
+    };
+    // support lambda hints ie. @Field({hint: () => User})
+    if (ret.hint?.name == "hint") {
+      ret.hint = ret.hint();
+    }
+    return ret;
+  });
 }
 
 export function listClasses(): any[] {
@@ -36,13 +45,13 @@ export function listClasses(): any[] {
   return ret;
 }
 
+export type FieldOptions = Omit<FieldData, "target" | "type">;
+
 /**
  * Field is for data class properties. Makes properties available to the Actio runtime for API docs and API client generation.
  * The parent class is also registered with the Actio runtime, but only the fields that are decorated with @Field are available.
  */
-export const Field = (
-  options?: Omit<FieldData, "target" | "type">
-): PropertyDecorator => {
+export const Field = (options?: FieldOptions): PropertyDecorator => {
   return function (target, propertyKey) {
     classMap.set(target.constructor.name, target.constructor);
 
@@ -54,10 +63,6 @@ export const Field = (
     }
     opts.hint = options.hint;
 
-    // support lambda hints ie. @Field({hint: () => User})
-    if (opts.hint?.name == "hint") {
-      opts.hint = options.hint();
-    }
     let name = target.constructor.name;
 
     let t = Reflect.getMetadata("design:type", target, propertyKey);
