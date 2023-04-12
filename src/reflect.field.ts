@@ -8,10 +8,10 @@ export interface FieldData {
    */
   type?: any;
   /**
-   * This is needed because array types can not be retrieved with typescript reflection, so we need some help from the caller:
+   * Type hint. This is needed because array types can not be retrieved with typescript reflection, so we need some help from the caller:
    * https://stackoverflow.com/questions/35022658/how-do-i-get-array-item-type-in-typescript-using-the-reflection-api
    */
-  arrayOf?: any;
+  hint?: any;
 }
 
 export let classMap = new Map<string, any>();
@@ -52,7 +52,12 @@ export const Field = (
     if (!options) {
       options = {};
     }
-    opts.arrayOf = options.arrayOf;
+    opts.hint = options.hint;
+
+    // support lambda hints ie. @Field({hint: () => User})
+    if (opts.hint?.name == "hint") {
+      opts.hint = options.hint();
+    }
     let name = target.constructor.name;
 
     let t = Reflect.getMetadata("design:type", target, propertyKey);

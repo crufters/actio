@@ -1,4 +1,4 @@
-import { Service, Unexposed } from "../../reflect.js";
+import { Endpoint, Service, Unexposed } from "../../reflect.js";
 import { Servicelike } from "../../util.js";
 import { DataSource } from "typeorm";
 
@@ -37,29 +37,48 @@ import {
   SecretCode,
   Language,
   DepartmentListRequest,
+  DepartmentListResponse,
   VerificationCodeSendRequest,
+  VerificationCodeSendResponse,
   VerificationCodeVerifyRequest,
+  VerificationCodeVerifyResponse,
   PasswordSendResetRequest,
+  PasswordSendResetResponse,
+  PasswordChangeResponse,
   PasswordChangeRequest,
   PasswordChangeWithOldRequest,
+  PasswordChangeWithOldResponse,
   UserSlugCheckRequest,
+  UserSlugCheckResponse,
   PlatformListRequest,
+  PlatformListResponse,
   TokenReadRequest,
+  TokenReadResponse,
   UserLoginRequest,
+  UserLoginResponse,
   UserListRequest,
+  UserListResponse,
   UserSaveRequest,
+  UserSaveResponse,
   UserRegisterRequest,
+  UserRegisterResponse,
   UserBrandRegisterRequest,
+  UserBrandRegisterResponse,
   UserDepartmentRegisterRequest,
+  UserDepartmentRegisterResponse,
   RoleListRequest,
+  RoleListResponse,
   roles,
   languages,
   platforms,
   UserUnGhostRequest,
+  UserUnGhostResponse,
   TokenAdminGetRequest,
   Config,
   OauthInfoRequest,
+  OauthInfoResponse,
   FacebookLoginRequest,
+  FacebookLoginResponse,
   RegisterOrLoginWithProvenIdentityRequest,
 } from "./models.js";
 import { ConfigService } from "../config/index.js";
@@ -186,39 +205,66 @@ export class AuthenticationService implements Servicelike {
     return;
   }
 
+  @Endpoint({
+    returns: DepartmentListResponse,
+  })
   departmentList(req: DepartmentListRequest) {
     return departmentList(this.connection, req);
   }
 
+  @Endpoint({
+    returns: VerificationCodeSendResponse,
+  })
   verificationCodeSend(req: VerificationCodeSendRequest) {
     return verificationCodeSend(this.connection, this.config, req);
   }
 
+  @Endpoint({
+    returns: VerificationCodeVerifyResponse,
+  })
   verificationCodeVerify(req: VerificationCodeVerifyRequest) {
     return verificationCodeVerify(this.connection, req);
   }
 
+  @Endpoint({
+    returns: PasswordSendResetResponse,
+  })
   passwordSendReset(req: PasswordSendResetRequest) {
     return passwordSendReset(this.connection, req);
   }
 
+  @Endpoint({
+    returns: PasswordChangeResponse,
+  })
   passwordChange(req: PasswordChangeRequest) {
     return passwordChange(this.connection, req);
   }
 
+  @Endpoint({
+    returns: PasswordChangeWithOldResponse,
+  })
   passwordChangeWithOld(req: PasswordChangeWithOldRequest) {
     return passwordChangeWithOld(this.connection, req);
   }
 
+  @Endpoint({
+    returns: UserSlugCheckResponse,
+  })
   userSlugCheck(req: UserSlugCheckRequest) {
     return userSlugCheck(this.connection, req);
   }
 
+  @Endpoint({
+    returns: PlatformListResponse,
+  })
   platformListRequest(req: PlatformListRequest) {
     return platformList(this.connection, req);
   }
 
   /** Read token */
+  @Endpoint({
+    returns: TokenReadResponse,
+  })
   tokenRead(req: TokenReadRequest) {
     return tokenRead(this.connection, req);
   }
@@ -227,14 +273,23 @@ export class AuthenticationService implements Servicelike {
    * Returns the token but not the user object.
    * For that use 'tokenRead'
    */
+  @Endpoint({
+    returns: UserLoginResponse,
+  })
   userLogin(req: UserLoginRequest) {
     return userLogin(this.connection, req);
   }
 
+  @Endpoint({
+    returns: UserListResponse,
+  })
   userList(req: UserListRequest) {
     return userList(this.connection, req);
   }
 
+  @Endpoint({
+    returns: UserSaveResponse,
+  })
   userSave(req: UserSaveRequest) {
     return userSave(this.connection, req);
   }
@@ -243,6 +298,9 @@ export class AuthenticationService implements Servicelike {
    * Returns the token but not the user object.
    * For that use 'tokenRead'
    */
+  @Endpoint({
+    returns: UserRegisterResponse,
+  })
   userRegister(req: UserRegisterRequest) {
     return userRegister(this.connection, this.config, req);
   }
@@ -251,6 +309,9 @@ export class AuthenticationService implements Servicelike {
    * Returns the token but not the user object.
    * For that use 'tokenRead'
    */
+  @Endpoint({
+    returns: UserBrandRegisterResponse,
+  })
   userBrandRegister(req: UserBrandRegisterRequest) {
     return userBrandRegister(
       this.connection,
@@ -260,10 +321,16 @@ export class AuthenticationService implements Servicelike {
     );
   }
 
+  @Endpoint({
+    returns: UserDepartmentRegisterResponse,
+  })
   userDepartmentRegister(req: UserDepartmentRegisterRequest) {
     return userDepartmentRegister(this.connection, req);
   }
 
+  @Endpoint({
+    returns: RoleListResponse,
+  })
   roleList(req: RoleListRequest) {
     return roleList(this.connection, req);
   }
@@ -286,6 +353,9 @@ export class AuthenticationService implements Servicelike {
    * 4. Optionally update with more user data (can call userSave many times)
    * 5. Call userUnGhost({token: t, password: "password"})
    */
+  @Endpoint({
+    returns: UserUnGhostResponse,
+  })
   userUnGhost(req: UserUnGhostRequest) {
     return userUnGhost(this.connection, req);
   }
@@ -302,10 +372,16 @@ export class AuthenticationService implements Servicelike {
     return tokenAdminGet(this.connection, req);
   }
 
+  @Endpoint({
+    returns: OauthInfoResponse,
+  })
   oauthInfo(req: OauthInfoRequest) {
     return oauthInfo(this.connection, req, this.facebookAppID);
   }
 
+  @Endpoint({
+    returns: FacebookLoginResponse,
+  })
   facebookLogin(req: FacebookLoginRequest) {
     return facebookLogin(
       this.connection,

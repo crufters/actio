@@ -14,6 +14,7 @@ import {
 import { File } from "../file/models.js";
 import { Geometry } from "geojson";
 import { nanoid } from "nanoid";
+import { Field } from "../../reflect.field.js";
 
 export function copy(from, to) {
   if (!from || !to) {
@@ -27,7 +28,7 @@ export function copy(from, to) {
 export declare type Relation<T> = T;
 declare var google: any;
 
-export interface Config {
+export class Config {
   /** Admin user fullname */
   fullName?: string;
   /** Admin user email */
@@ -74,16 +75,20 @@ export class Role {
   }
 
   // eg. "user", "business", "admin"
+  @Field()
   @PrimaryColumn()
   id?: string;
 
+  @Field()
   @Column({ nullable: true })
   @Index({ unique: true })
   slug?: string;
 
+  @Field()
   @Column({ nullable: true })
   name?: string;
 
+  @Field()
   @ManyToMany(() => User, (user) => user.roles)
   users?: User[];
 }
@@ -130,28 +135,36 @@ export class User {
     });
   }
 
+  @Field()
   @PrimaryColumn()
   id?: string;
 
+  @Field()
   @Column()
   @Index({ unique: true })
   slug?: string;
 
+  @Field()
   @Column({ nullable: true })
   fullName?: string;
 
+  @Field()
   @Column({ nullable: true })
   active?: boolean;
 
+  @Field()
   @Column({ nullable: true })
   // "male", "female", "other"
   gender?: string;
 
+  @Field()
   thumbnail?: File;
 
+  @Field()
   @Column({ nullable: true })
   thumbnailId?: string;
 
+  @Field()
   @Column({
     type: "geography",
     spatialFeatureType: "Point",
@@ -163,6 +176,7 @@ export class User {
   // Is one location enough?
   location?: Geometry;
 
+  @Field()
   @Column({
     type: "jsonb",
     array: false,
@@ -172,6 +186,7 @@ export class User {
   // but at least the key 'formatted_address'.
   address?: google.maps.places.PlaceResult;
 
+  @Field()
   @Column({
     type: "jsonb",
     array: false,
@@ -179,41 +194,51 @@ export class User {
   })
   meta?: { [key: string]: any };
 
+  @Field()
   @Column({ nullable: true, type: "timestamptz" })
   birthDay?: string;
 
+  @Field()
   @CreateDateColumn({ type: "timestamptz", default: () => "CURRENT_TIMESTAMP" })
   createdAt?: string;
 
+  @Field()
   @UpdateDateColumn({ type: "timestamptz", default: () => "CURRENT_TIMESTAMP" })
   updatedAt?: string;
 
+  @Field()
   @Column({ type: "timestamptz", nullable: true })
   lastLogin?: string;
 
+  @Field({ hint: () => Role })
   @ManyToMany(() => Role, (role) => role.users, {
     cascade: ["insert", "update"],
   })
   @JoinTable()
   roles?: Role[];
 
+  @Field({ hint: () => Contact })
   @OneToMany(() => Contact, (contact) => contact.user, {
     cascade: ["insert", "update"],
   })
   contacts?: Contact[];
 
+  @Field()
   @Column({ nullable: true })
   ghost?: boolean;
 
+  @Field({ hint: () => Password })
   @OneToMany(() => Password, (password) => password.user)
   passwords?: Password[];
 
+  @Field({ hint: () => Department })
   @ManyToMany(() => Department, (department) => department.users, {
     cascade: ["insert", "update"],
   })
   // departments a user belongs to
   departments?: Department[];
 
+  @Field({ hint: () => Token })
   @OneToMany(() => Token, (token) => token.user)
   tokens?: Token[];
 
@@ -239,25 +264,32 @@ export class Token {
   }
 
   // id to help CRUD ops on the token
+  @Field()
   @PrimaryColumn()
   id?: string;
 
+  @Field()
   @ManyToOne(() => User, (user) => user.tokens)
   user?: User;
 
+  @Field()
   @Column()
   userId?: string;
 
+  @Field()
   @CreateDateColumn({ type: "timestamptz", default: () => "CURRENT_TIMESTAMP" })
   createdAt?: string;
 
   // the token value itself
+  @Field()
   @Column()
   token?: string;
 
+  @Field()
   @Column({ nullable: true })
   description?: string;
 
+  @Field()
   @UpdateDateColumn({ type: "timestamptz", default: () => "CURRENT_TIMESTAMP" })
   updatedAt?: string;
 }
@@ -265,28 +297,36 @@ export class Token {
 /** Used for things like email verification, password reset or OTPs */
 @Entity()
 export class SecretCode {
+  @Field()
   @PrimaryColumn()
   id?: string;
 
+  @Field()
   @ManyToOne(() => User, (user) => user.tokens)
   user?: User;
 
+  @Field()
   @Column()
   userId?: string;
 
+  @Field()
   @Column({ nullable: true })
   used?: boolean;
 
+  @Field()
   @CreateDateColumn({ type: "timestamptz", default: () => "CURRENT_TIMESTAMP" })
   createdAt?: string;
 
+  @Field()
   @Column({ nullable: true, type: "timestamptz" })
   expires?: string;
 
   // the code itself
+  @Field()
   @Column()
   code?: string;
 
+  @Field()
   @UpdateDateColumn({ type: "timestamptz", default: () => "CURRENT_TIMESTAMP" })
   updatedAt?: string;
 }
@@ -305,33 +345,42 @@ export class Organization {
     this.departments = json?.departments?.map((d) => new Department(d));
   }
 
+  @Field()
   @PrimaryColumn()
   id?: string;
 
+  @Field()
   @Column()
   @Index({ unique: true })
   slug?: string;
 
+  @Field()
   @Column()
   name?: string;
 
   /** Main website URL of the organization */
+  @Field()
   @Column({ nullable: true })
   website?: string;
 
+  @Field()
   thumbnail?: File;
 
+  @Field()
   @Column({ nullable: true })
   thumbnailId?: string;
 
+  @Field({ hint: () => Department })
   @OneToMany(() => Department, (department) => department.organization, {
     cascade: ["insert", "update"],
   })
   departments?: Department[];
 
+  @Field()
   @CreateDateColumn({ type: "timestamptz", default: () => "CURRENT_TIMESTAMP" })
   createdAt?: string;
 
+  @Field()
   @UpdateDateColumn({ type: "timestamptz", default: () => "CURRENT_TIMESTAMP" })
   updatedAt?: string;
 }
@@ -350,35 +399,45 @@ export class Department {
     this.organization = new Organization(json?.organization);
     this.users = json?.users?.map((user) => new User(user));
   }
+
+  @Field()
   @PrimaryColumn()
   id?: string;
 
+  @Field()
   @Column()
   slug?: string;
 
+  @Field()
   @Column()
   name?: string;
 
+  @Field()
   @Column()
   balance?: number;
 
+  @Field()
   @ManyToOne(() => Organization, (organization) => organization.departments, {
     cascade: ["insert", "update"],
   })
   organization?: Organization;
 
+  @Field()
   @Column()
   organizationId?: string;
 
+  @Field({ hint: () => User })
   @ManyToMany(() => User, (user) => user.departments, {
     cascade: ["insert", "update"],
   })
   @JoinTable()
   users?: User[];
 
+  @Field()
   @CreateDateColumn({ type: "timestamptz", default: () => "CURRENT_TIMESTAMP" })
   createdAt?: string;
 
+  @Field()
   @UpdateDateColumn({ type: "timestamptz", default: () => "CURRENT_TIMESTAMP" })
   updatedAt?: string;
 }
@@ -399,6 +458,7 @@ export class Contact {
     this.user = new User(json?.user);
   }
 
+  @Field()
   @PrimaryColumn()
   id?: string;
 
@@ -409,31 +469,40 @@ export class Contact {
    * rapperkid123@gmail.com
    * +44270111222
    */
+  @Field()
   @Column()
   url?: string;
 
+  @Field()
   /** Youtube channel or Facebook account name */
   @Column({ nullable: true })
   name?: string;
 
+  @Field()
   @Column({ nullable: true })
   verified?: boolean;
 
+  @Field()
   @ManyToOne(() => Platform, (platform) => platform.contacts)
   platform?: Relation<Platform>;
 
+  @Field()
   @Column()
   platformId?: string;
 
+  @Field()
   @ManyToOne(() => User, (user) => user.contacts)
   user?: User;
 
+  @Field()
   @Column()
   userId?: string;
 
+  @Field()
   @CreateDateColumn({ type: "timestamptz", default: () => "CURRENT_TIMESTAMP" })
   createdAt?: string;
 
+  @Field()
   @UpdateDateColumn({ type: "timestamptz", default: () => "CURRENT_TIMESTAMP" })
   updatedAt?: string;
 }
@@ -454,9 +523,11 @@ export class Platform {
     this.contacts = json?.contacts?.map((c: any) => new Contact(c));
   }
 
+  @Field()
   @PrimaryColumn()
   id?: string;
 
+  @Field()
   @Column({ nullable: true })
   @Index({ unique: true })
   slug?: string;
@@ -464,21 +535,26 @@ export class Platform {
   // Represents either an abstract platform ("email", "phone")
   // or an actual website url ("facebook.com")
   // eg. "facebook.com", "Reddit.com", "email", "phone"
+  @Field()
   @Column({ nullable: true })
   @Index({ unique: true })
   name?: string;
 
   // Is platform still selectable for new missions? (see Mission class)
   // Can users still log in with the platform contact? (see Contact class)
+  @Field()
   @Column("boolean", { default: true })
   active?: boolean;
 
+  @Field({ hint: () => Contact })
   @OneToMany(() => Contact, (contact) => contact.platform)
   contacts?: Contact[];
 
+  @Field()
   @CreateDateColumn({ type: "timestamptz", default: () => "CURRENT_TIMESTAMP" })
   createdAt?: string;
 
+  @Field()
   @UpdateDateColumn({ type: "timestamptz", default: () => "CURRENT_TIMESTAMP" })
   updatedAt?: string;
 }
@@ -525,54 +601,57 @@ export class Password {
   }
 
   // password hash itsef
+  @Field()
   @PrimaryColumn()
   id?: string;
 
+  @Field()
   @Column()
   userId?: string;
 
+  @Field()
   @ManyToOne(() => User, (user) => user.passwords)
   user?: User;
 }
 
-export interface VerificationCodeSendRequest {
+export class VerificationCodeSendRequest {
   token?: string;
 }
 
-export interface VerificationCodeSendResponse {}
+export class VerificationCodeSendResponse {}
 
-export interface VerificationCodeVerifyRequest {
+export class VerificationCodeVerifyRequest {
   code?: string;
 }
 
-export interface VerificationCodeVerifyResponse {}
+export class VerificationCodeVerifyResponse {}
 
-export interface PasswordSendResetRequest {
+export class PasswordSendResetRequest {
   contactUrl?: string;
 }
 
-export interface PasswordSendResetResponse {}
+export class PasswordSendResetResponse {}
 
 /** Password change by supplying an code got through email/sms etc. */
-export interface PasswordChangeRequest {
+export class PasswordChangeRequest {
   code?: string;
   newPassword?: string;
 }
 
-export interface PasswordChangeResponse {
+export class PasswordChangeResponse {
   token: Token;
 }
 
 /** Change password by supplying the old password. */
-export interface PasswordChangeWithOldRequest {
+export class PasswordChangeWithOldRequest {
   contactUrl: string;
   oldPassword: string;
   newPassword: string;
 }
 
-export interface PasswordChangeWithOldResponse {}
+export class PasswordChangeWithOldResponse {}
 
-export interface UserRegisterRequest {
+export class UserRegisterRequest {
   user?: User;
   password?: string;
   /**
@@ -583,46 +662,46 @@ export interface UserRegisterRequest {
   ghostRegister?: boolean;
 }
 
-export interface UserRegisterResponse {
+export class UserRegisterResponse {
   token: Token;
 }
 
-export interface UserBrandRegisterRequest {
+export class UserBrandRegisterRequest {
   user: User;
   password: string;
   organization: Organization;
 }
 
-export interface UserBrandRegisterResponse {
+export class UserBrandRegisterResponse {
   token: Token;
 }
 
-export interface UserDepartmentRegisterRequest {
+export class UserDepartmentRegisterRequest {
   user: User;
   password: string;
   departmentId: string;
 }
 
-export interface UserDepartmentRegisterResponse {}
+export class UserDepartmentRegisterResponse {}
 
-export interface TokenReadRequest {
+export class TokenReadRequest {
   token: string;
 }
 
-export interface TokenReadResponse {
+export class TokenReadResponse {
   token: Token;
 }
 
-export interface UserLoginRequest {
+export class UserLoginRequest {
   contactUrl: string;
   password: string;
 }
 
-export interface UserLoginResponse {
+export class UserLoginResponse {
   token: Omit<Token, "user">;
 }
 
-export interface UserListRequest {
+export class UserListRequest {
   token: string;
   departmentId?: string;
   /** Defaults to created at */
@@ -632,63 +711,63 @@ export interface UserListRequest {
   limit?: number;
 }
 
-export interface UserListResponse {
+export class UserListResponse {
   users: User[];
 }
 
-export interface UserSaveRequest {
+export class UserSaveRequest {
   token: string;
   user: User;
 }
 
-export interface UserSaveResponse {
+export class UserSaveResponse {
   user: User;
 }
 
-export interface UserSaveAddressRequest {
+export class UserSaveAddressRequest {
   token: string;
   user: User;
 }
 
-export interface UserSaveAddressResponse {
+export class UserSaveAddressResponse {
   user: User;
 }
 
-export interface UserSlugCheckRequest {
+export class UserSlugCheckRequest {
   slug: string;
 }
 
-export interface UserSlugCheckResponse {
+export class UserSlugCheckResponse {
   taken: boolean;
 }
 
-export interface RoleListRequest {}
+export class RoleListRequest {}
 
-export interface RoleListResponse {
+export class RoleListResponse {
   roles: Role[];
 }
 
-export interface DepartmentListRequest {
+export class DepartmentListRequest {
   token: string;
   // optional code fragment to full text search on
   code?: string;
 }
 
-export interface DepartmentListResponse {
+export class DepartmentListResponse {
   departments: Department[];
 }
 
-export interface UserUnGhostRequest {
+export class UserUnGhostRequest {
   token: string;
   password: string;
   contact: Contact;
 }
 
-export interface UserUnGhostResponse {}
+export class UserUnGhostResponse {}
 
-export interface TokenAdminGetRequest {}
+export class TokenAdminGetRequest {}
 
-export interface TokenAdminGetResponse {
+export class TokenAdminGetResponse {
   token: Token;
 }
 
@@ -718,32 +797,32 @@ languageEn.name = "English";
 
 export const languages = [languageHu, languageEn];
 
-export interface PlatformListRequest {}
+export class PlatformListRequest {}
 
-export interface PlatformListResponse {
+export class PlatformListResponse {
   platforms: Platform[];
 }
 
-export interface OauthInfoRequest {}
+export class OauthInfoRequest {}
 
-export interface OauthInfoResponse {
+export class OauthInfoResponse {
   facebookAppID?: string;
 }
 
-export interface FacebookLoginRequest {
+export class FacebookLoginRequest {
   accessToken: string;
 }
 
-export interface FacebookLoginResponse {
+export class FacebookLoginResponse {
   token: Omit<Token, "user">;
 }
 
-export interface RegisterOrLoginWithProvenIdentityRequest {
+export class RegisterOrLoginWithProvenIdentityRequest {
   email: string;
   firstName?: string;
   lastName?: string;
 }
 
-export interface RegisterOrLoginWithProvenIdentityResponse {
+export class RegisterOrLoginWithProvenIdentityResponse {
   token: Omit<Token, "user">;
 }
