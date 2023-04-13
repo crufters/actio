@@ -80,6 +80,9 @@ export function getAPIJSON(): APIJSON {
         ...field,
       };
       data.type = data.type?.name;
+      if (data.hint) {
+        data.hint = data.hint?.name;
+      }
       delete data.target;
       api.types[className][field.name] = {
         data: data,
