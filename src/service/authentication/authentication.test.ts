@@ -318,10 +318,25 @@ test("auth api", async () => {
     services: {
       AuthenticationService: api.services.AuthenticationService,
     },
+    types: {
+      DepartmentListResponse: api.types.DepartmentListResponse,
+    },
   };
   expect(
     JSON.parse(JSON.stringify(json))["services"]["AuthenticationService"][
       "departmentList"
     ]["info"]["options"]["returns"]
   ).toEqual("DepartmentListResponse");
+
+  expect(
+    JSON.parse(JSON.stringify(json))["types"]["DepartmentListResponse"][
+      "departments"
+    ]["data"]["hint"]
+  ).toEqual("Department");
+
+  expect(
+    JSON.parse(JSON.stringify(json))["types"]["DepartmentListResponse"][
+      "departments"
+    ]["data"]["type"]
+  ).toEqual("Array");
 });
