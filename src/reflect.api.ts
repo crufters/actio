@@ -41,6 +41,9 @@ export function getAPIJSON(): APIJSON {
       }
       let newInfo = {
         ...endpointInfo,
+        options: {
+          ...endpointInfo.options,
+        },
       };
       newInfo.paramTypes = newInfo.paramTypes.map((type) => {
         return type.name;
