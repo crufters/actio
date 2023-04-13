@@ -34,16 +34,7 @@ class N {
 
 test("api def", async () => {
   console.log(N);
-  let api = getAPIJSON();
-  let json = {
-    services: {
-      N: api.services.N,
-    },
-    types: {
-      M: api.types.M,
-    },
-  };
-  expect(JSON.parse(JSON.stringify(json))).toEqual({
+  let equalTo = {
     services: {
       N: {
         doSomething: {
@@ -87,5 +78,28 @@ test("api def", async () => {
         },
       },
     },
-  });
+  };
+
+  let api = getAPIJSON();
+  let json = {
+    services: {
+      N: api.services.N,
+    },
+    types: {
+      M: api.types.M,
+    },
+  };
+  expect(JSON.parse(JSON.stringify(json))).toEqual(equalTo);
+
+  // do it again to test for idempotency
+  api = getAPIJSON();
+  json = {
+    services: {
+      N: api.services.N,
+    },
+    types: {
+      M: api.types.M,
+    },
+  };
+  expect(JSON.parse(JSON.stringify(json))).toEqual(equalTo);
 });
