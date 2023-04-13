@@ -1,6 +1,6 @@
 import { classNameToEndpointInfo, EndpointInfo } from "./reflect.js";
 import { FieldData, getParamOptions, ParamOptions } from "./reflect.field.js";
-import { fieldMap } from "./reflect.field.js";
+import { listFieldClasses, listFields } from "./reflect.field.js";
 
 interface APIJSON {
   types: {
@@ -71,8 +71,9 @@ export function getAPIJSON(): APIJSON {
     });
   });
 
-  fieldMap.forEach((fields, className) => {
-    fields.forEach((field) => {
+  listFieldClasses().forEach((clas) => {
+    listFields(clas.name).forEach((field) => {
+      let className = clas.name;
       if (!api.types[className]) {
         api.types[className] = {};
       }

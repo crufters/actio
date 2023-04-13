@@ -14,8 +14,16 @@ export interface FieldData {
   hint?: any;
 }
 
-export let classMap = new Map<string, any>();
-export let fieldMap = new Map<string, FieldData[]>();
+let classMap = new Map<string, any>();
+let fieldMap = new Map<string, FieldData[]>();
+
+export function listFieldClasses(): any[] {
+  let ret = [];
+  classMap.forEach((value) => {
+    ret.push(value);
+  });
+  return ret;
+}
 
 export function listFields(target: any | string): FieldData[] {
   let key = target;

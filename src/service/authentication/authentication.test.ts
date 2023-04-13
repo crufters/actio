@@ -320,6 +320,7 @@ test("auth api", async () => {
     },
     types: {
       DepartmentListResponse: api.types.DepartmentListResponse,
+      Department: api.types.Department,
     },
   };
   expect(
@@ -339,4 +340,10 @@ test("auth api", async () => {
       "departments"
     ]["data"]["type"]
   ).toEqual("Array");
+
+  expect(
+    JSON.parse(JSON.stringify(json))["types"]["Department"][
+      "users"
+    ]["data"]["hint"]
+  ).toEqual("User");
 });
