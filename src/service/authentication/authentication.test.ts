@@ -9,6 +9,7 @@ import {
   roleUser,
   UserRegisterResponse,
 } from "./models.js";
+import { getAPIJSON } from "../../reflect.api.js";
 
 describe("Config free auth works", () => {
   var auth: AuthenticationService;
@@ -309,4 +310,18 @@ describe("Register admin with config and log in", () => {
     expect(usr.fullName).toBe("Joe Noone");
     expect(usr.slug).toBe("joe-no");
   });
+});
+
+test("auth api", async () => {
+  let api = getAPIJSON();
+  let json = {
+    services: {
+      AuthenticationService: api.services.AuthenticationService,
+    },
+  };
+  expect(
+    JSON.parse(JSON.stringify(json))["services"]["AuthenticationService"][
+      "departmentList"
+    ]["info"]["options"]["returns"]
+  ).toEqual("DepartmentListResponse");
 });
