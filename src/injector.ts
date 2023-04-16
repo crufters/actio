@@ -34,6 +34,7 @@ interface Handler {
 export class Injector {
   public addresses = new Map<string, string>();
   public turnoffOnInit = false;
+  nodeID: string;
   log = false;
 
   classes: any[];
@@ -44,11 +45,6 @@ export class Injector {
   inProgressByClassNameAndNamespace: Map<string, any> = new Map();
 
   constructor(classes: any[], handlers?: Handler[]) {
-    // @todo fix this special case
-    if (!classes) {
-      classes = []
-    }
-
     // get the dependencies of all classes from their constructors
     this.classes = _.uniqBy(
       _.concat(classes, classes.map((c) => getDependencyGraph(c)).flat()),
@@ -59,7 +55,8 @@ export class Injector {
     }
     // remove classes that are provided by handlers, like 'DataSource'
     this.classes = this.classes.filter(
-      (c) => !this.handlers.find((h) => h.typeName == c.name)
+      (c) =>
+        !this.handlers.find((h) => h.typeName == c.name) && c.name != "Injector"
     );
     this.log &&
       console.log(

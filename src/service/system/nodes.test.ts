@@ -31,18 +31,21 @@ test("node read", async () => {
     addresses: new Map()
       .set("NodeA", `http://localhost:${randomPortNumberA}`)
       .set("NodeB", `http://localhost:${randomPortNumberB}`),
+    nodeID: "1",
   });
 
   let appB = createApp([NodeC, SystemService], {
     addresses: new Map()
       .set("NodeA", `http://localhost:${randomPortNumberA}`)
       .set("NodeC", `http://localhost:${randomPortNumberC}`),
+    nodeID: "2",
   });
 
   let appA = createApp([NodeC, SystemService], {
     addresses: new Map()
       .set("NodeB", `http://localhost:${randomPortNumberB}`)
       .set("NodeC", `http://localhost:${randomPortNumberC}`),
+    nodeID: "3",
   });
 
   let serverA, serverB, serverC;
@@ -60,30 +63,18 @@ test("node read", async () => {
     propagate: true,
   });
   expect(response.status).toBe(200);
-  expect(response.body).toEqual({
+  expect({
+    nodes: response.body.nodes.sort((a, b) => {
+        if (a.id < b.id)
+        return -1;
+      if (a.id > b.id)
+        return 1;
+      return 0;
+    }),
+  }).toEqual({
     nodes: [
       {
-        services: [
-          {
-            address: `http://localhost:${randomPortNumberC}`,
-            name: "NodeC",
-          },
-          {
-            name: "SystemService",
-          },
-          {
-            address: `http://localhost:${randomPortNumberB}`,
-            name: "NodeB",
-          },
-          {
-            name: "NodeA",
-          },
-          {
-            name: "Injector",
-          },
-        ],
-      },
-      {
+        id: "1",
         services: [
           {
             name: "NodeC",
@@ -99,12 +90,10 @@ test("node read", async () => {
             address: `http://localhost:${randomPortNumberA}`,
             name: "NodeA",
           },
-          {
-            name: "Injector",
-          },
         ],
       },
       {
+        id: "2",
         services: [
           {
             address: `http://localhost:${randomPortNumberC}`,
@@ -120,8 +109,24 @@ test("node read", async () => {
             address: `http://localhost:${randomPortNumberA}`,
             name: "NodeA",
           },
+        ],
+      },
+      {
+        id: "3",
+        services: [
           {
-            name: "Injector",
+            address: `http://localhost:${randomPortNumberC}`,
+            name: "NodeC",
+          },
+          {
+            name: "SystemService",
+          },
+          {
+            address: `http://localhost:${randomPortNumberB}`,
+            name: "NodeB",
+          },
+          {
+            name: "NodeA",
           },
         ],
       },

@@ -12,6 +12,7 @@ export default async (
     nodes: [],
   };
   let node = {
+    id: injector.nodeID,
     address: env.selfAddress,
     services: [],
   };
@@ -39,7 +40,6 @@ export default async (
   if (request.propagate) {
     await Promise.all(
       _.map(Array.from(addresses.values()), async (address) => {
-        console.log("CALLING", address);
         let resp: NodesReadResponse = (await injector.serviceCall(
           address,
           "System",

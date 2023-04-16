@@ -11,6 +11,7 @@ export class NodesReadResponse {
 }
 
 export class Node {
+  id?: string;
   address: string;
   services: Service[];
 }
