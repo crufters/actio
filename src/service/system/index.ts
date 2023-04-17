@@ -1,4 +1,4 @@
-import { Service } from "../../reflect.js";
+import { Endpoint, Service } from "../../reflect.js";
 import { DataSource } from "typeorm";
 
 import apiRead from "./apiRead.js";
@@ -27,6 +27,9 @@ export class SystemService implements Servicelike {
     return apiRead(this.connection, req);
   }
 
+  @Endpoint({
+    returns: "NodesReadResponse",
+  })
   async nodesRead(req: any) {
     return nodesRead(this.injector, req);
   }
