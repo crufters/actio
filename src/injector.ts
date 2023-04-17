@@ -12,7 +12,7 @@ import { error } from "./util.js";
  * Ie. a TypeORMHandler produces a DataSource, not a TypeORMHandler.
  */
 interface Handler {
-  handle(typeName: string, config?: any): Promise<any>;
+  handle(typeName: string, config?: string): Promise<any>;
   typeName: string;
 }
 
@@ -34,6 +34,7 @@ interface Handler {
 export class Injector {
   public addresses = new Map<string, string>();
   public turnoffOnInit = false;
+  nodeID: string;
   log = false;
 
   classes: any[];
@@ -54,7 +55,8 @@ export class Injector {
     }
     // remove classes that are provided by handlers, like 'DataSource'
     this.classes = this.classes.filter(
-      (c) => !this.handlers.find((h) => h.typeName == c.name)
+      (c) =>
+        !this.handlers.find((h) => h.typeName == c.name) && c.name != "Injector"
     );
     this.log &&
       console.log(
@@ -220,6 +222,10 @@ export class Injector {
             });
             continue;
           }
+          if (t == "Injector") {
+            args.push(this);
+            continue;
+          }
           let handler = this.handlers.find((h) => h.typeName == t);
           if (!handler) {
             // Inject other services as dependencies
@@ -307,7 +313,7 @@ export class Injector {
   }
 
   // make a JSON over HTTP call
-  private serviceCall(address, className, method, ...args) {
+  serviceCall(address, className, method, ...args) {
     return new Promise((resolve, reject) => {
       let isMultiParamCall = arguments.length - 3 > 1;
       let url = `${address}/${className}/${method}`;
@@ -365,6 +371,6 @@ function until(
   return new Promise(poll);
 }
 
-function toSnakeCase(str) {
+export function toSnakeCase(str) {
   return str.replace(/([A-Z])/g, (g) => "_" + g[0].toUpperCase());
 }

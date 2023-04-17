@@ -17,6 +17,7 @@ export class Registrator {
   public addresses = new Map<string, string>();
   app: express.Application;
   injector: Injector;
+  nodeID: string;
 
   constructor(app: express.Application) {
     this.app = app;
@@ -25,6 +26,7 @@ export class Registrator {
   register(serviceClasses: any[]) {
     this.injector = new Injector(serviceClasses);
     this.injector.addresses = this.addresses;
+    this.injector.nodeID = this.nodeID;
     this.injector.log = true;
 
     // can't simply pass this.route as callback due to this issue:
@@ -203,7 +205,8 @@ function capitalizeFirstLetter(string) {
 }
 
 interface CreateAppOptions {
-  addresses: Map<string, string>;
+  addresses?: Map<string, string>;
+  nodeID?: string;
 }
 
 export function createApp(
@@ -233,6 +236,7 @@ export function createApp(
   let reg = new Registrator(app);
   if (options?.addresses) {
     reg.addresses = options.addresses;
+    reg.nodeID = options.nodeID;
   }
   reg.register(serviceClasses);
 
