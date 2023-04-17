@@ -11,12 +11,20 @@ export class NodesReadResponse {
 }
 
 export class Node {
+  @Field()
   id?: string;
+
+  @Field()
   address: string;
+
+  @Field()
   services: Service[];
 }
 
 export class Service {
+  @Field()
   address: string;
+
+  @Field()
   name: string;
 }
