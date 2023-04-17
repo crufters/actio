@@ -3,6 +3,7 @@ import { DataSource } from "typeorm";
 
 import apiRead from "./apiRead.js";
 import nodesRead from "./nodesRead.js";
+import { NodesReadResponse } from "./models.js";
 
 import { Servicelike } from "../../util.js";
 import { Injector } from "../../injector.js";
@@ -28,7 +29,7 @@ export class SystemService implements Servicelike {
   }
 
   @Endpoint({
-    returns: "NodesReadResponse",
+    returns: NodesReadResponse,
   })
   async nodesRead(req: any) {
     return nodesRead(this.injector, req);
