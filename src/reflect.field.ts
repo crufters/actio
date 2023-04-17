@@ -12,6 +12,8 @@ export interface FieldData {
    * https://stackoverflow.com/questions/35022658/how-do-i-get-array-item-type-in-typescript-using-the-reflection-api
    */
   hint?: any;
+  /** Description for a field, it will appear in the API documentation/explorer */
+  desc?: string;
 }
 
 let classMap = new Map<string, any>();
