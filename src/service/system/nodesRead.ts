@@ -13,7 +13,7 @@ export default async (
   };
   let node = {
     id: injector.nodeID,
-    address: env.selfAddress,
+    address: env.selfAddress || injector.selfAddress,
     services: [],
   };
 

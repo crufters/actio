@@ -46,6 +46,7 @@ test("node read", async () => {
       .set("NodeB", `http://localhost:${randomPortNumberB}`)
       .set("NodeC", `http://localhost:${randomPortNumberC}`),
     nodeID: "3",
+    selfAddress: `http://localhost:${randomPortNumberA}`,
   });
 
   let serverA, serverB, serverC;
@@ -113,6 +114,7 @@ test("node read", async () => {
       },
       {
         id: "3",
+        address: `http://localhost:${randomPortNumberA}`,
         services: [
           {
             address: `http://localhost:${randomPortNumberC}`,

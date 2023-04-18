@@ -33,6 +33,7 @@ interface Handler {
  */
 export class Injector {
   public addresses = new Map<string, string>();
+  selfAddress: string;
   public turnoffOnInit = false;
   nodeID: string;
   log = false;
