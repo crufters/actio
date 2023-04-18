@@ -47,6 +47,7 @@ export default async (
           []
         )) as NodesReadResponse;
         resp.nodes.forEach((n) => {
+          n.address = address;
           rsp.nodes.push(n);
         });
       })
