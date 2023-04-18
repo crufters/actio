@@ -17,7 +17,7 @@ export class Node {
   @Field()
   address: string;
 
-  @Field()
+  @Field({ hint: () => Service})
   services: Service[];
 }
 
