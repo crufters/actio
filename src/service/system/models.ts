@@ -6,7 +6,7 @@ export class NodesReadRequest {
 }
 
 export class NodesReadResponse {
-  @Field()
+  @Field({ hint: () => Node })
   nodes: Node[];
 }
 
