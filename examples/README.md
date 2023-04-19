@@ -157,7 +157,7 @@ Please note that while `auth.ts` contains no login endpoint, our service has the
 
 In other words, since our little `MyService` has `AuthenticationService` as a dependency, the many endpoints of the `AuthenticationService` get exposed as endpoint as well. So let's try to curl them - let's try to log in.
 
-Here we run into the problem of not knowing what the API looks like. A builtin API explorer is coming soon, but for now we can check the [`models.ts`](../src/service/authentication/models.ts) of each service.
+Here we run into the problem of not knowing what the API looks like. A builtin API explorer and OpenAPI etc. exports are coming soon, but for now we can check the [`models.ts`](../src/service/authentication/models.ts) of each service.
 
 By grepping for `login`, we can see this request type:
 
