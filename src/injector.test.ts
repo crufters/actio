@@ -231,10 +231,12 @@ class H {
   }
 }
 
-test("Function based injection", async () => {
+test("function based injection", async () => {
   // not how we pass in the producers
   let i = new Injector([F, G, H]);
   let h = await i.getInstance("H", "function-based-injection");
   expect(h.f?.cname).toBe("F");
   expect(h.g?.cname).toBe("G");
+  // G F H + Function Function
+  expect(i.classes.length).toBe(4);
 });

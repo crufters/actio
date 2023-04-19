@@ -13,7 +13,7 @@ export default async (
   };
   let node = {
     id: injector.nodeID,
-    address: env.selfAddress,
+    address: env.selfAddress || injector.selfAddress,
     services: [],
   };
 
@@ -47,6 +47,7 @@ export default async (
           []
         )) as NodesReadResponse;
         resp.nodes.forEach((n) => {
+          n.address = address;
           rsp.nodes.push(n);
         });
       })

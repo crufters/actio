@@ -18,6 +18,7 @@ export class Registrator {
   app: express.Application;
   injector: Injector;
   nodeID: string;
+  selfAddress: string;
 
   constructor(app: express.Application) {
     this.app = app;
@@ -26,6 +27,7 @@ export class Registrator {
   register(serviceClasses: any[]) {
     this.injector = new Injector(serviceClasses);
     this.injector.addresses = this.addresses;
+    this.injector.selfAddress = this.selfAddress;
     this.injector.nodeID = this.nodeID;
     this.injector.log = true;
 
@@ -207,6 +209,7 @@ function capitalizeFirstLetter(string) {
 interface CreateAppOptions {
   addresses?: Map<string, string>;
   nodeID?: string;
+  selfAddress?: string;
 }
 
 export function createApp(
@@ -236,6 +239,7 @@ export function createApp(
   let reg = new Registrator(app);
   if (options?.addresses) {
     reg.addresses = options.addresses;
+    reg.selfAddress = options.selfAddress;
     reg.nodeID = options.nodeID;
   }
   reg.register(serviceClasses);

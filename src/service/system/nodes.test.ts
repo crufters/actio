@@ -46,6 +46,7 @@ test("node read", async () => {
       .set("NodeB", `http://localhost:${randomPortNumberB}`)
       .set("NodeC", `http://localhost:${randomPortNumberC}`),
     nodeID: "3",
+    selfAddress: `http://localhost:${randomPortNumberA}`,
   });
 
   let serverA, serverB, serverC;
@@ -65,16 +66,15 @@ test("node read", async () => {
   expect(response.status).toBe(200);
   expect({
     nodes: response.body.nodes.sort((a, b) => {
-        if (a.id < b.id)
-        return -1;
-      if (a.id > b.id)
-        return 1;
+      if (a.id < b.id) return -1;
+      if (a.id > b.id) return 1;
       return 0;
     }),
   }).toEqual({
     nodes: [
       {
         id: "1",
+        address: `http://localhost:${randomPortNumberC}`,
         services: [
           {
             name: "NodeC",
@@ -94,6 +94,7 @@ test("node read", async () => {
       },
       {
         id: "2",
+        address: `http://localhost:${randomPortNumberB}`,
         services: [
           {
             address: `http://localhost:${randomPortNumberC}`,
@@ -113,6 +114,7 @@ test("node read", async () => {
       },
       {
         id: "3",
+        address: `http://localhost:${randomPortNumberA}`,
         services: [
           {
             address: `http://localhost:${randomPortNumberC}`,
