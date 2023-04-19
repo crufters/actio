@@ -167,6 +167,15 @@ export class Registrator {
     } else {
       // @todo maybe remove this and always parse
       let req;
+    
+      // support empty body
+      if (
+        request.body === undefined ||
+        request.body === null ||
+        request.body === ""
+      ) {
+        request.body = "{}";
+      }
       try {
         req =
           typeof request.body === "string"
