@@ -26,7 +26,6 @@ export function copy(from, to) {
 }
 
 export declare type Relation<T> = T;
-declare var google: any;
 
 export class Config {
   /** Admin user fullname */
@@ -184,7 +183,7 @@ export class User {
   })
   // Ideally should contain the full google places search result,
   // but at least the key 'formatted_address'.
-  address?: google.maps.places.PlaceResult;
+  address?: any; // google.maps.places.PlaceResult;
 
   @Field()
   @Column({
