@@ -9,6 +9,8 @@
 
 Actio is a modern, batteries included Node.js (Typescript) framework for your backend applications.
 
+<img src="./assets/actioscreen.png" />
+
 ```sh
 npm i -S @crufters/actio
 ```
