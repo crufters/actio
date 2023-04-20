@@ -56,7 +56,7 @@ mkdir myproject; cd myproject
 npm init --yes
 npm i -S @crufters/actio
 npm i -S express; npm i -S @types/express
-npm i -D typescript; npm i -D @types/googlemaps
+npm i -D typescript;
 npx tsc --init
 touch index.ts
 ```
