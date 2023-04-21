@@ -12,7 +12,6 @@ class MyService {
 
   constructor(auth: AuthenticationService) {
     this.auth = auth;
-    console.log(process.env.SQL_PASSWORD, process.env.SQL_USER);
   }
 
   async myEndpoint(req: MyEndpointRequest) {
