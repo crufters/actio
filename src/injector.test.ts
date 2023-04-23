@@ -238,5 +238,5 @@ test("function based injection", async () => {
   expect(h.f?.cname).toBe("F");
   expect(h.g?.cname).toBe("G");
   // G F H + Function Function
-  expect(i.classes.length).toBe(4);
+  expect(i.availableClassNames().length).toBe(4);
 });
