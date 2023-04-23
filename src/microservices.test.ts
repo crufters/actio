@@ -50,10 +50,7 @@ test("multiParam microservice call", async () => {
   let randomPortNumber = Math.floor(Math.random() * 10000) + 10000;
   let appA = createApp([MultiParam]);
 
-  let server;
-  setTimeout(() => {
-    server = appA.listen(randomPortNumber);
-  }, 1);
+  let server = appA.listen(randomPortNumber);
 
   let appB = createApp([MultiParamProxy], {
     addresses: new Map().set(
@@ -105,10 +102,7 @@ test("microservice call", async () => {
   let randomPortNumber = Math.floor(Math.random() * 10000) + 10000;
   let appA = createApp([Hi]);
 
-  let server;
-  setTimeout(() => {
-    server = appA.listen(randomPortNumber);
-  }, 1);
+  let server = appA.listen(randomPortNumber);
 
   let appB = createApp([HiProxy], {
     addresses: new Map().set("Hi", "http://localhost:" + randomPortNumber),
@@ -193,10 +187,7 @@ test("microservice error propagates", async () => {
 
   let appA = createApp([DirectErr]);
 
-  let server;
-  setTimeout(() => {
-    server = appA.listen(randomPortNumber);
-  }, 1);
+  let server = appA.listen(randomPortNumber);
 
   let appB = createApp([ProxyErr], {
     addresses: new Map().set(
@@ -280,10 +271,7 @@ test("array proxy api call", async () => {
   let randomPortNumber = Math.floor(Math.random() * 10000) + 10000;
   let appA = createApp([Array]);
 
-  let server;
-  setTimeout(() => {
-    server = appA.listen(randomPortNumber);
-  }, 1);
+  let server = appA.listen(randomPortNumber);
 
   let appB = createApp([ArrayProxy], {
     addresses: new Map().set("Array", "http://localhost:" + randomPortNumber),

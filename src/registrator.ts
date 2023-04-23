@@ -5,6 +5,7 @@ import { Injector } from "./injector.js";
 import chalk from "chalk";
 import { isUnexposed, isRaw } from "./reflect.js";
 import _ from "lodash";
+import http from "http";
 
 // Registrator's responsibility is registering endpoints of a service
 export class Registrator {
@@ -167,7 +168,7 @@ export class Registrator {
     } else {
       // @todo maybe remove this and always parse
       let req;
-    
+
       // support empty body
       if (
         request.body === undefined ||
@@ -256,12 +257,25 @@ export function createApp(
   return app;
 }
 
-export function startServer(serviceClasses: any[], port?: number) {
+export interface StartServerReturn {
+  app: express.Application;
+  server: http.Server;
+}
+
+export function startServer(
+  serviceClasses: any[],
+  port?: number
+): StartServerReturn {
   if (!port) {
     port = 8080;
   }
   let app = createApp(serviceClasses);
-  app.listen(port, () => {
+  let ret: any = {};
+  ret.app = app;
+
+  ret.server = app.listen(port, () => {
     console.log(`Server is listening on port ${port}`);
   });
+
+  return ret;
 }

@@ -1,9 +1,13 @@
 import { inputParamTypeNames, getMeta, getDependencyGraph } from "./reflect.js";
 import _ from "lodash";
+
 import { TypeORMHandler } from "./typeorm.js";
 import chalk from "chalk";
 import axios from "axios";
 import { error } from "./util.js";
+
+import express from "express";
+import http from "http";
 
 /**
  * A Handler is a leaf node dependency, eg. type ORM DataSource and similar.
@@ -32,18 +36,23 @@ interface Handler {
  * Lazily instantiates classes.
  */
 export class Injector {
-  public addresses = new Map<string, string>();
-  selfAddress: string;
   public turnoffOnInit = false;
+  public addresses = new Map<string, string>();
+  /** Mostly exists to make websockets implementatios possible */
+  public expressApp: express.Application;
+  /** Mostly exists to make websockets implementatios possible */
+  public server: http.Server;
+
+  selfAddress: string;
   nodeID: string;
   log = false;
 
-  classes: any[];
+  private classes: any[];
   // these handlers are the leaf nodes in the dependency graph
   // things like databases, etc.
-  handlers: Handler[] = [new TypeORMHandler()];
-  instancesByClassNameAndNamespace: Map<string, any> = new Map();
-  inProgressByClassNameAndNamespace: Map<string, any> = new Map();
+  private handlers: Handler[] = [new TypeORMHandler()];
+  private instancesByClassNameAndNamespace: Map<string, any> = new Map();
+  private inProgressByClassNameAndNamespace: Map<string, any> = new Map();
 
   constructor(classes: any[], handlers?: Handler[]) {
     // get the dependencies of all classes from their constructors
