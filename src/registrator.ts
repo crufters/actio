@@ -222,10 +222,10 @@ interface CreateAppOptions {
   selfAddress?: string;
 }
 
-export function createApp(
+export function createAppExt(
   serviceClasses: any[],
   options?: CreateAppOptions
-): express.Application {
+) {
   const app = express();
 
   // https://stackoverflow.com/questions/68680900/express-4-17-get-raw-body-for-one-endpoint
@@ -253,8 +253,15 @@ export function createApp(
     reg.nodeID = options.nodeID;
   }
   reg.register(serviceClasses);
+  return { app, reg };
+}
 
-  return app;
+export function createApp(
+  serviceClasses: any[],
+  options?: CreateAppOptions
+): express.Application {
+  let ret = createAppExt(serviceClasses, options);
+  return ret.app;
 }
 
 export interface StartServerReturn {
@@ -269,13 +276,15 @@ export function startServer(
   if (!port) {
     port = 8080;
   }
-  let app = createApp(serviceClasses);
-  let ret: any = {};
-  ret.app = app;
+  let x = createAppExt(serviceClasses);
+  let ret: any = {
+    app: x.app,
+  };
 
-  ret.server = app.listen(port, () => {
+  ret.server = x.app.listen(port, () => {
     console.log(`Server is listening on port ${port}`);
   });
+  x.reg.injector.server = ret.server;
 
   return ret;
 }

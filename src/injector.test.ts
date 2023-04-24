@@ -3,6 +3,8 @@ import { Service } from "./reflect.js";
 import { expect, test } from "@jest/globals";
 import { nanoid } from "nanoid";
 import { random } from "lodash";
+import { startServer } from "./registrator.js";
+import { default as request } from "supertest";
 
 /** @todo test for circular dependencies */
 
@@ -239,4 +241,36 @@ test("function based injection", async () => {
   expect(h.g?.cname).toBe("G");
   // G F H + Function Function
   expect(i.availableClassNames().length).toBe(4);
+});
+
+@Service()
+class InjectorServer {
+  inj: Injector;
+  hasServ;
+  constructor(injector: Injector) {
+    this.inj = injector;
+  }
+
+  async _onInit() {
+    this.hasServ = this.inj.server != undefined;
+  }
+
+  hasServer() {
+    return { has: this.hasServ };
+  }
+}
+
+test("injector has server", async () => {
+  let randomPortNumber = Math.floor(Math.random() * 10000) + 10000;
+
+  let serv = startServer([InjectorServer], randomPortNumber);
+
+  let response = await request(serv.app)
+    .post("/InjectorServer/hasServer")
+    .send({})
+    .retry(0);
+  expect(response.status).toBe(200);
+  expect(response.body).toEqual({ has: true });
+
+  serv.server.close();
 });
