@@ -208,6 +208,8 @@ $ curl -XPOST -d '{"token":"4o11JVud5mIFiFWC0FrcA"}' 127.0.0.1:8080/MyService/my
 
 As you can see we successfully called the `AuthenticationService` from our own and read the name of the calling user.
 
+Note that the current pattern of calling the AuthenticationService in most endpoints is prone to fan-out but a JWT implementation is being considered for those who prefer to avoid that.
+
 ##  4. <a name='Endpointdecorators'></a>Endpoint decorators
 
 ###  4.1. <a name='Unexposed'></a>Unexposed
