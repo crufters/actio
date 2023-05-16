@@ -4,7 +4,6 @@ import {
   Token,
   User,
   platformEmail,
-  roleUser,
   RegisterOrLoginWithProvenIdentityRequest,
   RegisterOrLoginWithProvenIdentityResponse,
 } from "../models.js";
@@ -41,7 +40,6 @@ export default async (
   user.fullName = req.firstName + " " + req.lastName;
   // @todo
   user.slug = nanoid();
-  user.roles = [roleUser];
 
   let contact = new Contact();
   let contactId = nanoid();

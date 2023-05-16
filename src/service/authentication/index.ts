@@ -15,14 +15,14 @@ import userLogin from "./user/userLogin.js";
 import userList from "./user/userList.js";
 import userSave from "./user/userSave.js";
 import userRegister from "./user/userRegister.js";
-import userBrandRegister from "./user/userBrandRegister.js";
-import userDepartmentRegister from "./user/userDepartmentRegister.js";
 import userUnGhost from "./user/userUnGhost.js";
 import roleList from "./role/roleList.js";
 import tokenAdminGet from "./user/tokenAdminGet.js";
 import oauthInfo from "./oauth/oauthInfo.js";
 import facebookLogin from "./oauth/facebookLogin.js";
 import registerOrLoginWithProvenIdentity from "./oauth/registerOrLoginWithProvenIdentity.js";
+import userCreateOrganization from "./user/userCreateOrganization.js";
+
 import { Geometry } from "geojson";
 
 import {
@@ -62,10 +62,7 @@ import {
   UserSaveResponse,
   UserRegisterRequest,
   UserRegisterResponse,
-  UserBrandRegisterRequest,
-  UserBrandRegisterResponse,
-  UserDepartmentRegisterRequest,
-  UserDepartmentRegisterResponse,
+  UserCreateOrganizationRequest,
   RoleListRequest,
   RoleListResponse,
   roles,
@@ -185,7 +182,7 @@ export class AuthenticationService implements Servicelike {
     }
 
     console.log("Registering admin");
-    let ubreq: UserBrandRegisterRequest = {
+    let rsp = await this.userRegister({
       user: {
         fullName: fullName,
         location: toGeometry(47.5316, 21.6273),
@@ -196,12 +193,15 @@ export class AuthenticationService implements Servicelike {
         ],
       },
       password: adminPassword,
+    });
+    let ubreq: UserCreateOrganizationRequest = {
+      token: rsp.token.token,
       organization: {
         name: adminOrganization,
       },
     };
 
-    await this.userBrandRegister(ubreq);
+    await this.userCreateOrganization(ubreq);
     return;
   }
 
@@ -302,30 +302,7 @@ export class AuthenticationService implements Servicelike {
     returns: UserRegisterResponse,
   })
   userRegister(req: UserRegisterRequest) {
-    return userRegister(this.connection, this.config, req);
-  }
-
-  /**
-   * Returns the token but not the user object.
-   * For that use 'tokenRead'
-   */
-  @Endpoint({
-    returns: UserBrandRegisterResponse,
-  })
-  userBrandRegister(req: UserBrandRegisterRequest) {
-    return userBrandRegister(
-      this.connection,
-      this.config,
-      req,
-      this.defaultConfig
-    );
-  }
-
-  @Endpoint({
-    returns: UserDepartmentRegisterResponse,
-  })
-  userDepartmentRegister(req: UserDepartmentRegisterRequest) {
-    return userDepartmentRegister(this.connection, req);
+    return userRegister(this.connection, this.config, req, this.defaultConfig);
   }
 
   @Endpoint({
@@ -408,5 +385,10 @@ export class AuthenticationService implements Servicelike {
     req: RegisterOrLoginWithProvenIdentityRequest
   ) {
     return registerOrLoginWithProvenIdentity(this.connection, req);
+  }
+
+  @Endpoint()
+  userCreateOrganization(req: UserCreateOrganizationRequest) {
+    return userCreateOrganization(this.connection, req);
   }
 }

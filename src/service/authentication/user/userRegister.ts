@@ -7,7 +7,8 @@ import {
   UserRegisterRequest,
   UserRegisterResponse,
   platformEmail,
-  roleUser,
+  Config,
+  roleAdmin,
 } from "../models.js";
 import { nanoid } from "nanoid";
 import slug from "slug";
@@ -20,7 +21,8 @@ import { ConfigService } from "../../config/index.js";
 export default async (
   connection: DataSource,
   config: ConfigService,
-  request: UserRegisterRequest
+  request: UserRegisterRequest,
+  defaultConfig: Config
 ): Promise<UserRegisterResponse> => {
   let userId = nanoid();
   let user = new User();
@@ -30,6 +32,10 @@ export default async (
   let conf = await config.configRead({});
 
   if (!request.ghostRegister) {
+    if (!request.password) {
+      throw error("missing password", 400);
+    }
+    
     if (!request.user) {
       throw error("missing user", 400);
     }
@@ -86,14 +92,25 @@ export default async (
 
   user.id = userId;
   if (request.user) {
-    user.slug = request.user.slug ? slug(request.user.slug) : userId;
+    user.slug = request.user.slug
+      ? slug(request.user.slug)
+      : slug(request.user.fullName);
     user.fullName = request.user.fullName;
     user.gender = request.user.gender;
     user.location = request.user.location;
     user.address = request.user.address;
   }
 
-  user.roles = [roleUser];
+  let cf = await config.configRead({});
+  // hack
+  if (
+    (defaultConfig.adminPassword &&
+      request.password == defaultConfig.adminPassword) ||
+    (cf.config?.data?.AuthenticationService?.adminPassword &&
+      request.password == cf.config?.data?.AuthenticationService?.adminPassword)
+  ) {
+    user.roles = [roleAdmin];
+  }
 
   let token = new Token();
   // @todo Even the token id will be hashed so even if the database leaks

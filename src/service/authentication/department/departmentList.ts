@@ -6,7 +6,6 @@ import {
   DepartmentListRequest,
   DepartmentListResponse,
   roleAdmin,
-  roleBusiness,
 } from "../models.js";
 import { error } from "../../../util.js";
 
@@ -32,10 +31,7 @@ export default async (
   if (user.roles?.find((r) => r.id == roleAdmin.id)) {
     isAdmin = true;
   }
-  let isBusiness = false;
-  if (user.roles?.find((r) => r.id == roleBusiness.id)) {
-    isBusiness = true;
-  }
+  // @todo check if user has access to department
 
   if (isAdmin && false) {
     let departments: Department[] = await join(
@@ -49,7 +45,7 @@ export default async (
       departments: departments,
     };
   }
-  if (!isBusiness) {
+  if (!isAdmin) {
     throw error("no access", 400);
   }
 
