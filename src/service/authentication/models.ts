@@ -81,33 +81,18 @@ export class Role {
   @Field()
   @Column({ nullable: true })
   @Index({ unique: true })
-  slug?: string;
-
-  @Field()
-  @Column({ nullable: true })
-  name?: string;
+  key?: string;
 
   @Field()
   @ManyToMany(() => User, (user) => user.roles)
   users?: User[];
 }
 
-export const roleUser = new Role();
-roleUser.id = "AUszZarrfepp3rUnRcKju";
-roleUser.slug = "user";
-roleUser.name = "User";
-
-export const roleBusiness = new Role();
-roleBusiness.id = "rebHRXRbW5RLMRiua4LGk";
-roleBusiness.slug = "business";
-roleBusiness.name = "Business";
-
 export const roleAdmin = new Role();
 roleAdmin.id = "ylKNo1UgrS9f94ED6VGWp";
-roleAdmin.slug = "admin";
-roleAdmin.name = "Admin";
+roleAdmin.key = "admin";
 
-export const roles = [roleUser, roleBusiness, roleAdmin];
+export const roles = [roleAdmin];
 
 @Entity()
 export class User {
@@ -682,34 +667,6 @@ export class UserRegisterResponse {
   token: Token;
 }
 
-export class userOrganizationRegisterRequest {
-  @Field()
-  user: User;
-
-  @Field()
-  password: string;
-
-  @Field()
-  organization: Organization;
-}
-
-export class userOrganizationRegisterResponse {
-  token: Token;
-}
-
-export class UserDepartmentRegisterRequest {
-  @Field()
-  user: User;
-
-  @Field()
-  password: string;
-
-  @Field()
-  departmentId: string;
-}
-
-export class UserDepartmentRegisterResponse {}
-
 export class TokenReadRequest {
   @Field()
   token: string;
@@ -901,3 +858,13 @@ export class RegisterOrLoginWithProvenIdentityResponse {
   @Field()
   token: Omit<Token, "user">;
 }
+
+export class UserCreateOrganizationRequest {
+  @Field()
+  token: string;
+
+  @Field()
+  organization: Organization;
+}
+
+export class UserCreateOrganizationResponse {}

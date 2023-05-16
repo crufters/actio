@@ -6,7 +6,6 @@ import { ConfigService } from "../config/index.js";
 import {
   DepartmentListResponse,
   platformEmail,
-  roleUser,
   UserRegisterResponse,
 } from "./models.js";
 import { getAPIJSON } from "../../reflect.api.js";
@@ -167,24 +166,6 @@ describe("Register admin with config and log in", () => {
     expect(depResp.departments.length).toBe(1);
   });
 
-  test("department register new user", async () => {
-    // department register is someone registering a third party, ie. an
-    // other future member of a department
-    await auth.userDepartmentRegister({
-      user: {
-        contacts: [{ url: "test-1@test.com" }],
-        fullName: "Janey Jane",
-      },
-      password: "987",
-      departmentId: depResp.departments[0].id,
-    });
-
-    await auth.userLogin({
-      password: "987",
-      contactUrl: "test-1@test.com",
-    });
-  });
-
   let userRegRsp: UserRegisterResponse;
   test("register simple user", async () => {
     userRegRsp = await auth.userRegister({
@@ -197,8 +178,9 @@ describe("Register admin with config and log in", () => {
     let userTokenReadRsp = await auth.tokenRead({
       token: userRegRsp.token.token,
     });
-    expect(userTokenReadRsp.token.user.roles.length).toBe(1);
-    expect(userTokenReadRsp.token.user.roles[0].id).toBe(roleUser.id);
+
+    console.log("hey", userTokenReadRsp.token.user.roles)
+    expect(userTokenReadRsp.token.user.roles.length).toBe(0);
     // @todo expect(userTokenReadRsp.token.user.slug).toBe("simple-user-janey-jane");
     expect(userTokenReadRsp.token.user.contacts[0].url).toBe("test-2@test.com");
     expect(userTokenReadRsp.token.user.contacts[0].platform.id).toBe(
@@ -217,8 +199,7 @@ describe("Register admin with config and log in", () => {
     let userTokenReadRsp = await auth.tokenRead({
       token: userRegOrIRsp.token.token,
     });
-    expect(userTokenReadRsp.token.user.roles.length).toBe(1);
-    expect(userTokenReadRsp.token.user.roles[0].id).toBe(roleUser.id);
+    expect(userTokenReadRsp.token.user.roles.length).toBe(0);
     // @todo expect(userTokenReadRsp.token.user.slug).toBe("simple-user-janey-jane");
     expect(userTokenReadRsp.token.user.contacts[0].url).toBe("test-2@test.com");
     expect(userTokenReadRsp.token.user.contacts[0].platform.id).toBe(
@@ -231,7 +212,7 @@ describe("Register admin with config and log in", () => {
       token: adminToken,
       departmentId: depResp.departments[0].id,
     });
-    expect(list.users.length).toBe(2);
+    expect(list.users.length).toBe(1);
   });
 
   test("user should not be able to list department it does not belong to", async () => {
@@ -342,8 +323,8 @@ test("auth api", async () => {
   ).toEqual("Array");
 
   expect(
-    JSON.parse(JSON.stringify(json))["types"]["Department"][
-      "users"
-    ]["data"]["hint"]
+    JSON.parse(JSON.stringify(json))["types"]["Department"]["users"]["data"][
+      "hint"
+    ]
   ).toEqual("User");
 });

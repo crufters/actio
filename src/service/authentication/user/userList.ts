@@ -2,7 +2,6 @@ import { DataSource } from "typeorm";
 import { error } from "../../../util.js";
 import {
   roleAdmin,
-  roleBusiness,
   Token,
   User,
   UserListRequest,
@@ -32,11 +31,8 @@ export default async (
   if (user.roles?.find((r) => r.id == roleAdmin.id)) {
     isAdmin = true;
   }
-  let isBusiness = false;
-  if (user.roles?.find((r) => r.id == roleBusiness.id)) {
-    isBusiness = true;
-  }
-  if (!isAdmin && !isBusiness) {
+
+  if (!isAdmin) {
     throw error("no rights", 400);
   }
 
@@ -51,7 +47,6 @@ export default async (
   }
 
   if (
-    isBusiness &&
     request.departmentId &&
     !user.departments.find((d) => {
       return (d.id = request.departmentId);
