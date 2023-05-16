@@ -15,7 +15,7 @@ import userLogin from "./user/userLogin.js";
 import userList from "./user/userList.js";
 import userSave from "./user/userSave.js";
 import userRegister from "./user/userRegister.js";
-import userBrandRegister from "./user/userBrandRegister.js";
+import userOrganizationRegister from "./user/userOrganizationRegister.js";
 import userDepartmentRegister from "./user/userDepartmentRegister.js";
 import userUnGhost from "./user/userUnGhost.js";
 import roleList from "./role/roleList.js";
@@ -62,8 +62,8 @@ import {
   UserSaveResponse,
   UserRegisterRequest,
   UserRegisterResponse,
-  UserBrandRegisterRequest,
-  UserBrandRegisterResponse,
+  userOrganizationRegisterRequest,
+  userOrganizationRegisterResponse,
   UserDepartmentRegisterRequest,
   UserDepartmentRegisterResponse,
   RoleListRequest,
@@ -185,7 +185,7 @@ export class AuthenticationService implements Servicelike {
     }
 
     console.log("Registering admin");
-    let ubreq: UserBrandRegisterRequest = {
+    let ubreq: userOrganizationRegisterRequest = {
       user: {
         fullName: fullName,
         location: toGeometry(47.5316, 21.6273),
@@ -201,7 +201,7 @@ export class AuthenticationService implements Servicelike {
       },
     };
 
-    await this.userBrandRegister(ubreq);
+    await this.userOrganizationRegister(ubreq);
     return;
   }
 
@@ -310,10 +310,10 @@ export class AuthenticationService implements Servicelike {
    * For that use 'tokenRead'
    */
   @Endpoint({
-    returns: UserBrandRegisterResponse,
+    returns: userOrganizationRegisterResponse,
   })
-  userBrandRegister(req: UserBrandRegisterRequest) {
-    return userBrandRegister(
+  userOrganizationRegister(req: userOrganizationRegisterRequest) {
+    return userOrganizationRegister(
       this.connection,
       this.config,
       req,

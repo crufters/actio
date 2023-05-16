@@ -13,8 +13,8 @@ import {
   roleUser,
   Token,
   User,
-  UserBrandRegisterRequest,
-  UserBrandRegisterResponse,
+  userOrganizationRegisterRequest,
+  userOrganizationRegisterResponse,
   roles,
   Config,
 } from "../models.js";
@@ -25,9 +25,9 @@ import { ConfigService } from "../../config/index.js";
 export default async (
   connection: DataSource,
   config: ConfigService,
-  request: UserBrandRegisterRequest,
+  request: userOrganizationRegisterRequest,
   defaultConfig: Config
-): Promise<UserBrandRegisterResponse> => {
+): Promise<userOrganizationRegisterResponse> => {
   if (!request.user) {
     throw error("missing user", 400);
   }

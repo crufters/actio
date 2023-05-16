@@ -682,7 +682,7 @@ export class UserRegisterResponse {
   token: Token;
 }
 
-export class UserBrandRegisterRequest {
+export class userOrganizationRegisterRequest {
   @Field()
   user: User;
 
@@ -693,7 +693,7 @@ export class UserBrandRegisterRequest {
   organization: Organization;
 }
 
-export class UserBrandRegisterResponse {
+export class userOrganizationRegisterResponse {
   token: Token;
 }
 
