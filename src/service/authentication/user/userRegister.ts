@@ -24,10 +24,6 @@ export default async (
   request: UserRegisterRequest,
   defaultConfig: Config
 ): Promise<UserRegisterResponse> => {
-  if (!request.password) {
-    throw error("missing password", 400);
-  }
-
   let userId = nanoid();
   let user = new User();
 
@@ -36,6 +32,10 @@ export default async (
   let conf = await config.configRead({});
 
   if (!request.ghostRegister) {
+    if (!request.password) {
+      throw error("missing password", 400);
+    }
+    
     if (!request.user) {
       throw error("missing user", 400);
     }
