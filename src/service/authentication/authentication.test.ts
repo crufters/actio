@@ -179,13 +179,33 @@ describe("Register admin with config and log in", () => {
       token: userRegRsp.token.token,
     });
 
-    console.log("hey", userTokenReadRsp.token.user.roles)
+    console.log("hey", userTokenReadRsp.token.user.roles);
     expect(userTokenReadRsp.token.user.roles.length).toBe(0);
     // @todo expect(userTokenReadRsp.token.user.slug).toBe("simple-user-janey-jane");
     expect(userTokenReadRsp.token.user.contacts[0].url).toBe("test-2@test.com");
     expect(userTokenReadRsp.token.user.contacts[0].platform.id).toBe(
       platformEmail.id
     );
+
+    await auth.userCreateOrganization({
+      token: userRegRsp.token.token,
+      organization: {
+        name: "My Org",
+      },
+    });
+    let usrTk = await auth.tokenRead({ token: userRegRsp.token.token });
+    expect(usrTk.token.user.roles.length).toBe(2);
+    expect(usrTk.token.user.departments.length).toBe(1);
+    let orgID = usrTk.token.user.departments[0].organizationId;
+    let depID = usrTk.token.user.departments[0].id;
+    expect(
+      usrTk.token.user.roles.find(
+        (r) => r.key === `organization:${orgID}:member`
+      )
+    ).toBeTruthy();
+    expect(
+      usrTk.token.user.roles.find((r) => r.key === `department:${depID}:member`)
+    ).toBeTruthy();
   });
 
   test("registerOrLoginWithProvenIdentity test", async () => {
@@ -199,7 +219,7 @@ describe("Register admin with config and log in", () => {
     let userTokenReadRsp = await auth.tokenRead({
       token: userRegOrIRsp.token.token,
     });
-    expect(userTokenReadRsp.token.user.roles.length).toBe(0);
+    expect(userTokenReadRsp.token.user.roles.length).toBe(2);
     // @todo expect(userTokenReadRsp.token.user.slug).toBe("simple-user-janey-jane");
     expect(userTokenReadRsp.token.user.contacts[0].url).toBe("test-2@test.com");
     expect(userTokenReadRsp.token.user.contacts[0].platform.id).toBe(
