@@ -24,6 +24,10 @@ export default async (
   request: UserRegisterRequest,
   defaultConfig: Config
 ): Promise<UserRegisterResponse> => {
+  if (!request.password) {
+    throw error("missing password", 400);
+  }
+
   let userId = nanoid();
   let user = new User();
 
@@ -100,8 +104,10 @@ export default async (
   let cf = await config.configRead({});
   // hack
   if (
-    (defaultConfig.adminPassword && request.password == defaultConfig.adminPassword) ||
-    (cf.config?.data?.AuthenticationService?.adminPassword && request.password == cf.config?.data?.AuthenticationService?.adminPassword)
+    (defaultConfig.adminPassword &&
+      request.password == defaultConfig.adminPassword) ||
+    (cf.config?.data?.AuthenticationService?.adminPassword &&
+      request.password == cf.config?.data?.AuthenticationService?.adminPassword)
   ) {
     user.roles = [roleAdmin];
   }
