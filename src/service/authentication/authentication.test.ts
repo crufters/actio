@@ -179,7 +179,6 @@ describe("Register admin with config and log in", () => {
       token: userRegRsp.token.token,
     });
 
-    console.log("hey", userTokenReadRsp.token.user.roles);
     expect(userTokenReadRsp.token.user.roles.length).toBe(0);
     // @todo expect(userTokenReadRsp.token.user.slug).toBe("simple-user-janey-jane");
     expect(userTokenReadRsp.token.user.contacts[0].url).toBe("test-2@test.com");
@@ -206,6 +205,22 @@ describe("Register admin with config and log in", () => {
     expect(
       usrTk.token.user.roles.find((r) => r.key === `department:${depID}:member`)
     ).toBeTruthy();
+  });
+
+  test("register simple nameless user", async () => {
+    await auth.userRegister({
+      user: {
+        contacts: [{ url: "test-3@test.com" }],
+      },
+      password: "1011",
+    });
+
+    await auth.userRegister({
+      user: {
+        contacts: [{ url: "test-4@test.com" }],
+      },
+      password: "1011",
+    });
   });
 
   test("registerOrLoginWithProvenIdentity test", async () => {

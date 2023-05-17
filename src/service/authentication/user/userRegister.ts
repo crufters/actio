@@ -35,7 +35,7 @@ export default async (
     if (!request.password) {
       throw error("missing password", 400);
     }
-    
+
     if (!request.user) {
       throw error("missing user", 400);
     }
@@ -92,9 +92,9 @@ export default async (
 
   user.id = userId;
   if (request.user) {
-    user.slug = request.user.slug
-      ? slug(request.user.slug)
-      : slug(request.user.fullName);
+    var slugable =
+      request.user.slug || request.user.fullName || user.id;
+    user.slug = slug(slugable);
     user.fullName = request.user.fullName;
     user.gender = request.user.gender;
     user.location = request.user.location;
