@@ -59,6 +59,10 @@ export default async (
       );
     }
 
+    if (!isValidEmail(cont.url)) {
+      throw error("invalid email address", 400);
+    }
+
     let existingContacts: Contact[] = await connection
       .createQueryBuilder(Contact, "contact")
       .where(`contact."platformId" = :platformId AND contact.url = :url`, {
@@ -92,8 +96,7 @@ export default async (
 
   user.id = userId;
   if (request.user) {
-    var slugable =
-      request.user.slug || request.user.fullName || user.id;
+    var slugable = request.user.slug || request.user.fullName || user.id;
     user.slug = slug(slugable);
     user.fullName = request.user.fullName;
     user.gender = request.user.gender;
@@ -141,4 +144,9 @@ export default async (
   return {
     token: token,
   };
+};
+
+const isValidEmail = (email) => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
 };
