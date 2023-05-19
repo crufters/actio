@@ -10,7 +10,7 @@ import {
 } from "./models.js";
 import { getAPIJSON } from "../../reflect.api.js";
 
-describe("Config free auth works", () => {
+describe("config free auth", () => {
   var auth: AuthenticationService;
   test("setup", async () => {
     let namespace = "t_" + nanoid().slice(0, 7);
@@ -25,7 +25,7 @@ describe("Config free auth works", () => {
   });
 });
 
-describe("Register admin with config and log in", () => {
+describe("auth", () => {
   var auth: AuthenticationService;
   test("setup", async () => {
     let namespace = "t_" + nanoid().slice(0, 7);
@@ -167,6 +167,26 @@ describe("Register admin with config and log in", () => {
   });
 
   let userRegRsp: UserRegisterResponse;
+
+  test("register should fail with invalid email", async () => {
+    let errored = false;
+    let em = "";
+    try {
+      userRegRsp = await auth.userRegister({
+        user: {
+          contacts: [{ url: "test-2" }],
+          fullName: "Simple User Janey Jane",
+        },
+        password: "1011",
+      });
+    } catch (e) {
+      errored = true;
+      em = JSON.stringify(e);
+    }
+    expect(errored).toBe(true);
+    expect(em).toContain("invalid email address");
+  });
+
   test("register simple user", async () => {
     userRegRsp = await auth.userRegister({
       user: {
