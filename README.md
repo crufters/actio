@@ -8,6 +8,7 @@
 </p>
 
 Actio is a modern, batteries included Node.js (Typescript) framework for your backend applications.
+It enables you to effortlessly switch between monolithic and microservices architectures.
 
 ```sh
 npm i -S @crufters/actio
