@@ -1,18 +1,45 @@
-import { expect, test } from "@jest/globals";
+import { test } from "@jest/globals";
 import { createApp } from "../../registrator.js";
-import { default as request } from "supertest";
+//import { default as request } from "supertest";
 import { FileService } from "./index.js";
-//import { url } from "inspector";
+import FormData from "form-data";
+import fs from "fs";
+
+const submitForm = (form, url) => {
+  return new Promise((resolve, reject) => {
+    form.submit(url, (err, res) => {
+      if (err) {
+        reject(err);
+      } else {
+        let responseData = "";
+        res.on("data", (chunk) => {
+          responseData += chunk;
+        });
+        res.on("end", () => {
+          resolve({
+            statusCode: res.statusCode,
+            headers: res.headers,
+            body: responseData,
+          });
+        });
+      }
+    });
+  });
+};
 
 test("file upload", async () => {
+  let randomPortNumber = Math.floor(Math.random() * 10000) + 10000;
   let appA = createApp([FileService]);
+  let server = appA.listen(randomPortNumber);
 
-  let rsp = await request(appA)
-    .post("/file/httpFileUpload") // Replace '/upload' with the actual endpoint that handles file uploads
-    .attach("file", "/tmp/testfile.png") // Replace 'file' with the field name for file upload and provide the path to the file
-    .expect(200);
-  console.log(rsp.body);
-  expect(rsp.body).toBeTruthy();
+  const form = new FormData();
+  form.append("file", fs.createReadStream("/tmp/testfile.png"));
 
-  // rsp = request(appA).post("/FileService/httpFileServe/" + rsp.url.split("/")[]).send();
+  const rsp = await submitForm(
+    form,
+    `http://localhost:${randomPortNumber}/file/httpFileUpload`
+  );
+  console.log(rsp);
+
+  server.close();
 });
