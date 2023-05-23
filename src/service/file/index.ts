@@ -8,6 +8,10 @@ import { Servicelike } from "../../util.js";
 import { ConfigService } from "../config/index.js";
 import * as fs from "fs";
 import * as express from "express";
+import * as path from "path";
+import * as os from "os";
+
+const actioFolder = "actio-files";
 
 @Service()
 export class FileService implements Servicelike {
@@ -48,10 +52,9 @@ export class FileService implements Servicelike {
 
   _onInit(): Promise<void> {
     // for local development only
-    fs.promises.mkdir(
-      require("path").join(require("os").homedir(), "opensourceorg"),
-      { recursive: true }
-    );
+    fs.promises.mkdir(path.join(os.homedir(), actioFolder), {
+      recursive: true,
+    });
     return null;
   }
 }
