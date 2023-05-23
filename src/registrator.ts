@@ -231,6 +231,9 @@ export function createAppExt(
   // https://stackoverflow.com/questions/68680900/express-4-17-get-raw-body-for-one-endpoint
   // @todo should probably use a bytes buffer here or similar?
   app.use((req, res, next) => {
+    if (req.headers["content-type"] !== "application/json") {
+      return next();
+    }
     let rawBody = "";
     req.on("data", (chunk) => {
       rawBody += chunk;
