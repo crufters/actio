@@ -21,11 +21,13 @@ import busboy from "busboy";
 import { default as env } from "../../env.js";
 import { ConfigService } from "../config/index.js";
 
+// @todo fix this
+const actioFolder = "actio-files";
+
 interface File {
   name: string;
   path: string;
 }
-
 interface FileResponse {
   originalName: string;
   size: number;
@@ -136,7 +138,7 @@ function saveFileToLocation(
 ): Promise<void> {
   let f = fs.readFileSync(file.path);
   fs.writeFile(
-    require("path").join(require("os").homedir(), "actio-files", file.name),
+    path.join(os.homedir(), actioFolder, file.name),
     f,
     function (err) {
       if (err) {

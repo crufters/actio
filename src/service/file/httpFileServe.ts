@@ -6,8 +6,11 @@
  */
 import * as express from "express";
 import * as path from "path";
+import * as os from "os";
 
 import { ConfigService } from "../config/index.js";
+
+const actioFolder = "actio-files";
 
 export default async (
   req: express.Request,
@@ -26,7 +29,5 @@ export default async (
   res
     .contentType(path.basename(parts[3]))
     // @todo get this from config
-    .sendFile(
-      require("path").join(require("os").homedir(), "opensourceorg", parts[3])
-    );
+    .sendFile(path.join(os.homedir(), actioFolder, parts[3]));
 };
