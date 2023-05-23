@@ -38,6 +38,7 @@ jobs:
           printf "SQL_PASSWORD=$SQL_PASSWORD\n" >> .env
           printf "SQL_NAME=$SQL_NAME\n" >> .env
           cat .env
+          cp src/service/file/testfile.png /tmp/
           npm test
         env:
           CONNECTION_NAME: ${{ secrets.CONNECTION_NAME }}
