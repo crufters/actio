@@ -22,9 +22,28 @@ export default async (
     .where("token.token = :id", { id: request.token })
     .leftJoinAndSelect("token.user", "user")
     .leftJoinAndSelect("user.roles", "role")
+    .leftJoinAndSelect("user.departments", "department")
     .getOne();
   if (!token) {
     throw error("token not found", 400);
+  }
+
+  // check if organization exists
+  let existingOrganization = await connection
+    .createQueryBuilder(Organization, "organization")
+    .where("organization.name = :name", { name: request.organization.name })
+    .leftJoinAndSelect("organization.departments", "department")
+    .getOne();
+  if (
+    existingOrganization &&
+    existingOrganization.departments.length > 0 &&
+    existingOrganization.departments.find((d) =>
+      token.user.departments.find((ud) => ud.id == d.id)
+    )
+  ) {
+    return {
+      organization: existingOrganization,
+    };
   }
 
   let organization = new Organization();
@@ -59,6 +78,6 @@ export default async (
   });
 
   return {
-    token: token,
+    organization: organization,
   };
 };
