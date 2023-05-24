@@ -43,8 +43,43 @@ export default async (
   }
 
   await connection.transaction(async (tran) => {
+    if (user.meta) {
+      let dbUser = await tran.findOne(User, {
+        select: ["meta"],
+        where: { id: user.id },
+      });
+      if (dbUser && dbUser.meta) {
+        user.meta = mergeObjects(user.meta, dbUser.meta);
+      }
+    }
+
     await tran.save(user);
   });
 
   return { user: user };
 };
+
+function mergeObjects(obj1, obj2) {
+  if (typeof obj1 !== "object" || typeof obj2 !== "object") {
+    // Return the non-object value if either input is not an object
+    return obj2 !== undefined ? obj2 : obj1;
+  }
+
+  var mergedObj = {};
+
+  // Merge keys from obj1
+  for (var key in obj1) {
+    if (obj1.hasOwnProperty(key)) {
+      mergedObj[key] = mergeObjects(obj1[key], obj2[key]);
+    }
+  }
+
+  // Merge keys from obj2
+  for (var key in obj2) {
+    if (obj2.hasOwnProperty(key) && !obj1.hasOwnProperty(key)) {
+      mergedObj[key] = mergeObjects(obj1[key], obj2[key]);
+    }
+  }
+
+  return mergedObj;
+}
