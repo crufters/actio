@@ -36,7 +36,7 @@ describe("auth user update", () => {
     expect(auth).toBeTruthy();
   });
 
-  test("register simple nameless user", async () => {
+  test("meta tests", async () => {
     let rsp = await auth.userRegister({
       user: {
         contacts: [{ url: "test-3@test.com" }],
@@ -83,7 +83,7 @@ describe("auth user update", () => {
         meta: {
           obj: {
             b: "c",
-          },  
+          },
         },
       },
     });
@@ -91,5 +91,28 @@ describe("auth user update", () => {
     trsp = await auth.tokenRead({ token: rsp.token.token });
     expect(trsp.token.user.meta.obj.a).toBe("b");
     expect(trsp.token.user.meta.obj.b).toBe("c");
+  });
+
+  test("org update", async () => {
+    let rsp = await auth.userRegister({
+      user: {
+        contacts: [{ url: "test-5@test.com" }],
+      },
+      password: "1015",
+    });
+
+    await auth.userCreateOrganization({
+      token: rsp.token.token,
+      organization: {
+        name: "user test org",
+      },
+    });
+
+    await auth.userCreateOrganization({
+      token: rsp.token.token,
+      organization: {
+        name: "user test org",
+      },
+    });
   });
 });

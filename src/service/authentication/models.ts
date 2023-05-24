@@ -867,4 +867,7 @@ export class UserCreateOrganizationRequest {
   organization: Organization;
 }
 
-export class UserCreateOrganizationResponse {}
+export class UserCreateOrganizationResponse {
+  @Field()
+  organization: Organization;
+}
