@@ -257,7 +257,7 @@ export function createAppExt(
     reg.addresses = options.addresses;
     reg.selfAddress = options.selfAddress;
     reg.nodeID = options.nodeID;
-    reg.fixedNamspaces = options.fixedNamespaces;
+    reg.fixedNamespaces = options.fixedNamespaces;
   }
   reg.register(serviceClasses);
   return { app, reg };
