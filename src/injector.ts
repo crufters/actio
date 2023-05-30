@@ -43,7 +43,7 @@ export class Injector {
    * even when running multiple sites in their each namespace, perhaps we want one global
    * authentication service.
    */
-  public fixedNamespaces: Map<string, string>;
+  public fixedNamespaces: Map<string, string> = new Map();
   public turnoffOnInit = false;
   public addresses = new Map<string, string>();
   /** Mostly exists to make websockets implementatios possible */

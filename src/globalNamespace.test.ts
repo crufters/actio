@@ -81,3 +81,5 @@ describe("test global namespaces", () => {
     expect(await rspB).toEqual(await rspC);
   });
 });
+
+// @todo test multinode setup

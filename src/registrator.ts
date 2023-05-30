@@ -20,7 +20,7 @@ export class Registrator {
   injector: Injector;
   nodeID: string;
   selfAddress: string;
-  fixedNamspaces = new Map<string, string>();
+  fixedNamespaces = new Map<string, string>();
 
   constructor(app: express.Application) {
     this.app = app;
@@ -32,7 +32,7 @@ export class Registrator {
     this.injector.selfAddress = this.selfAddress;
     this.injector.nodeID = this.nodeID;
     this.injector.log = true;
-    this.injector.fixedNamespaces = this.fixedNamspaces;
+    this.injector.fixedNamespaces = this.fixedNamespaces;
 
     // can't simply pass this.route as callback due to this issue:
     // https://stackoverflow.com/questions/49319353/typescript-this-instance-is-undefined-in-class
