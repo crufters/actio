@@ -32,7 +32,9 @@ export class Registrator {
     this.injector.selfAddress = this.selfAddress;
     this.injector.nodeID = this.nodeID;
     this.injector.log = true;
-    this.injector.fixedNamespaces = this.fixedNamespaces;
+    if (this.fixedNamespaces?.size > 0) {
+      this.injector.fixedNamespaces = this.fixedNamespaces;
+    }
 
     // can't simply pass this.route as callback due to this issue:
     // https://stackoverflow.com/questions/49319353/typescript-this-instance-is-undefined-in-class

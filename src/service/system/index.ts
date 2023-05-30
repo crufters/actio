@@ -1,5 +1,4 @@
 import { Endpoint, Service } from "../../reflect.js";
-import { DataSource } from "typeorm";
 
 import apiRead from "./apiRead.js";
 import nodesRead from "./nodesRead.js";
@@ -16,16 +15,14 @@ export class SystemService implements Servicelike {
     name: "system",
   };
 
-  private connection: DataSource;
   private injector: Injector;
 
-  constructor(connection: DataSource, injector: Injector) {
-    this.connection = connection;
+  constructor(injector: Injector) {
     this.injector = injector;
   }
 
   apiRead(req: ApiReadRequest) {
-    return apiRead(this.connection, req);
+    return apiRead(req);
   }
 
   @Endpoint({
