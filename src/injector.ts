@@ -36,6 +36,14 @@ interface Handler {
  * Lazily instantiates classes.
  */
 export class Injector {
+  /**
+   * A map of service/class names to their fixed namespaces-
+   *
+   * A prime example for this is the 'authentication' service -
+   * even when running multiple sites in their each namespace, perhaps we want one global
+   * authentication service.
+   */
+  public fixedNamespaces: Map<string, string>;
   public turnoffOnInit = false;
   public addresses = new Map<string, string>();
   /** Mostly exists to make websockets implementatios possible */
@@ -112,6 +120,9 @@ export class Injector {
    * methods like _onInit etc. called.
    */
   async getInstance(className: string, namespace?: string): Promise<any> {
+    if (this.fixedNamespaces.has(className)) {
+      namespace = this.fixedNamespaces.get(className);
+    }
     let logPrefix = chalk.dim(
       `Injector.getInstance(${className}, ${namespace}):`
     );
