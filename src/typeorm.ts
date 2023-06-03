@@ -59,6 +59,16 @@ export class TypeORMHandler {
     // This assumes the constructor won't panic because the dependencies
     // are not supplied.
     let meta = getMeta(serviceClass);
+    if (!meta) {
+      throw new Error(
+        `Service ${serviceClass.name} has no metadata, did you forget to decorate it with @Service()?`
+      );
+    }
+    if (!(meta as any).typeorm) {
+      throw new Error(
+        `Service ${serviceClass.name} has no typeorm metadata, did you forget to decorate it with @Service()?`
+      );
+    }
     let conf = (meta as any).typeorm as TypeORMMeta;
     let connection = await conn.connect(
       namespace + "__" + serviceClass.name.toLowerCase().replace("service", ""),
