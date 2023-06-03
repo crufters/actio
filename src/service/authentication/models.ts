@@ -491,8 +491,9 @@ export class Contact {
   updatedAt?: string;
 }
 
-/** A platform is a space where a user can do advertising/spread the word.
- * Phone, email, Facebook etc. It is also used for proving
+/**
+ * A platform is a space where a user can have a unique identifier.
+ * Phone, email, Facebook etc.
  */
 @Entity()
 export class Platform {
