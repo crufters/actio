@@ -57,6 +57,13 @@ export class Config {
   facebookAppRedirectURL?: string;
 }
 
+export const defaultConfig: Config = {
+  adminEmail: "example@example.com",
+  adminPassword: "admin",
+  adminOrganization: "Admin Org",
+  fullName: "The Admin",
+};
+
 // User roles
 @Entity()
 export class Role {

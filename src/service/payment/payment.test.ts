@@ -4,7 +4,6 @@ import { nanoid } from "nanoid";
 import { PaymentService } from "./index.js";
 import { AuthenticationService } from "../authentication/index.js";
 import { UserRegisterResponse } from "../authentication/models.js";
-import { ConfigService } from "../config/index.js";
 import { AccountType, gatewayStripe } from "./models.js";
 // import Stripe from "stripe";
 
@@ -13,24 +12,6 @@ describe("Check balance and payment history", () => {
   var auth: AuthenticationService;
   test("setup", async () => {
     let namespace = "t_" + nanoid().slice(0, 7);
-    let config: ConfigService = await new Injector([ConfigService]).getInstance(
-      "ConfigService",
-      namespace
-    );
-
-    await config.configSaveS2S({
-      token: "",
-      config: {
-        data: {
-          AuthenticationService: {
-            fullName: "Joey Joe",
-            adminEmail: "test@test.com",
-            adminPassword: "123",
-            adminOrganization: "Your Org",
-          },
-        },
-      },
-    });
 
     let i = new Injector([PaymentService]);
     ps = await i.getInstance("PaymentService", namespace);

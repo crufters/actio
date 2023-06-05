@@ -2,31 +2,12 @@ import { test, expect, describe } from "@jest/globals";
 import { Injector } from "../../injector.js";
 import { nanoid } from "nanoid";
 import { AuthenticationService } from "./index.js";
-import { ConfigService } from "../config/index.js";
 
 describe("auth user update", () => {
   var auth: AuthenticationService;
 
   test("setup", async () => {
     let namespace = "t_" + nanoid().slice(0, 7);
-    let config: ConfigService = await new Injector([ConfigService]).getInstance(
-      "ConfigService",
-      namespace
-    );
-
-    await config.configSaveS2S({
-      token: "",
-      config: {
-        data: {
-          AuthenticationService: {
-            fullName: "Joey Joe",
-            adminEmail: "test@test.com",
-            adminPassword: "123",
-            adminOrganization: "Your Org",
-          },
-        },
-      },
-    });
 
     let i = new Injector([AuthenticationService]);
     auth = await i.getInstance("AuthenticationService", namespace);

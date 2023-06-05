@@ -34,6 +34,7 @@ describe("auth", () => {
       namespace
     );
 
+    // set config instead of using defaultConfig to test if config is loaded
     await config.configSaveS2S({
       token: "",
       config: {

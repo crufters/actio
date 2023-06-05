@@ -77,6 +77,7 @@ import {
   FacebookLoginRequest,
   FacebookLoginResponse,
   RegisterOrLoginWithProvenIdentityRequest,
+  defaultConfig,
 } from "./models.js";
 import { ConfigService } from "../config/index.js";
 
@@ -113,12 +114,7 @@ export class AuthenticationService implements Servicelike {
   private facebookAppSecret: string;
   private facebookAppRedirectURL: string;
 
-  defaultConfig: Config = {
-    adminEmail: "example@example.com",
-    adminPassword: "admin",
-    adminOrganization: "Admin Org",
-    fullName: "The Admin",
-  };
+  defaultConfig: Config = defaultConfig;
 
   constructor(connection?: DataSource, config?: ConfigService) {
     this.connection = connection;
