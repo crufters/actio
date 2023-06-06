@@ -312,7 +312,8 @@ export class Injector {
     });
   }
 
-  monkeyPatchServiceMethods(instance, className, address) {
+  // turns function calls into network calls
+  private monkeyPatchServiceMethods(instance, className, address) {
     let methods = Object.getOwnPropertyNames(instance.__proto__).filter(
       (m) => m != "constructor"
     );
