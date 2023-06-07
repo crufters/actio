@@ -2,6 +2,13 @@
 
 This is a config service that supports both loading data from the database or dotenv.
 
+- [Config Service](#config-service)
+  - [Concepts](#concepts)
+  - [Envars](#envars)
+  - [Conventions](#conventions)
+    - [Top level values](#top-level-values)
+    - [Default config/secrets for your services](#default-configsecrets-for-your-services)
+
 ## Concepts
 
 The config service deals with two kind of data: `Config` and `Secrets`.
@@ -27,6 +34,18 @@ See for example how the [`AuthenticationService`](../authentication/README.md) u
 ```ts
 let srsp = await this.config.secretRead({});
 let secret: Secret = srsp.secret.data.AuthenticationService;
+```
+
+### Top level values
+
+There are a few notable top level values which fall outside of the convention mentioned in the previous section:
+
+Using the notation from the code above:
+
+```ts
+// tells the system that this is a production instance
+// used by eg. the FileService
+srsp.secret.data.isProduction
 ```
 
 ### Default config/secrets for your services
