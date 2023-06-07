@@ -1,6 +1,16 @@
 # Authentication service
 
+```ts
+import { Service, AuthenticationService } from "@crufters/actio"
+
+@Service()
+class MyService {
+  constructor(auth: AuthenticationService) {...}
+}
+```
+
 - [Authentication service](#authentication-service)
+  - [Basics](#basics)
   - [Concepts](#concepts)
     - [Contacts](#contacts)
   - [Organizations and departments](#organizations-and-departments)
@@ -8,6 +18,31 @@
   - [Oauth](#oauth)
     - [Facebook oauth setup](#facebook-oauth-setup)
       - [Facebook oauth troubleshooting](#facebook-oauth-troubleshooting)
+  - [Envars](#envars)
+
+## Basics
+
+The basic usage of the auth service involves registration
+
+```ts
+let resp = await auth.userRegister({
+  user: {
+    contacts: [
+      {
+        url: "user@test.com",
+      },
+    ],
+  },
+  password: "123",
+});
+```
+
+and reading token information:
+
+```ts
+let trsp = await auth.tokenRead({ token: req.token });
+console.log(trsp.token.user?.fullName)
+```
 
 ## Concepts
 
@@ -78,3 +113,30 @@ Include the facebook app id in the `AuthenticationService` config or add `AUTHEN
 - If you don't get an email back, look at the permissions of the app
 
 - For local development create a test app of your Facebook app.
+
+## Envars
+
+```sh
+# default admin email address that gets registered on onInit
+# if there are no admin users
+AUTHENTICATION_ADMIN_EMAIL=...
+
+# default admin password
+AUTHENTICATION_ADMIN_PASSWORD=...
+
+# default admin organization name
+AUTHENTICATION_ADMIN_ORGANIZATION=...
+
+# default admin full name
+AUTHENTICATION_ADMIN_FULLNAME=...
+
+# facebook oauth app id
+AUTHENTICATION_FACEBOOK_APP_ID=...
+
+# facebook oauth app secret
+AUTHENTICATION_FACEBOOK_APP_SECRET=...
+
+# facebook oauth redirect
+AUTHENTICATION_FACEBOOK_APP_REDIRECT_URL=...
+```
+

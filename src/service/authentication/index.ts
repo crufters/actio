@@ -165,16 +165,32 @@ export class AuthenticationService implements Servicelike {
     }
 
     if (!adminEmail) {
-      adminEmail = this.defaultConfig.adminEmail;
+      if (process.env["AUTHENTICATION_ADMIN_EMAIL"]) {
+        adminEmail = process.env["AUTHENTICATION_ADMIN_EMAIL"];
+      } else {
+        adminEmail = this.defaultConfig.adminEmail;
+      }
     }
     if (!adminPassword) {
-      adminPassword = this.defaultConfig.adminPassword;
+      if (process.env["AUTHENTICATION_ADMIN_PASSWORD"]) {
+        adminPassword = process.env["AUTHENTICATION_ADMIN_PASSWORD"];
+      } else {
+        adminPassword = this.defaultConfig.adminPassword;
+      }
     }
     if (!adminOrganization) {
-      adminOrganization = this.defaultConfig.adminOrganization;
+      if (process.env["AUTHENTICATION_ADMIN_ORGANIZATION"]) {
+        adminOrganization = process.env["AUTHENTICATION_ADMIN_ORGANIZATION"];
+      } else {
+        adminOrganization = this.defaultConfig.adminOrganization;
+      }
     }
     if (!fullName) {
+      if (process.env["AUTHENTICATION_ADMIN_FULLNAME"]) {
+        fullName = process.env["AUTHENTICATION_ADMIN_FULLNAME"];
+      } else {
       fullName = this.defaultConfig.fullName;
+      }
     }
 
     console.log("Registering admin");
