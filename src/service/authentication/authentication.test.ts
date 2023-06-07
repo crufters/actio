@@ -220,11 +220,11 @@ describe("auth", () => {
     let depID = usrTk.token.user.departments[0].id;
     expect(
       usrTk.token.user.roles.find(
-        (r) => r.key === `organization:${orgID}:member`
+        (r) => r.key === `organization:${orgID}:admin`
       )
     ).toBeTruthy();
     expect(
-      usrTk.token.user.roles.find((r) => r.key === `department:${depID}:member`)
+      usrTk.token.user.roles.find((r) => r.key === `department:${depID}:admin`)
     ).toBeTruthy();
   });
 
