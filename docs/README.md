@@ -1,3 +1,6 @@
+
+This is a getting started guide. For more in depth docs see:
+- [AuthenticationService](../src/service/authentication/)
 # Getting started
 
 - [Getting started](#getting-started)
@@ -16,7 +19,7 @@
     - [Raw](#raw)
   - [Testing](#testing)
     - [Anatomy of a test](#anatomy-of-a-test)
-    - [5.2.Misc](#52misc)
+    - [Misc](#misc)
 
 
 ## How to run these examples
@@ -467,7 +470,7 @@ Congrats! You just implemented and nicely tested a stateful service that talks t
 
 @todo: perhaps Actio could provide helper functions for test namespace generation instead of repeating `let namespace = "t_" + nanoid().slice(0, 7);` everywhere.
 
-### 5.2.Misc
+### Misc
 
 Running a single test:
 
