@@ -15,8 +15,8 @@ class MyService {
   }
 
   async myEndpoint(req: MyEndpointRequest) {
-    let token = await this.auth.tokenRead({ token: req.token });
-    return { hi: token.token.user?.fullName };
+    let trsp = await this.auth.tokenRead({ token: req.token });
+    return { hi: trsp.token.user?.fullName };
   }
 }
 

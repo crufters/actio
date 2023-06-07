@@ -117,7 +117,7 @@ Each service is a black box for other services, which enable you to reimplement 
 
 ## Examples and tutorials
 
-For examples and tutorials see the [examples folder](./examples).
+For examples and tutorials see the [Getting started] guide(./docs).
 
 ## Credits
 
