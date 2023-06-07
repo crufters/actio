@@ -28,3 +28,56 @@ See for example how the [`AuthenticationService`](../authentication/README.md) u
 let srsp = await this.config.secretRead({});
 let secret: Secret = srsp.secret.data.AuthenticationService;
 ```
+
+### Default config/secrets for your services
+
+We encourage you to define your own `Secret` type in your service for ease of understanding when someone explores your service, similar to what the [`AuthenticationService`](../authentication/README.md) is doing:
+
+```ts
+export class Secret {
+  /** Admin user fullname */
+  fullName?: string;
+  /** Admin user email */
+  adminEmail?: string;
+  /** Admin user password */
+  adminPassword?: string;
+  /** Admin user organization name */
+  adminOrganization?: string;
+
+  sendgrid?: {
+    key?: string;
+  };
+  email?: {
+    from?: string;
+    register?: {
+      /**
+       * Subject of
+       */
+      subject?: string;
+      text?: string;
+    };
+  };
+
+  // https://developers.facebook.com/docs/facebook-login/guides/advanced/manual-flow#login
+  facebookAppID?: string;
+  facebookAppSecret?: string;
+  facebookAppRedirectURL?: string;
+}
+
+export const defaultSecret: Secret = {
+  adminEmail: "example@example.com",
+  adminPassword: "admin",
+  adminOrganization: "Admin Org",
+  fullName: "The Admin",
+};
+```
+
+We advise you to reuse this `Secret` type across your service, ie. use the same structure to save secrets.
+
+So in practice, you might do something like this:
+
+```ts
+let srsp = await this.config.secretRead({});
+// using your own Secret type to understand data obtained from config service
+let secret: Secret = srsp.secret.data.YourServiceName;
+```
