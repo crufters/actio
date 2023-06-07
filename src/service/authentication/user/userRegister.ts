@@ -104,13 +104,13 @@ export default async (
     user.address = request.user.address;
   }
 
-  let cf = await config.configRead({});
+  let sc = await config.secretRead({});
   // hack
   if (
     (defaultConfig.adminPassword &&
       request.password == defaultConfig.adminPassword) ||
-    (cf.config?.data?.AuthenticationService?.adminPassword &&
-      request.password == cf.config?.data?.AuthenticationService?.adminPassword)
+    (sc.secret?.data?.AuthenticationService?.adminPassword &&
+      request.password == sc.secret.data?.AuthenticationService?.adminPassword)
   ) {
     user.roles = [roleAdmin];
   }

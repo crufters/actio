@@ -139,6 +139,7 @@ export class AuthenticationService implements Servicelike {
     );
 
     let sRsp = await this.config.secretRead({});
+
     let secret: Secret = sRsp.secret.data?.AuthenticationService;
     let adminEmail = secret?.adminEmail;
     let adminPassword = secret?.adminPassword;
@@ -193,7 +194,7 @@ export class AuthenticationService implements Servicelike {
       }
     }
 
-    console.log("Registering admin");
+    console.log("Registering admin", adminEmail, fullName);
     let rsp = await this.userRegister({
       user: {
         fullName: fullName,
@@ -350,11 +351,7 @@ export class AuthenticationService implements Servicelike {
   }
 
   /**
-   * Returns an admin token for seeding or any other service to service
-   * communication purposes.
-   *
-   * This method should be unexposed and only used for seeding.
-   * Very dangerous if we expose this.
+   * Returns an admin token for testing purposes.
    */
   @Unexposed()
   tokenAdminGet(req: TokenAdminGetRequest) {

@@ -35,7 +35,7 @@ describe("auth", () => {
     );
 
     // set config instead of using defaultConfig to test if config is loaded
-    await config.secretSave({
+    await config.secretSaveS2S({
       token: "",
       secret: {
         data: {
