@@ -1,8 +1,5 @@
 
-This is a getting started guide. For more in depth docs about particular services see:
-- [AuthenticationService](../src/service/authentication/README.md)
-- [ConfigService](../src/service/config/README.md)
-- [FileService](../src/service/file/README.md)
+This is a getting started guide. For more in depth docs about particular services see: [AuthenticationService](../src/service/authentication/README.md), [ConfigService](../src/service/config/README.md), [FileService](../src/service/file/README.md), [SystemService](../src/service/system/README.md)
 # Getting started
 
 - [Getting started](#getting-started)

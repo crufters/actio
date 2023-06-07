@@ -89,11 +89,12 @@ Calls to the login service become network calls automatically.
 
 Actio is batteries included: it comes with services that help you bootstrap your system (but tries to not force you to use these) faster:
 
-- [x] Authentication service for login, register, oauth (facebook etc.).
-- [x] File service for file upload. Upload to a local disk or to Google Storage etc. in production.
-- [x] Config service for handling public configuration and secret values.
+- [x] [Authentication service](./src/service/authentication/README.md) for login, register, oauth (facebook etc.).
+- [x] [File service](./src/service/file/README.md) for file upload. Upload to a local disk or to Google Storage etc. in production.
+- [x] [Config service](./src/service/config/README.md) for handling public configuration and secret values.
+- [x] [System service](./src/service/system/README.md) for inspecting the Actio runtime and enabling building tools upon Actio (such as API explorers etc.). 
 - [x] Payment service: a double entry ledger system with Stripe and other payment provider support.
-- [ ] ...and many others that the community will find useful.
+- [ ] ...and many others that the community might find useful.
 
 ## Built with infrastructure in mind
 
