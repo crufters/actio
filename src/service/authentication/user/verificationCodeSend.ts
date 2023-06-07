@@ -5,7 +5,7 @@ import {
   User,
   Token,
   SecretCode,
-  Config,
+  Secret,
 } from "../models.js";
 import sendgrid from "@sendgrid/mail";
 import { Error, error } from "../../../util.js";
@@ -42,11 +42,11 @@ export default async (
   code.code = nanoid();
   code.userId = user.id;
 
-  let c = await config.configRead({});
+  let c = await config.secretRead({});
   if (c instanceof Error) {
     return c;
   }
-  let conf: Config = c.config?.data?.AuthenticationService;
+  let conf: Secret = c.secret?.data?.AuthenticationService;
 
   sendgrid.setApiKey(getSendgridKey());
   const msg = {

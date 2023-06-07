@@ -7,7 +7,7 @@ import {
   UserRegisterRequest,
   UserRegisterResponse,
   platformEmail,
-  Config,
+  Secret,
   roleAdmin,
 } from "../models.js";
 import { nanoid } from "nanoid";
@@ -22,7 +22,7 @@ export default async (
   connection: DataSource,
   config: ConfigService,
   request: UserRegisterRequest,
-  defaultConfig: Config
+  defaultConfig: Secret
 ): Promise<UserRegisterResponse> => {
   let userId = nanoid();
   let user = new User();
