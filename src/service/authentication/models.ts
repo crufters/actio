@@ -27,7 +27,7 @@ export function copy(from, to) {
 
 export declare type Relation<T> = T;
 
-export class Config {
+export class Secret {
   /** Admin user fullname */
   fullName?: string;
   /** Admin user email */
@@ -57,7 +57,7 @@ export class Config {
   facebookAppRedirectURL?: string;
 }
 
-export const defaultConfig: Config = {
+export const defaultSecret: Secret = {
   adminEmail: "example@example.com",
   adminPassword: "admin",
   adminOrganization: "Admin Org",

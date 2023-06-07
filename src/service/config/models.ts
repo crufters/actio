@@ -55,7 +55,8 @@ export class ContactConfig {
   phone?: string;
 }
 
-/** Sercret. Can only be saved through http but not read.
+/**
+ * Sercret. Can only be saved through HTTP but not read.
  * It is only read by other services.
  */
 @Entity()

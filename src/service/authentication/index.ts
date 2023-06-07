@@ -71,13 +71,13 @@ import {
   UserUnGhostRequest,
   UserUnGhostResponse,
   TokenAdminGetRequest,
-  Config,
+  Secret,
   OauthInfoRequest,
   OauthInfoResponse,
   FacebookLoginRequest,
   FacebookLoginResponse,
   RegisterOrLoginWithProvenIdentityRequest,
-  defaultConfig,
+  defaultSecret,
 } from "./models.js";
 import { ConfigService } from "../config/index.js";
 
@@ -114,7 +114,7 @@ export class AuthenticationService implements Servicelike {
   private facebookAppSecret: string;
   private facebookAppRedirectURL: string;
 
-  defaultConfig: Config = defaultConfig;
+  defaultSecret: Secret = defaultSecret;
 
   constructor(connection?: DataSource, config?: ConfigService) {
     this.connection = connection;
@@ -138,27 +138,28 @@ export class AuthenticationService implements Servicelike {
       })
     );
 
-    let cf = await this.config.configRead({});
-    let config: Config = cf.config.data?.AuthenticationService;
-    let adminEmail = config?.adminEmail;
-    let adminPassword = config?.adminPassword;
-    let adminOrganization = config?.adminOrganization;
-    let fullName = config?.fullName;
+    let sRsp = await this.config.secretRead({});
+
+    let secret: Secret = sRsp.secret.data?.AuthenticationService;
+    let adminEmail = secret?.adminEmail;
+    let adminPassword = secret?.adminPassword;
+    let adminOrganization = secret?.adminOrganization;
+    let fullName = secret?.fullName;
 
     // facebook related config
-    if (config?.facebookAppID) {
-      this.facebookAppID = config.facebookAppID;
+    if (secret?.facebookAppID) {
+      this.facebookAppID = secret.facebookAppID;
     } else {
       this.facebookAppID = process.env["AUTHENTICATION_FACEBOOK_APP_ID"];
     }
-    if (config?.facebookAppSecret) {
-      this.facebookAppSecret = config.facebookAppSecret;
+    if (secret?.facebookAppSecret) {
+      this.facebookAppSecret = secret.facebookAppSecret;
     } else {
       this.facebookAppSecret =
         process.env["AUTHENTICATION_FACEBOOK_APP_SECRET"];
     }
-    if (config?.facebookAppRedirectURL) {
-      this.facebookAppRedirectURL = config.facebookAppRedirectURL;
+    if (secret?.facebookAppRedirectURL) {
+      this.facebookAppRedirectURL = secret.facebookAppRedirectURL;
     } else {
       this.facebookAppRedirectURL =
         process.env["AUTHENTICATION_FACEBOOK_APP_REDIRECT_URL"];
@@ -168,32 +169,32 @@ export class AuthenticationService implements Servicelike {
       if (process.env["AUTHENTICATION_ADMIN_EMAIL"]) {
         adminEmail = process.env["AUTHENTICATION_ADMIN_EMAIL"];
       } else {
-        adminEmail = this.defaultConfig.adminEmail;
+        adminEmail = this.defaultSecret.adminEmail;
       }
     }
     if (!adminPassword) {
       if (process.env["AUTHENTICATION_ADMIN_PASSWORD"]) {
         adminPassword = process.env["AUTHENTICATION_ADMIN_PASSWORD"];
       } else {
-        adminPassword = this.defaultConfig.adminPassword;
+        adminPassword = this.defaultSecret.adminPassword;
       }
     }
     if (!adminOrganization) {
       if (process.env["AUTHENTICATION_ADMIN_ORGANIZATION"]) {
         adminOrganization = process.env["AUTHENTICATION_ADMIN_ORGANIZATION"];
       } else {
-        adminOrganization = this.defaultConfig.adminOrganization;
+        adminOrganization = this.defaultSecret.adminOrganization;
       }
     }
     if (!fullName) {
       if (process.env["AUTHENTICATION_ADMIN_FULLNAME"]) {
         fullName = process.env["AUTHENTICATION_ADMIN_FULLNAME"];
       } else {
-      fullName = this.defaultConfig.fullName;
+        fullName = this.defaultSecret.fullName;
       }
     }
 
-    console.log("Registering admin");
+    console.log("Registering admin", adminEmail, fullName);
     let rsp = await this.userRegister({
       user: {
         fullName: fullName,
@@ -314,7 +315,7 @@ export class AuthenticationService implements Servicelike {
     returns: UserRegisterResponse,
   })
   userRegister(req: UserRegisterRequest) {
-    return userRegister(this.connection, this.config, req, this.defaultConfig);
+    return userRegister(this.connection, this.config, req, this.defaultSecret);
   }
 
   @Endpoint({
@@ -350,11 +351,7 @@ export class AuthenticationService implements Servicelike {
   }
 
   /**
-   * Returns an admin token for seeding or any other service to service
-   * communication purposes.
-   *
-   * This method should be unexposed and only used for seeding.
-   * Very dangerous if we expose this.
+   * Returns an admin token for testing purposes.
    */
   @Unexposed()
   tokenAdminGet(req: TokenAdminGetRequest) {

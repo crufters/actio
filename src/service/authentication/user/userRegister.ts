@@ -7,7 +7,7 @@ import {
   UserRegisterRequest,
   UserRegisterResponse,
   platformEmail,
-  Config,
+  Secret,
   roleAdmin,
 } from "../models.js";
 import { nanoid } from "nanoid";
@@ -22,7 +22,7 @@ export default async (
   connection: DataSource,
   config: ConfigService,
   request: UserRegisterRequest,
-  defaultConfig: Config
+  defaultConfig: Secret
 ): Promise<UserRegisterResponse> => {
   let userId = nanoid();
   let user = new User();
@@ -104,13 +104,13 @@ export default async (
     user.address = request.user.address;
   }
 
-  let cf = await config.configRead({});
+  let sc = await config.secretRead({});
   // hack
   if (
     (defaultConfig.adminPassword &&
       request.password == defaultConfig.adminPassword) ||
-    (cf.config?.data?.AuthenticationService?.adminPassword &&
-      request.password == cf.config?.data?.AuthenticationService?.adminPassword)
+    (sc.secret?.data?.AuthenticationService?.adminPassword &&
+      request.password == sc.secret.data?.AuthenticationService?.adminPassword)
   ) {
     user.roles = [roleAdmin];
   }
