@@ -22,7 +22,7 @@ jobs:
 
       - name: Launch docker containers
         run: |
-          cp examples/docker-compose.yaml .
+          cp docs/docker-compose.yaml .
           docker-compose up --detach
           npm install
 

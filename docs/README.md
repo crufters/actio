@@ -1,29 +1,25 @@
-# Actio Examples
+# Getting started
 
-This folder does not aim to be in depth for the topics covered here - that will be the job of the READMEs in specific folders.
-
-Instead it aims to read more like a tutorial.
-
-- [Actio Examples](#actio-examples)
-  - [1. How to run these examples](#1-how-to-run-these-examples)
-  - [2. How to create a new project from scratch](#2-how-to-create-a-new-project-from-scratch)
-    - [2.1. Initialize](#21-initialize)
-    - [2.2 tsconfig.ts](#22-tsconfigts)
-    - [2.3. package.json](#23-packagejson)
-    - [2.4. index.ts](#24-indexts)
-    - [2.5. Compile and run](#25-compile-and-run)
-    - [2.6. cURL](#26-curl)
-  - [3. Authentication](#3-authentication)
-  - [4. Endpoint decorators](#4-endpoint-decorators)
-    - [4.1. Unexposed](#41-unexposed)
-      - [4.1.1. Why Unexposed is important](#411-why-unexposed-is-important)
-    - [4.2. Raw](#42-raw)
-  - [5. Testing](#5-testing)
-    - [5.1. Anatomy of a test](#51-anatomy-of-a-test)
+- [Getting started](#getting-started)
+  - [How to run these examples](#how-to-run-these-examples)
+  - [How to create a new project from scratch](#how-to-create-a-new-project-from-scratch)
+    - [Initialize](#initialize)
+    - [tsconfig.ts](#tsconfigts)
+    - [package.json](#packagejson)
+    - [index.ts](#indexts)
+    - [Compile and run](#compile-and-run)
+    - [cURL](#curl)
+  - [Authentication](#authentication)
+  - [Endpoint decorators](#endpoint-decorators)
+    - [Unexposed](#unexposed)
+      - [Why Unexposed is important](#why-unexposed-is-important)
+    - [Raw](#raw)
+  - [Testing](#testing)
+    - [Anatomy of a test](#anatomy-of-a-test)
     - [5.2.Misc](#52misc)
 
 
-## 1. How to run these examples
+## How to run these examples
 
 Run
 
@@ -42,9 +38,9 @@ npx ts-node --esm ./basic.ts
 
 Replace `basic.ts` with the file you want to run.
 
-## 2. How to create a new project from scratch
+## How to create a new project from scratch
 
-### 2.1. Initialize
+### Initialize
 
 Run the following in your terminal:
 
@@ -58,7 +54,7 @@ npx tsc --init
 touch index.ts
 ```
 
-### 2.2 tsconfig.ts
+### tsconfig.ts
 
 Make sure your `tsconfig.ts` looks something like this
 
@@ -79,11 +75,11 @@ Make sure your `tsconfig.ts` looks something like this
 }
 ```
 
-### 2.3. package.json
+### package.json
 
 and make sure the `package.json` has `"type": "module"`.
 
-### 2.4. index.ts
+### index.ts
 
 Create a basic service in index.ts
 
@@ -113,7 +109,7 @@ class MyService implements Servicelike {
 startServer([MyService]);
 ```
 
-### 2.5. Compile and run
+### Compile and run
 
 Compile and run your project from project root:
 
@@ -125,7 +121,7 @@ Should output `Server is listening on port 8080`.
 
 Now do a curl:
 
-### 2.6. cURL
+### cURL
 
 ```sh
 curl -XPOST -d '{"name":"Johnny"}' 127.0.0.1:8080/MyService/myEndpoint
@@ -137,7 +133,7 @@ The output should be:
 {"hi":"Johnny"}
 ```
 
-## 3. Authentication
+## Authentication
 
 Let's run the `auth.ts` example and curl it:
 
@@ -165,7 +161,7 @@ export interface UserLoginRequest {
 }
 ```
 
-(The field ContactURL might seem a bit unintuitive at first but the authentication service is designed to work with phones, emails etc.)
+(The field `contactURL` might seem a bit unintuitive at first but the authentication service is designed to work with any platform where the user can uniquely identify themselves - phones, emails etc.)
 
 We have no users yet but there is a default admin user registered. The default user can be configured through the `ConfigService` but when no config is set, the system uses the following credentials:
 
@@ -207,9 +203,9 @@ As you can see we successfully called the `AuthenticationService` from our own a
 
 Note that the current pattern of calling the AuthenticationService in most endpoints is prone to fan-out but a JWT implementation is being considered for those who prefer to avoid that.
 
-## 4. Endpoint decorators
+## Endpoint decorators
 
-### 4.1. Unexposed
+### Unexposed
 
 You can use the `@Unexposed` decorator to mark a method as one that should not be exposed as a HTTP endpoint.
 
@@ -263,13 +259,20 @@ MyService/myEndpoint 4ms 200
 MyService/notMyEndpoint 1ms 404 Error { message: 'endpoint not found' }
 ```
 
-#### 4.1.1. Why Unexposed is important
+#### Why Unexposed is important
 
-The `@Unexposed` decorator is supremely important because it enables us to build endpoints only available to other services but not available to end users at the API gateway level.
+The `@Unexposed` decorator is supremely important because it is the primary mechanism for "Service to service" calls. It enables us to build unauthenticated endpoints only available to other services but not available to end users at the API gateway level.
 
-@todo: For monoliths the current implementation is fine but for a microservices setup we need to build out a service to service call mechanism driven by this decorator.
+Here is an example:
 
-### 4.2. Raw
+Imagine a versatile and generic coupon service where the coupon creation endpoint is `@Unexposed`. The coupon service might handle code generation, expiry and all other functionalities but it might not know why a user gets a coupon - that might be too usecase specific and hinder reusability of the service.
+
+We can move authorization to the caller services by making CouponCreate @Unexposed and implement our own logic upwards in the call chain. Do users get a Coupon as part of some kind of game? They purchase it? The coupon service doesn't necessarily have to care.
+
+
+@todo: For monoliths the current implementation is fine (and works) but for a microservices setup we need to build out a service to service call mechanism driven by this decorator.
+
+### Raw
 
 Class methods get turned into JSON expecting HTTP endpoints by Actio. This works fine for most use cases but sometimes we need access to the underlying HTTP request and response types. A prime example of that is the `FileService`:
 
@@ -285,11 +288,13 @@ Class methods get turned into JSON expecting HTTP endpoints by Actio. This works
   }
 ```
 
-The prefix if `http` in the method name is not mandatory.
+(Note: The prefix if `http` in the method name is not mandatory.)
 
-## 5. Testing
+You should try to refrain from using this decorator unless you absolutel must or know what you are doing.
 
-### 5.1. Anatomy of a test
+## Testing
+
+### Anatomy of a test
 
 Actio's dependency injection makes it a breeze to test your services. Let's build a simple key value service and test it.
 For ease of reading we will put the service and the test in the same file:
@@ -300,6 +305,7 @@ import { nanoid } from "nanoid";
 import { Service, Injector } from "@crufters/actio";
 import { DataSource, Entity, PrimaryColumn, Column } from "typeorm";
 
+// define typeorm database entity
 @Entity()
 export class KV {
   @PrimaryColumn()
@@ -309,6 +315,7 @@ export class KV {
   value?: string;
 }
 
+// define request and response types
 interface SetRequest {
   key?: string;
   value?: string;
@@ -322,6 +329,7 @@ interface GetResponse {
   value?: string;
 }
 
+// implement our service
 @Service()
 class MyService {
   meta = {
@@ -346,6 +354,7 @@ class MyService {
   }
 }
 
+// run some simple tests
 describe("my test", () => {
   var myService: MyService;
 
@@ -455,6 +464,8 @@ Perhaps the most important point here is the usage of a random namespace (` let 
 Teardown is not part of Actio yet, but since every test runs in a fresh database worst case is that you will accumulate databases in your local postgres instance.
 
 Congrats! You just implemented and nicely tested a stateful service that talks to the database!
+
+@todo: perhaps Actio could provide helper functions for test namespace generation instead of repeating `let namespace = "t_" + nanoid().slice(0, 7);` everywhere.
 
 ### 5.2.Misc
 
