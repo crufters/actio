@@ -2,17 +2,11 @@
 This is a getting started guide. For more in depth docs about particular services see:
 - [AuthenticationService](../src/service/authentication/README.md)
 - [ConfigService](../src/service/config/README.md)
+- [FileService](../src/service/file/README.md)
 # Getting started
 
 - [Getting started](#getting-started)
   - [How to run these examples](#how-to-run-these-examples)
-  - [How to create a new project from scratch](#how-to-create-a-new-project-from-scratch)
-    - [Initialize](#initialize)
-    - [tsconfig.ts](#tsconfigts)
-    - [package.json](#packagejson)
-    - [index.ts](#indexts)
-    - [Compile and run](#compile-and-run)
-    - [cURL](#curl)
   - [Authentication](#authentication)
   - [Endpoint decorators](#endpoint-decorators)
     - [Unexposed](#unexposed)
@@ -21,6 +15,13 @@ This is a getting started guide. For more in depth docs about particular service
   - [Testing](#testing)
     - [Anatomy of a test](#anatomy-of-a-test)
     - [Misc](#misc)
+  - [How to create a new project from scratch](#how-to-create-a-new-project-from-scratch)
+    - [Initialize](#initialize)
+    - [tsconfig.ts](#tsconfigts)
+    - [package.json](#packagejson)
+    - [index.ts](#indexts)
+    - [Compile and run](#compile-and-run)
+    - [cURL](#curl)
 
 
 ## How to run these examples
@@ -41,101 +42,6 @@ npx ts-node --esm ./basic.ts
 ```
 
 Replace `basic.ts` with the file you want to run.
-
-## How to create a new project from scratch
-
-### Initialize
-
-Run the following in your terminal:
-
-```sh
-mkdir myproject; cd myproject
-npm init --yes
-npm i -S @crufters/actio
-npm i -S express; npm i -S @types/express
-npm i -D typescript;
-npx tsc --init
-touch index.ts
-```
-
-### tsconfig.ts
-
-Make sure your `tsconfig.ts` looks something like this
-
-```js
-{
-  "compilerOptions": {
-    "target": "esnext",
-    "module": "esnext",
-    "outDir": "build",
-    "rootDir": "./",
-    "strict": true,
-    "noImplicitAny": true,
-    "moduleResolution": "node",
-    "esModuleInterop": true,
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true
-  }
-}
-```
-
-### package.json
-
-and make sure the `package.json` has `"type": "module"`.
-
-### index.ts
-
-Create a basic service in index.ts
-
-```ts
-import { Service, Servicelike, startServer } from "@crufters/actio";
-
-interface MyEndpointRequest {
-  name?: string;
-}
-
-@Service()
-class MyService implements Servicelike {
-  constructor() {}
-
-  // this endpoint will be exposed as a http endpoint
-  async myEndpoint(req: MyEndpointRequest) {
-    return { hi: req.name };
-  }
-
-  async _onInit() {
-    console.log(
-      "MyService: This callback runs when the server boots up. Perfect place to run do things like seeding the database."
-    );
-  }
-}
-
-startServer([MyService]);
-```
-
-### Compile and run
-
-Compile and run your project from project root:
-
-```sh
-npx ts-node --esm ./index.ts
-```
-
-Should output `Server is listening on port 8080`.
-
-Now do a curl:
-
-### cURL
-
-```sh
-curl -XPOST -d '{"name":"Johnny"}' 127.0.0.1:8080/MyService/myEndpoint
-```
-
-The output should be:
-
-```sh
-{"hi":"Johnny"}
-```
 
 ## Authentication
 
@@ -477,4 +383,99 @@ Running a single test:
 
 ```sh
 npm test -- -t 'Init only happens once'
+```
+
+## How to create a new project from scratch
+
+### Initialize
+
+Run the following in your terminal:
+
+```sh
+mkdir myproject; cd myproject
+npm init --yes
+npm i -S @crufters/actio
+npm i -S express; npm i -S @types/express
+npm i -D typescript;
+npx tsc --init
+touch index.ts
+```
+
+### tsconfig.ts
+
+Make sure your `tsconfig.ts` looks something like this
+
+```js
+{
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "esnext",
+    "outDir": "build",
+    "rootDir": "./",
+    "strict": true,
+    "noImplicitAny": true,
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
+  }
+}
+```
+
+### package.json
+
+and make sure the `package.json` has `"type": "module"`.
+
+### index.ts
+
+Create a basic service in index.ts
+
+```ts
+import { Service, Servicelike, startServer } from "@crufters/actio";
+
+interface MyEndpointRequest {
+  name?: string;
+}
+
+@Service()
+class MyService implements Servicelike {
+  constructor() {}
+
+  // this endpoint will be exposed as a http endpoint
+  async myEndpoint(req: MyEndpointRequest) {
+    return { hi: req.name };
+  }
+
+  async _onInit() {
+    console.log(
+      "MyService: This callback runs when the server boots up. Perfect place to run do things like seeding the database."
+    );
+  }
+}
+
+startServer([MyService]);
+```
+
+### Compile and run
+
+Compile and run your project from project root:
+
+```sh
+npx ts-node --esm ./index.ts
+```
+
+Should output `Server is listening on port 8080`.
+
+Now do a curl:
+
+### cURL
+
+```sh
+curl -XPOST -d '{"name":"Johnny"}' 127.0.0.1:8080/MyService/myEndpoint
+```
+
+The output should be:
+
+```sh
+{"hi":"Johnny"}
 ```
