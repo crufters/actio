@@ -9,6 +9,7 @@ This is a getting started guide. For more in depth docs about particular service
     - [Unexposed](#unexposed)
       - [Why Unexposed is important](#why-unexposed-is-important)
     - [Raw](#raw)
+    - [Endpoint](#endpoint)
   - [Testing](#testing)
     - [Anatomy of a test](#anatomy-of-a-test)
     - [Misc](#misc)
@@ -198,6 +199,10 @@ Class methods get turned into JSON expecting HTTP endpoints by Actio. This works
 (Note: The prefix if `http` in the method name is not mandatory.)
 
 You should try to refrain from using this decorator unless you absolutel must or know what you are doing.
+
+### Endpoint
+
+The `@Endpoint` decorator, coupled with the `@Field` decorator enables us to annotate blind spots for TypeScript reflection so the Actio runtime has complete knowledge of types for each endpoint and their request and response parameters. For more information see the [System service](../src/service/system/README.md).
 
 ## Testing
 

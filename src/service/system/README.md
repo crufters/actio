@@ -51,7 +51,7 @@ apiRead returns the type information for endpoints and there parameters. Here is
                   "req"
                ],
                "paramTypes":[
-                  "Object"
+                  "NodesReadRequest"
                ],
                "options":{
                   "returns":"NodesReadResponse"
