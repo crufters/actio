@@ -110,6 +110,11 @@ Run integration tests easily including all of your services and infrastructure d
 
 Actio enables you to run multiple projects from the same single server by namespaces. Save on server and maintenance cost.
 
+## Firm service boundaries
+
+Actio isolates your services - no more sidestepping of service boundaries, be it intentional or accidental.
+Each service is a black box for other services, which enable you to reimplement services without breaking depending services.
+
 ## Examples and tutorials
 
 For examples and tutorials see the [examples folder](./examples).
