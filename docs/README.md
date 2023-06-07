@@ -35,7 +35,7 @@ docker-compose up -d
 
 in this folder.
 
-To run a given you can do
+To run a given example you can do
 
 ```sh
 npx ts-node --esm ./basic.ts
