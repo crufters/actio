@@ -1,1 +1,1 @@
-This was moved to the [docs folder](../docs/)
+This was moved to the [docs folder](../docs/README.md)
