@@ -1,15 +1,19 @@
 
 This is a getting started guide. For more in depth docs about particular services see: [AuthenticationService](../src/service/authentication/README.md), [ConfigService](../src/service/config/README.md), [FileService](../src/service/file/README.md), [SystemService](../src/service/system/README.md).
+
+For other topics see [Decorators](./decorators.md).
 # Getting started
 
 - [Getting started](#getting-started)
   - [How to run these examples](#how-to-run-these-examples)
   - [Authentication](#authentication)
+  - [Anatomy of a service](#anatomy-of-a-service)
+    - [models file](#models-file)
   - [Endpoint decorators](#endpoint-decorators)
     - [Unexposed](#unexposed)
       - [Why Unexposed is important](#why-unexposed-is-important)
     - [Raw](#raw)
-    - [Endpoint](#endpoint)
+    - [More decorators](#more-decorators)
   - [Testing](#testing)
     - [Anatomy of a test](#anatomy-of-a-test)
     - [Misc](#misc)
@@ -27,7 +31,9 @@ This is a getting started guide. For more in depth docs about particular service
 Run
 
 ```sh
+# install dependencies
 npm install
+# launch postgres
 docker-compose up -d
 ```
 
@@ -41,7 +47,11 @@ npx ts-node --esm ./basic.ts
 
 Replace `basic.ts` with the file you want to run.
 
+The examples all read the `dotenv` file in this readme and know how to connect to the database.
+
 ## Authentication
+
+Perhaps the most useful thing to start with is the [`AuthenticationService`](../src/service/authentication/README.md), because once you know how to use it you can start shipping real world apps!
 
 Let's run the `auth.ts` example and curl it:
 
@@ -52,26 +62,29 @@ $ npx ts-node --esm ./auth.ts
 Server is listening on port 8080
 ```
 
-Please note that while `auth.ts` contains no login endpoint, our service has the `AuthenticationService` as a dependency and it is important to understand that:
+Please note that while our custom servie in `auth.ts` contains no login endpoint, our service has the `AuthenticationService` as a dependency and it is important to understand that:
 
 > All services in the dependency graph gets their endpoints registered and exposed through HTTP.
 
-In other words, since our little `MyService` has `AuthenticationService` as a dependency, the many endpoints of the `AuthenticationService` get exposed as endpoint as well. So let's try to curl them - let's try to log in.
+In other words, since our little `MyService` has `AuthenticationService` as a dependency, the many endpoints of the `AuthenticationService` get exposed as endpoint as well. So let's try to cURL them - let's try to log in.
 
 Here we run into the problem of not knowing what the API looks like. A builtin API explorer and OpenAPI etc. exports are coming soon, but for now we can check the [`models.ts`](../src/service/authentication/models.ts) of each service.
 
 By grepping for `login`, we can see this request type:
 
 ```sh
-export interface UserLoginRequest {
+export class UserLoginRequest {
+  @Field()
   contactUrl: string;
+
+  @Field()
   password: string;
 }
 ```
 
-(The field `contactURL` might seem a bit unintuitive at first but the authentication service is designed to work with any platform where the user can uniquely identify themselves - phones, emails etc.)
+(The field `contactURL` might seem a bit unintuitive at first but the authentication service is designed to work with any platform where the user can uniquely identify themselves - phones, emails etc. For more about this see the [contacts section in the auth docs](../src/service/authentication/README.md#contacts))
 
-We have no users yet but there is a default admin user registered. The default user can be configured through the `ConfigService` but when no config is set, the system uses the following credentials:
+We created no users yet but there is a default admin user registered. The default user can be configured through the `ConfigService` or envars, but when none of those is set, the system uses the following credentials:
 
 ```sh
 admin email: "example@example.com",
@@ -109,7 +122,27 @@ $ curl -XPOST -d '{"token":"4o11JVud5mIFiFWC0FrcA"}' 127.0.0.1:8080/MyService/my
 
 As you can see we successfully called the `AuthenticationService` from our own and read the name of the calling user.
 
-Note that the current pattern of calling the AuthenticationService in most endpoints is prone to fan-out but a JWT implementation is being considered for those who prefer to avoid that.
+@todo Note that the current pattern of calling the AuthenticationService in most endpoints is prone to fan-out but a JWT implementation is being considered for those who prefer to avoid that.
+
+That should be enough to get you started but for a more in depth look at the `AuthenticationService` have a look at [its readme](../src/service/authentication/README.md).
+
+## Anatomy of a service
+
+Once you wrote a couple of services using the tricks learnt in the previous section you probably wonder what is the best way to build and organize services.
+
+Actio tries to not dictate this but here are a few patterns we found useful:
+
+### models file
+
+We advise Actio services to have a `models.ts` file where all types of a service are defined.
+
+Not only will this get rid of the most common reason for circular dependencies (importing types), but also: 
+
+> Even though Actio is a Node.js library, if the `models.ts` contains only types and nothing else then importing it on the frontend should cause no problems.
+
+This is a great low-tech solution for interfacing with Actio on the client side - just write tiny wrapper functions for endpoints but use the types from `models.ts`.
+
+Just make sure you use [this TypeORM shim](https://github.com/typeorm/typeorm/blob/d4607a86723eef07e62e6d7321a07f3ae5ed1f90/extra/typeorm-model-shim.js#L1) on the frontend, and it should just work.
 
 ## Endpoint decorators
 
@@ -200,9 +233,9 @@ Class methods get turned into JSON expecting HTTP endpoints by Actio. This works
 
 You should try to refrain from using this decorator unless you absolutel must or know what you are doing.
 
-### Endpoint
+### More decorators
 
-The `@Endpoint` decorator, coupled with the `@Field` decorator enables us to annotate blind spots for TypeScript reflection so the Actio runtime has complete knowledge of types for each endpoint and their request and response parameters. For more information see the [System service](../src/service/system/README.md).
+For a complete list of decorators, see the [Decorators document](./decorators.md).
 
 ## Testing
 
@@ -388,6 +421,8 @@ npm test -- -t 'Init only happens once'
 ```
 
 ## How to create a new project from scratch
+
+This section is mostly about the dependencies and `package.json`/`tsconfig.json` settings needed to use `Actio`. Best way to illustrate that is to create a project from scratch:
 
 ### Initialize
 
