@@ -1,4 +1,4 @@
-[<- Back to Getting Started](../../../docs/README.md) 
+[<- Back to Getting Started](./docs/README.md) 
 # Decorators
 
 - [Decorators](#decorators)
