@@ -35,9 +35,9 @@ describe("auth", () => {
     );
 
     // set config instead of using defaultConfig to test if config is loaded
-    await config.configSaveS2S({
+    await config.secretSaveS2S({
       token: "",
-      config: {
+      secret: {
         data: {
           AuthenticationService: {
             fullName: "Joey Joe",
@@ -220,11 +220,11 @@ describe("auth", () => {
     let depID = usrTk.token.user.departments[0].id;
     expect(
       usrTk.token.user.roles.find(
-        (r) => r.key === `organization:${orgID}:member`
+        (r) => r.key === `organization:${orgID}:admin`
       )
     ).toBeTruthy();
     expect(
-      usrTk.token.user.roles.find((r) => r.key === `department:${depID}:member`)
+      usrTk.token.user.roles.find((r) => r.key === `department:${depID}:admin`)
     ).toBeTruthy();
   });
 

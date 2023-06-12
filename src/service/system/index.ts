@@ -2,7 +2,7 @@ import { Endpoint, Service } from "../../reflect.js";
 
 import apiRead from "./apiRead.js";
 import nodesRead from "./nodesRead.js";
-import { NodesReadResponse } from "./models.js";
+import { NodesReadRequest, NodesReadResponse } from "./models.js";
 
 import { Servicelike } from "../../util.js";
 import { Injector } from "../../injector.js";
@@ -28,7 +28,7 @@ export class SystemService implements Servicelike {
   @Endpoint({
     returns: NodesReadResponse,
   })
-  async nodesRead(req: any) {
+  async nodesRead(req: NodesReadRequest) {
     return nodesRead(this.injector, req);
   }
 }

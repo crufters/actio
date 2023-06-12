@@ -4,11 +4,13 @@
 <h1 align="center">Actio</h1>
 <h4 align="center">The Node.js framework for monoliths and microservices.</h4>
 <p align="center">
-<img src="https://github.com/crufters/actio/actions/workflows/build.yaml/badge.svg" /> <a href="https://www.gnu.org/licenses/agpl-3.0"><img src="https://img.shields.io/badge/License-AGPL_v3-blue.svg" alt="License: AGPL v3"/></a> <img src="https://img.shields.io/badge/semver-0.2.33-yellow" />
+<img src="https://github.com/crufters/actio/actions/workflows/build.yaml/badge.svg" /> <a href="https://www.gnu.org/licenses/agpl-3.0"><img src="https://img.shields.io/badge/License-AGPL_v3-blue.svg" alt="License: AGPL v3"/></a> <img src="https://img.shields.io/badge/semver-0.3.1-yellow" />
 </p>
 
 Actio is a modern, batteries included Node.js (Typescript) framework for your backend applications.
 It enables you to effortlessly switch between monolithic and microservices architectures.
+
+[Get started](./docs/README.md).
 
 ```sh
 npm i -S @crufters/actio
@@ -87,11 +89,12 @@ Calls to the login service become network calls automatically.
 
 Actio is batteries included: it comes with services that help you bootstrap your system (but tries to not force you to use these) faster:
 
-- [x] Authentication service for login, register, oauth (facebook etc.).
-- [x] File service for file upload. Upload to a local disk or to Google Storage etc. in production.
-- [x] Config service for handling public configuration and secret values.
+- [x] [Authentication service](./src/service/authentication/README.md) for login, register, oauth (facebook etc.).
+- [x] [File service](./src/service/file/README.md) for file upload. Upload to a local disk or to Google Storage etc. in production.
+- [x] [Config service](./src/service/config/README.md) for handling public configuration and secret values.
+- [x] [System service](./src/service/system/README.md) for inspecting the Actio runtime and enabling building tools upon Actio (such as API explorers etc.). 
 - [x] Payment service: a double entry ledger system with Stripe and other payment provider support.
-- [ ] ...and many others that the community will find useful.
+- [ ] ...and many others that the community might find useful.
 
 ## Built with infrastructure in mind
 
@@ -110,9 +113,14 @@ Run integration tests easily including all of your services and infrastructure d
 
 Actio enables you to run multiple projects from the same single server by namespaces. Save on server and maintenance cost.
 
+## Firm service boundaries
+
+Actio isolates your services - no more sidestepping of service boundaries, be it intentional or accidental.
+Each service is a black box for other services, which enable you to reimplement services without breaking depending services.
+
 ## Examples and tutorials
 
-For examples and tutorials see the [examples folder](./examples).
+For examples and tutorials see the [Getting started guide](./docs/README.md).
 
 ## Credits
 

@@ -64,9 +64,9 @@ export default async (
   user.roles.push(
     {
       id: nanoid(),
-      key: `organization:${organization.id}:member`,
+      key: `organization:${organization.id}:admin`,
     },
-    { id: nanoid(), key: `department:${department.id}:member` }
+    { id: nanoid(), key: `department:${department.id}:admin` }
   );
 
   await connection.transaction(async (tran) => {

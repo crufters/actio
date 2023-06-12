@@ -4,6 +4,7 @@ import { DataSource } from "typeorm";
 import configRead from "./configRead.js";
 import configSave from "./configSave.js";
 import configSaveS2S from "./configSaveS2S.js";
+import secretSaveS2S from "./secretSaveS2S.js";
 
 import {
   Config,
@@ -54,6 +55,11 @@ export class ConfigService implements Servicelike {
   @Unexposed()
   configSaveS2S(req: ConfigSaveRequest) {
     return configSaveS2S(this.connection, req);
+  }
+
+  @Unexposed()
+  secretSaveS2S(req: SecretSaveRequest) {
+    return secretSaveS2S(this.connection, req);
   }
 
   @Unexposed()
