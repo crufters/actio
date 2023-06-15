@@ -55,7 +55,7 @@ This means that you can build a system where people register with phones and not
 
 ## Organizations and departments
 
-In most systems there is a need for `Organization` accounts. While most users will have no `Organization`s, your advertisers for example will probably want multiple people accessing your software.
+In most systems there is a need for `Organization` accounts. While most users will have no `Organization`s, your business clients for example will probably want multiple people accessing your software.
 
 Looking at the `User` class it can be seen that users belong to `Department`s. `Department`s are simply a way to further divide `Organization`s into section. This is mostly useful for larger systems so they get created automatically when a user creates an organization:
 
