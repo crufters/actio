@@ -11,8 +11,6 @@
     - [public](#public)
     - [publicWrite](#publicwrite)
 
-
-
 Sometimes it is useful for frontend engineers to be able to save unstructured data into the database without bothering backend engineers to add yet another tables/fields/endpoints.
 
 The `KeyValue` service serves this need.
@@ -37,10 +35,18 @@ await keyValueService.set({
         // public means the options will be publicly readable
         // ie. without a token
         public: true,
+        // department of the subreddit
+        departmentId: "$subbredit-department-id"
         value: { 'background-color': '#ff0000' },
     },
 });
 ```
+
+After saving the above values will only be settable by the subreddit moderators.
+
+An important limitation here to understand is that the key must be "acquired" ideally before the subreddit ID is published, otherwise some other department might "take it".
+
+* imperfect because at the moment Actio doesn't work well with when a user belongs to a huge number of subreddits, but this is easy to fix and will be fixed later.
 
 ## Fields
 
