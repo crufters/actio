@@ -1,15 +1,17 @@
 [<- Back to Getting Started](../../../docs/README.md) 
 
+# KeyValue service
+
 - [KeyValue service](#keyvalue-service)
   - [Use case](#use-case)
   - [Fields](#fields)
-    - [Key](#key)
-    - [Namespace](#namespace)
+    - [key](#key)
+    - [namespace](#namespace)
     - [ownedByUser](#ownedbyuser)
     - [public](#public)
     - [publicWrite](#publicwrite)
 
-# KeyValue service
+
 
 Sometimes it is useful for frontend engineers to be able to save unstructured data into the database without bothering backend engineers to add yet another tables/fields/endpoints.
 
@@ -44,13 +46,13 @@ await keyValueService.set({
 
 Below are the fields for the `Value` type that this service accepts (see [`models.ts`](./models.ts)).
 
-### Key
+### key
 
 The key : ). ([Everyone knows what a horse is](https://en.wikipedia.org/wiki/Nowe_Ateny#:~:text=Nowe%20Ateny%20is%20the%20source,a%20stinking%20kind%20of%20animal.)).
 
 This is most likely an object id that exists somewhere else in your application. A subreddit ID, a webshop ID, a user ID etc.
 
-### Namespace
+### namespace
 
 The namespace simply exists so you can save multiple things for a key. For a user ID key you could save namespaces like "preferences", "settings", "history" etc.
 
