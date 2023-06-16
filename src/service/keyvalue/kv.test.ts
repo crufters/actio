@@ -99,4 +99,88 @@ describe("keyvalue", () => {
     });
     expect(readRsp.value.value).toEqual({ hi: "there", hi2: "there2" });
   });
+
+  test("deep merge", async () => {
+    let val: Value = {
+      key: "key3",
+      namespace: "test",
+      ownedByUser: true,
+      public: true,
+      value: {
+        level1: {
+          level2: {
+            a: 1,
+          },
+        },
+      },
+    };
+    await serv.set({
+      token: tok1,
+      value: val,
+    });
+
+    let val1: Value = {
+      key: "key3",
+      namespace: "test",
+      ownedByUser: true,
+      public: true,
+      value: {
+        level1: {
+          level2: {
+            b: 2,
+          },
+        },
+      },
+    };
+    await serv.set({
+      token: tok1,
+      value: val1,
+    });
+
+    let readRsp = await serv.get({
+      token: tok1,
+      key: "key3",
+      namespace: "test",
+    });
+    expect(readRsp.value.value).toEqual({
+      level1: {
+        level2: {
+          a: 1,
+          b: 2,
+        },
+      },
+    });
+
+    let val3: Value = {
+      key: "key3",
+      namespace: "test",
+      ownedByUser: true,
+      public: true,
+      value: {
+        level1: {
+          level2: {
+            a: 3,
+          },
+        },
+      },
+    };
+    await serv.set({
+      token: tok1,
+      value: val3,
+    });
+
+    readRsp = await serv.get({
+      token: tok1,
+      key: "key3",
+      namespace: "test",
+    });
+    expect(readRsp.value.value).toEqual({
+      level1: {
+        level2: {
+          a: 3,
+          b: 2,
+        },
+      },
+    });
+  });
 });
