@@ -10,6 +10,7 @@ import { PaymentService } from "./service/payment/index.js";
 import { ConfigService } from "./service/config/index.js";
 import { FileService } from "./service/file/index.js";
 import { SystemService } from "./service/system/index.js";
+import { KeyValueService } from "./service/keyvalue/index.js";
 
 export {
   Service,
@@ -33,4 +34,5 @@ export {
   Endpoint,
   EndpointOptions,
   startServer,
+  KeyValueService,
 };
