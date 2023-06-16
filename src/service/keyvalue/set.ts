@@ -47,7 +47,7 @@ export default async (
     }
   }
 
-  value.value = mergeDeep(value.value, existingValue.value);
+  value.value = mergeDeep(existingValue.value, value.value);
 
   await connection.transaction(async (tran) => {
     await tran.save(value);
