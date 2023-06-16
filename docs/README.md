@@ -1,7 +1,7 @@
 
 This is a getting started guide. For more in depth docs about particular services see: [AuthenticationService](../src/service/authentication/README.md), [ConfigService](../src/service/config/README.md), [FileService](../src/service/file/README.md), [SystemService](../src/service/system/README.md).
 
-For other topics see [Decorators](./decorators.md).
+For other topics see [Decorators](./decorators.md), [Seeding](./seeding.md).
 # Getting started
 
 - [Getting started](#getting-started)
