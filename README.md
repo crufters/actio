@@ -8,7 +8,9 @@
 </p>
 
 Actio is a modern, batteries included Node.js (Typescript) framework for your backend applications.
-It enables you to effortlessly switch between monolithic and microservices architectures.
+It enables you to effortlessly switch between monolithic and microservices architectures. 
+
+Start out with a monolith and turn it into microservices without changing your code once you need to scale!
 
 [Get started](./docs/README.md).
 
@@ -118,6 +120,9 @@ Actio enables you to run multiple projects from the same single server by namesp
 
 Actio isolates your services - no more sidestepping of service boundaries, be it intentional or accidental.
 Each service is a black box for other services, which enable you to reimplement services without breaking depending services.
+
+The dependency injector makes sure your service tables live in different databases entirely - joins won't work across services.
+This and similar constraints enable you a seamless and refactor free transition to microservices - but also ensures your monolith doesn't became overly tightly coupled.
 
 ## Examples and tutorials
 
