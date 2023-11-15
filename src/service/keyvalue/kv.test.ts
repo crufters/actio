@@ -189,7 +189,7 @@ describe("keyvalue", () => {
       token: tok1,
       value: {
         key: "publicKey1",
-        namespace: "test",
+        namespace: "test2",
         public: true,
         value: { data: "value1" },
       },
@@ -198,7 +198,7 @@ describe("keyvalue", () => {
       token: tok1,
       value: {
         key: "publicKey2",
-        namespace: "test",
+        namespace: "test2",
         public: true,
         value: { data: "value2" },
       },
@@ -215,7 +215,7 @@ describe("keyvalue", () => {
       token: tok1,
       value: {
         key: "privateKey1",
-        namespace: "test",
+        namespace: "test3",
         public: false,
         value: { data: "value1" },
       },
@@ -228,7 +228,7 @@ describe("keyvalue", () => {
   test("unauthorized access to private values", async () => {
     let listRspNoToken = await serv.list({ namespace: "test" });
     let listRspInvalidToken = await serv.list({
-      namespace: "test",
+      namespace: "test3",
       token: "invalidtoken",
     });
 
