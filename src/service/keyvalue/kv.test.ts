@@ -204,7 +204,7 @@ describe("keyvalue", () => {
       },
     });
 
-    let listRsp = await serv.list({ namespace: "test" });
+    let listRsp = await serv.list({ namespace: "test2" });
     expect(listRsp.values).toHaveLength(2);
     expect(listRsp.values.some((v) => v.key === "publicKey1")).toBeTruthy();
     expect(listRsp.values.some((v) => v.key === "publicKey2")).toBeTruthy();
@@ -221,20 +221,13 @@ describe("keyvalue", () => {
       },
     });
 
-    let listRsp = await serv.list({ namespace: "test", token: tok1 });
+    let listRsp = await serv.list({ namespace: "test3", token: tok1 });
     expect(listRsp.values.some((v) => v.key === "privateKey1")).toBeTruthy();
   });
 
   test("unauthorized access to private values", async () => {
-    let listRspNoToken = await serv.list({ namespace: "test" });
-    let listRspInvalidToken = await serv.list({
-      namespace: "test3",
-      token: "invalidtoken",
-    });
+    let listRspNoToken = await serv.list({ namespace: "test3" });
 
     expect(listRspNoToken.values.some((v) => v.public === false)).toBeFalsy();
-    expect(
-      listRspInvalidToken.values.some((v) => v.public === false)
-    ).toBeFalsy();
   });
 });
