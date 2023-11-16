@@ -183,4 +183,51 @@ describe("keyvalue", () => {
       },
     });
   });
+
+  test("list public values", async () => {
+    await serv.set({
+      token: tok1,
+      value: {
+        key: "publicKey1",
+        namespace: "test2",
+        public: true,
+        value: { data: "value1" },
+      },
+    });
+    await serv.set({
+      token: tok1,
+      value: {
+        key: "publicKey2",
+        namespace: "test2",
+        public: true,
+        value: { data: "value2" },
+      },
+    });
+
+    let listRsp = await serv.list({ namespace: "test2" });
+    expect(listRsp.values).toHaveLength(2);
+    expect(listRsp.values.some((v) => v.key === "publicKey1")).toBeTruthy();
+    expect(listRsp.values.some((v) => v.key === "publicKey2")).toBeTruthy();
+  });
+
+  test("list private values with token", async () => {
+    await serv.set({
+      token: tok1,
+      value: {
+        key: "privateKey1",
+        namespace: "test3",
+        public: false,
+        value: { data: "value1" },
+      },
+    });
+
+    let listRsp = await serv.list({ namespace: "test3", token: tok1 });
+    expect(listRsp.values.some((v) => v.key === "privateKey1")).toBeTruthy();
+  });
+
+  test("unauthorized access to private values", async () => {
+    let listRspNoToken = await serv.list({ namespace: "test3" });
+
+    expect(listRspNoToken.values.some((v) => v.public === false)).toBeFalsy();
+  });
 });

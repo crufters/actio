@@ -89,3 +89,12 @@ export class SetRequest {
 export class SetResponse {
   value?: Value;
 }
+
+export class ListRequest {
+  token?: string;
+  namespace?: string;
+}
+
+export class ListResponse {
+  values: Value[];
+}
