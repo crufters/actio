@@ -1,7 +1,7 @@
 import { DataSource } from "typeorm";
 import { Value, ListRequest, ListResponse } from "./models.js";
 import { AuthenticationService } from "../authentication/index.js";
-import { Role } from "../authentication/models.js";
+import { Role, roleAdmin } from "../authentication/models.js";
 
 export default async function list(
   connection: DataSource,
@@ -29,7 +29,11 @@ export default async function list(
         continue;
       }
       let tokenRsp = await auth.tokenRead({ token: req.token });
-      if (v.ownedByUser && v.userId !== tokenRsp.token.user.id) {
+      let isAdmin = false;
+      if (tokenRsp.token.user.roles?.find((r) => r.id == roleAdmin.id)) {
+        isAdmin = true;
+      }
+      if (!isAdmin && v.ownedByUser && v.userId !== tokenRsp.token.user.id) {
         continue;
       }
       if (!v.ownedByUser) {
