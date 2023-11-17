@@ -1,9 +1,6 @@
 import { expect, test, describe } from "@jest/globals";
 
-//import { Registrator } from "./registrator.js";
-//import express from "express";
 import { Service } from "./reflect.js";
-//import { default as request } from "supertest";
 import { Entity, PrimaryColumn, Column } from "typeorm";
 import { DataSource } from "typeorm";
 import { nanoid } from "nanoid";
@@ -71,7 +68,7 @@ describe("test global namespaces", () => {
     let bNamespace = "t_" + nanoid().slice(0, 7);
     let cNamespace = "t_" + nanoid().slice(0, 7);
     let i = await new Injector([NsB, NsC]);
-    i.log = true
+    i.log = true;
     i.fixedNamespaces = new Map().set("NsA", "global");
     b = await i.getInstance("NsB", bNamespace);
     c = await i.getInstance("NsC", cNamespace);
