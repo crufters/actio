@@ -94,7 +94,7 @@ organization: "Admin Org
 ```
 
 ```sh
-$ curl -XPOST -d '{"contactUrl":"example@example.com", "password":"admin"}' 127.0.0.1:8080/AuthenticationService/userLogin
+$ curl -XPOST -H 'Content-Type: application/json' -d '{"contactUrl":"example@example.com", "password":"admin"}' 127.0.0.1:8080/AuthenticationService/userLogin
 ```
 
 The response is:
@@ -115,7 +115,7 @@ The response is:
 We can grab the `token` and call our endpoint which tries to read this user:
 
 ```sh
-$ curl -XPOST -d '{"token":"4o11JVud5mIFiFWC0FrcA"}' 127.0.0.1:8080/MyService/myEndpoint
+$ curl -XPOST -d -H 'Content-Type: application/json' '{"token":"4o11JVud5mIFiFWC0FrcA"}' 127.0.0.1:8080/MyService/myEndpoint
 
 {"hi":"The Admin"}
 ```
@@ -180,7 +180,7 @@ Server is listening on port 8080
 If we curl `myEndpoint`, it returns as expected:
 
 ```sh
-$ curl -XPOST -d '{"name":"Johnny"}' 127.0.0.1:8080/MyService/myEndpoint
+$ curl -XPOST -H 'Content-Type: application/json' -d '{"name":"Johnny"}' 127.0.0.1:8080/MyService/myEndpoint
 
 {"hi":"Johnny"}
 ```
@@ -188,7 +188,7 @@ $ curl -XPOST -d '{"name":"Johnny"}' 127.0.0.1:8080/MyService/myEndpoint
 Curling `notMyEndpoint`, marked with the `@Unexposed` decorator returns a 404:
 
 ```sh
-$ curl -XPOST -d '{"name":"Johnny"}' 127.0.0.1:8080/MyService/notMyEndpoint
+$ curl -XPOST -H 'Content-Type: application/json' -d '{"name":"Johnny"}' 127.0.0.1:8080/MyService/notMyEndpoint
 
 {"error":"endpoint not found"}
 ```
@@ -508,7 +508,7 @@ Now do a curl:
 ### cURL
 
 ```sh
-curl -XPOST -d '{"name":"Johnny"}' 127.0.0.1:8080/MyService/myEndpoint
+curl -XPOST -H 'Content-Type: application/json' -d '{"name":"Johnny"}' 127.0.0.1:8080/MyService/myEndpoint
 ```
 
 The output should be:
